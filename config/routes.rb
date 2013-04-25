@@ -1,4 +1,9 @@
 FilterPlayer::Application.routes.draw do
+  resources :tracks
+
+  match 'tracks/:id/load' => 'track#load', :as => :load
+
+
   # The priority is based upon order of creation:
   # first created -> highest priority.
 

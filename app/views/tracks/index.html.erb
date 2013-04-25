@@ -1,0 +1,22 @@
+<h1>Listing tracks</h1>
+<table>
+  <tr>
+    <th>Artist Name</th>
+    <th>Track Title</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @tracks.each do |track| %>
+  <tr>
+    <td><%= track.name %></td>
+    <td><%= track.title %></td>
+    <td><%= link_to "Load", load_url(:id => track.id) %></td>
+  
+  </tr> 
+<% end %>
+</table>
+
+<br />
+

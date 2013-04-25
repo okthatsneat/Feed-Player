@@ -46,12 +46,19 @@ GEM
       coffee-script-source
       execjs
     coffee-script-source (1.6.2)
+    crack (0.1.8)
     diff-lcs (1.1.3)
     erubis (2.7.0)
     execjs (1.4.0)
       multi_json (~> 1.0)
     ffi (1.6.0)
+    hashie (1.0.0)
     hike (1.2.2)
+    httmultiparty (0.3)
+      httparty (>= 0.7.3)
+      multipart-post
+    httparty (0.7.4)
+      crack (= 0.1.8)
     i18n (0.6.1)
     journey (1.0.4)
     jquery-rails (2.0.2)
@@ -64,6 +71,7 @@ GEM
       treetop (~> 1.4.8)
     mime-types (1.23)
     multi_json (1.7.2)
+    multipart-post (1.1.0)
     nokogiri (1.5.9)
     pg (0.12.2)
     polyglot (0.3.3)
@@ -116,6 +124,10 @@ GEM
       multi_json (~> 1.0)
       rubyzip
       websocket (~> 1.0.4)
+    soundcloud (0.2.0)
+      hashie
+      httmultiparty (>= 0.3)
+      httparty (>= 0.7.3)
     sprockets (2.2.2)
       hike (~> 1.2)
       multi_json (~> 1.0)
@@ -146,5 +158,6 @@ DEPENDENCIES
   rails (= 3.2.13)
   rspec-rails (= 2.11.0)
   sass-rails (= 3.2.5)
+  soundcloud
   sqlite3 (= 1.3.5)
   uglifier (= 1.2.3)
