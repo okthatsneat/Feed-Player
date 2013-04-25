@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130425131523) do
+ActiveRecord::Schema.define(:version => 20130425133121) do
 
   create_table "keyword_post", :force => true do |t|
     t.string   "title_occurrence"
@@ -37,9 +37,9 @@ ActiveRecord::Schema.define(:version => 20130425131523) do
 
   create_table "posts", :force => true do |t|
     t.string   "title"
-    t.string   "body"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.text     "body",       :limit => 255
+    t.datetime "created_at",                :null => false
+    t.datetime "updated_at",                :null => false
   end
 
   create_table "tracks", :force => true do |t|
