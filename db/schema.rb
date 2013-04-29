@@ -11,9 +11,19 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130425133121) do
+ActiveRecord::Schema.define(:version => 20130429150148) do
 
-  create_table "keyword_post", :force => true do |t|
+  create_table "feeds", :force => true do |t|
+    t.string   "url"
+    t.string   "title"
+    t.string   "feed_url"
+    t.string   "etag"
+    t.datetime "last_modified"
+    t.datetime "created_at",    :null => false
+    t.datetime "updated_at",    :null => false
+  end
+
+  create_table "keyword_posts", :force => true do |t|
     t.string   "title_occurrence"
     t.string   "body_occurrence"
     t.integer  "keyword_id"
@@ -22,7 +32,7 @@ ActiveRecord::Schema.define(:version => 20130425133121) do
     t.datetime "updated_at",       :null => false
   end
 
-  create_table "keyword_track", :force => true do |t|
+  create_table "keyword_tracks", :force => true do |t|
     t.integer  "keyword_id"
     t.integer  "track_id"
     t.datetime "created_at", :null => false
@@ -37,9 +47,14 @@ ActiveRecord::Schema.define(:version => 20130425133121) do
 
   create_table "posts", :force => true do |t|
     t.string   "title"
-    t.text     "body",       :limit => 255
-    t.datetime "created_at",                :null => false
-    t.datetime "updated_at",                :null => false
+    t.text     "body",         :limit => 255
+    t.datetime "created_at",                  :null => false
+    t.datetime "updated_at",                  :null => false
+    t.text     "summary"
+    t.string   "url"
+    t.datetime "published_at"
+    t.string   "guid"
+    t.integer  "feed_id"
   end
 
   create_table "tracks", :force => true do |t|

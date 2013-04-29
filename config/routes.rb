@@ -1,5 +1,22 @@
 FilterPlayer::Application.routes.draw do
-  resources :tracks
+  resources :feeds do
+    resources :posts
+  end
+  
+
+
+  resources :tracks do
+    resources :keywords
+  end
+
+  resources :posts do 
+    resources :keywords
+  end
+
+
+
+
+
 
   match 'tracks/:id/load' => 'track#load', :as => :load
 

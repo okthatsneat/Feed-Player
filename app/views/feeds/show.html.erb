@@ -1,0 +1,53 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Url:</b>
+  <%= @feed.url %>
+</p>
+
+<p>
+  <b>Title:</b>
+  <%= @feed.title %>
+</p>
+
+<p>
+  <b>Feed url:</b>
+  <%= @feed.feed_url %>
+</p>
+
+<p>
+  <b>Etag:</b>
+  <%= @feed.etag %>
+</p>
+
+<p>
+  <b>Last modified:</b>
+  <%= @feed.last_modified %>
+</p>
+
+<p>
+  <b>Posts:</b>
+  <table class="posts">
+  
+  <tr>
+    <th> Post.title </th>
+    <th> Post.keywords </th>
+    <th> Post.embed </th>
+  </tr>
+  
+    <% @feed.posts.each do |post| %>
+  <tr>  
+    <td>
+      <%= post.title %>
+    </td>
+    <td>keyword</td>
+    <td>embed</td>
+    <% end %>
+  </tr>
+</table>
+</p>
+
+
+
+<%= link_to 'Edit', edit_feed_path(@feed) %> |
+<%= link_to 'Back', feeds_path %>
