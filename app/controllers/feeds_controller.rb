@@ -41,22 +41,10 @@ class FeedsController < ApplicationController
   # POST /feeds.json
   def create
     @feed = Feed.new(params[:feed])
-    # get feed property values with Feedzirra
 
-    feedzirra_feed = Feedzirra::Feed.fetch_and_parse(@feed.feed_url)
-    @feed.attributes =
-    {
-      :title          => feedzirra_feed.title,
-      :url            => feedzirra_feed.url,
-      :etag           => feedzirra_feed.etag,       
-      :last_modified  => feedzirra_feed.last_modified
-    }
-    
     respond_to do |format|
-      if @feed.save
-      # get the feed's current posts
-        Post.update_from_feed(feedzirra_feed, @feed.id)
-    
+    # parse feed with Feedzirra and set attributes, create posts
+    if RSSParser.new(@feed).parse
         format.html { redirect_to @feed, notice: 'Feed was successfully created.' }
         format.json { render json: @feed, status: :created, location: @feed }
       else

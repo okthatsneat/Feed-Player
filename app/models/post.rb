@@ -1,7 +1,10 @@
 class Post < ActiveRecord::Base
-	attr_accessible :title, :body, :summary, :url, :published_at, :guid, :feed_id
+	attr_accessible :title, :body, :summary,
+	 :url, :published_at, :guid, :feed_id, :keywords_posts_attributes
 	has_many :keyword_posts
 	has_many :keywords, :through => :keyword_posts
+	accepts_nested_attributes_for :keyword_posts, :allow_destroy => true
+
 	belongs_to :feed
 
 	#from http://railscasts.com/episodes/168-feed-parsing?view=asciicast

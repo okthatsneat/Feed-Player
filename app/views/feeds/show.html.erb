@@ -40,7 +40,13 @@
     <td>
       <%= post.title %>
     </td>
-    <td>keyword</td>
+      
+    <td>
+      <% post.keywords.each do |keyword| %>
+      <%= keyword.value + ',' %>
+      <% end %>
+    </td>
+    
     <td>embed</td>
     <% end %>
   </tr>
