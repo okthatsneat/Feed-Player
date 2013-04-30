@@ -1,4 +1,4 @@
-	class Keyword < ActiveRecord::Base
+class Keyword < ActiveRecord::Base
 	attr_accessible :value
 	has_many :keyword_posts
 	has_many :keyword_tracks
