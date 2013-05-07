@@ -1,6 +1,6 @@
 class Feed < ActiveRecord::Base
   attr_accessible :etag, :feed_url, :last_modified, :title, :url
-  has_many :posts
+  has_many :posts , :dependent => :destroy
 
 	def update_from_feed(feedzirra_feed)
   	# FIXME exists? is a class, not an instance method. 
