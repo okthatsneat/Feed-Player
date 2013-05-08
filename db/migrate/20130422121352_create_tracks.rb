@@ -3,7 +3,7 @@ class CreateTracks < ActiveRecord::Migration
     create_table :tracks do |t|
       t.string :name
       t.string :title
-      t.string :soundcould_uri
+      t.string :soundcloud_uri
       t.string :spotify_uri
 
       t.timestamps

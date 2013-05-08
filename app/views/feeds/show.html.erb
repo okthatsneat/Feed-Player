@@ -47,7 +47,11 @@
       <% end %>
     </td>
     
-    <td>embed</td>
+    <td>
+      <% post.tracks.each do | track | %> 
+      <%= track.soundcloud_embed.html_safe %>
+      <% end %>
+    </td>
     <% end %>
   </tr>
 </table>

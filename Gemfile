@@ -4,6 +4,8 @@ gem 'rails', '3.2.13'
 gem 'feedzirra'
 gem 'echonest-ruby-api'
 gem 'httparty'
+gem 'soundcloud'
+gem 'jquery-rails', '2.0.2'
 
 group :development, :test do
   gem 'sqlite3', '1.3.5'
@@ -17,9 +19,6 @@ group :assets do
   gem 'coffee-rails', '3.2.2'
   gem 'uglifier', '1.2.3'
 end
-
-gem 'jquery-rails', '2.0.2'
-gem 'soundcloud'
 
 group :test do
   gem 'capybara', '1.1.2'

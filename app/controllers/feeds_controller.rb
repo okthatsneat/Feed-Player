@@ -14,7 +14,13 @@ class FeedsController < ApplicationController
   # GET /feeds/1.json
   def show
     @feed = Feed.find(params[:id])
-
+    @feed.posts.each do | post |
+      post.tracks.each do |track|
+        unless track.soundcloud_embed?
+        track.pull_soundcloud_embed
+        end
+      end
+    end 
     respond_to do |format|
       format.html # show.html.erb
       format.json { render json: @feed }
@@ -44,7 +50,16 @@ class FeedsController < ApplicationController
 
     respond_to do |format|
     # parse feed with Feedzirra and set attributes, create posts
-    if RSSParser.new(@feed).parse
+      if RSSParser.new(@feed).parse
+      # insert stuff to create tracks
+      # pull the posts to create tracks from
+      @feed.posts.each do | post |
+        post.create_track_from_title
+        post.tracks.each do |track|
+          track.pull_soundcloud_embed
+        end
+      end 
+        
         format.html { redirect_to @feed, notice: 'Feed was successfully created.' }
         format.json { render json: @feed, status: :created, location: @feed }
       else
