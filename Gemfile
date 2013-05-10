@@ -6,6 +6,7 @@ gem 'echonest-ruby-api'
 gem 'httparty'
 gem 'soundcloud'
 gem 'jquery-rails', '2.0.2'
+gem 'nokogiri'
 
 group :development, :test do
   gem 'sqlite3', '1.3.5'

@@ -176,6 +176,7 @@ DEPENDENCIES
   feedzirra
   httparty
   jquery-rails (= 2.0.2)
+  nokogiri
   pg (= 0.12.2)
   rails (= 3.2.13)
   rspec-rails (= 2.11.0)

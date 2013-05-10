@@ -19,11 +19,12 @@ class RSSParser
 				#create! posts if !exists, set attributes
 				Post.update_from_feed(feedzirra_feed, @feed.id)
 				#regex_titles_for_keywords - replaced by Echonest API call
-				echonest_extract_artists_from_titles
+				#comment out to speed up testing
+				#echonest_extract_artists_from_titles
 			end
 			@feed
 		else 
-			false
+			FALSE
 		end
 	end
 
@@ -74,6 +75,52 @@ class RSSParser
 			end
 		end
 	end
+
+	def self.extract_tracks_from_soundcloud_embeds(post)
+		# FIXME multiple calls are creating duplicate tracks in post
+
+		# parse html in post body with nokogiri
+		doc = Nokogiri::HTML(Post.find(post.id).body)
+		#find all iframes, decode their src value to regexable string
+		doc.xpath("//iframe").each do |iframe|
+			player_url = URI.decode(iframe.attributes['src'].value)
+			Rails.logger.debug """
+			<<<<<<<<<<<<<<<<<<<<<<
+
+			in extract_tracks_from_soundcloud_embeds: 
+			player_url is #{player_url}
+
+
+			>>>>>>>>>>>>>>>>>>>>>>>>
+			"""
+
+
+			#regex soundcloud uri from player_url, if present, create track
+			match = player_url.match /(api\.soundcloud\.com[^&]*)/
+			if match
+				
+			Rails.logger.debug """
+			<<<<<<<<<<<<<<<<<<<<<<
+
+			in if match , extract_tracks_from_soundcloud_embeds: 
+			first capture is #{match.captures.first}
+
+			>>>>>>>>>>>>>>>>>>>>>>>>
+			"""
+
+				#resolve soundcloud uri to souncloud track
+				# FIXME multiple calls are creating duplicate tracks in post
+				if (soundcloud_track = 
+					SoundcloudProvider.resolve_uri_to_track(match.captures.first))
+					
+					Track.create_from_soundcloud_track(soundcloud_track, post) 
+				end
+
+			end
+		end
+		
+	end
+
 	
 
 

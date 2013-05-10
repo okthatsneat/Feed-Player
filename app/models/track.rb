@@ -7,16 +7,24 @@ class Track < ActiveRecord::Base
 
   def pull_soundcloud_embed
 	  self.soundcloud_embed = SoundcloudProvider.get_embed_html5(self.soundcloud_uri)
-	  Rails.logger.debug """
-
-	  <<<<<<<<<<<<<<<<<<<<<<<<<<
-
-	  self.soundcloud_embed is #{self.soundcloud_embed}
-
-		>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-	  """
-	  
 	  self.save
   end
+
+  def self.create_from_soundcloud_track(soundcloud_track, post)
+		if Track.exists? :soundcloud_uri => soundcloud_track.uri
+			Track.find_by_soundcloud_uri(soundcloud_track.uri).posts << post
+		else
+			post.tracks.create	do |track| 
+				track.title 						=	soundcloud_track.title,
+				track.soundcloud_uri		=	soundcloud_track.uri,
+				track.soundcloud_url 		= 
+				(soundcloud_track.user.permalink_url + '/' + soundcloud_track.permalink)
+			end 
+		end
+	end
+	
+
+
+
 
 end

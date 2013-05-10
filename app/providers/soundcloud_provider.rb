@@ -14,4 +14,33 @@ class SoundcloudProvider
 		embed_info['html']
 	end
 
+	def self.query_for_single_track_from_title(title)
+		# strategy: directly query soundcloud with full title
+		# if only one track comes back 
+		# assume direct match
+		response = query_soundcloud(title)
+		if response.length == 1
+			soundcloud_track = response[0]
+		else 
+			FALSE
+		end
+	end
+
+	def self.resolve_uri_to_track(soundcloud_uri)
+		if soundcloud_uri
+			client = Soundcloud.new(:client_id => SOUNDCLOUD_CLIENT_ID)
+			Rails.logger.debug """
+			<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+			in resolve_uri_to_track: passed in param soundcloud_uri is
+			#{soundcloud_uri}
+
+			>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+			"""
+
+			soundcloud_track = client.get("http://#{soundcloud_uri}")
+		end
+	end
+
+
 end

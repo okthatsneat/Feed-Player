@@ -15,9 +15,10 @@ class FeedsController < ApplicationController
   def show
     @feed = Feed.find(params[:id])
     @feed.posts.each do | post |
+      RSSParser.extract_tracks_from_soundcloud_embeds(post)
       post.tracks.each do |track|
         unless track.soundcloud_embed?
-        track.pull_soundcloud_embed
+          track.pull_soundcloud_embed
         end
       end
     end 
@@ -52,11 +53,16 @@ class FeedsController < ApplicationController
     # parse feed with Feedzirra and set attributes, create posts
       if RSSParser.new(@feed).parse
       # insert stuff to create tracks
-      # pull the posts to create tracks from
+      # pull the posts to create tracks from, query Soundcloud
       @feed.posts.each do | post |
-        post.create_track_from_title
+        soundcloud_track = 
+        SoundcloudProvider.query_for_single_track_from_title(post.title)
+        if soundcloud_track
+          #create track with parent post
+          Track.create_from_soundcloud_track(soundcloud_track, post)
+        end
         post.tracks.each do |track|
-          track.pull_soundcloud_embed
+        track.pull_soundcloud_embed
         end
       end 
         
