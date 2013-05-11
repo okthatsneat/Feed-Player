@@ -12,7 +12,11 @@ class Track < ActiveRecord::Base
 
   def self.create_from_soundcloud_track(soundcloud_track, post)
 		if Track.exists? :soundcloud_uri => soundcloud_track.uri
-			Track.find_by_soundcloud_uri(soundcloud_track.uri).posts << post
+			if post.tracks.find_by_soundcloud_uri(soundcloud_track.uri)
+			# do nothing
+			else
+				Track.find_by_soundcloud_uri(soundcloud_track.uri).posts << post
+			end
 		else
 			post.tracks.create	do |track| 
 				track.title 						=	soundcloud_track.title,
@@ -22,9 +26,5 @@ class Track < ActiveRecord::Base
 			end 
 		end
 	end
-	
-
-
-
 
 end

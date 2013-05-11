@@ -77,8 +77,6 @@ class RSSParser
 	end
 
 	def self.extract_tracks_from_soundcloud_embeds(post)
-		# FIXME multiple calls are creating duplicate tracks in post
-
 		# parse html in post body with nokogiri
 		doc = Nokogiri::HTML(Post.find(post.id).body)
 		#find all iframes, decode their src value to regexable string
@@ -109,7 +107,6 @@ class RSSParser
 			"""
 
 				#resolve soundcloud uri to souncloud track
-				# FIXME multiple calls are creating duplicate tracks in post
 				if (soundcloud_track = 
 					SoundcloudProvider.resolve_uri_to_track(match.captures.first))
 					
