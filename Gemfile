@@ -7,6 +7,7 @@ gem 'httparty'
 gem 'soundcloud'
 gem 'jquery-rails', '2.0.2'
 gem 'nokogiri'
+gem 'discogs-wrapper'
 
 group :development, :test do
   gem 'sqlite3', '1.3.5'

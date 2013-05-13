@@ -19,8 +19,8 @@ class Track < ActiveRecord::Base
 			end
 		else
 			post.tracks.create	do |track| 
-				track.title 						=	soundcloud_track.title,
-				track.soundcloud_uri		=	soundcloud_track.uri,
+				track.title 						=	soundcloud_track['title']
+				track.soundcloud_uri		=	soundcloud_track.uri
 				track.soundcloud_url 		= 
 				(soundcloud_track.user.permalink_url + '/' + soundcloud_track.permalink)
 			end 

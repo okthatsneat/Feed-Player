@@ -26,6 +26,14 @@ class SoundcloudProvider
 		end
 	end
 
+	def self.query_for_first_track(searchTerm)
+		#strategy - return the first result, use this
+		#when search term is in form artist-title
+		response = query_soundcloud(searchTerm)
+		soundcloud_track = response[0]
+	end
+
+
 	def self.resolve_uri_to_track(soundcloud_uri)
 		if soundcloud_uri
 			client = Soundcloud.new(:client_id => SOUNDCLOUD_CLIENT_ID)

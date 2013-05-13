@@ -3,7 +3,7 @@ class RSSParser
 	include HTTParty
   format :json
 
-	def initialize (feed)
+	def initialize(feed)
 		@feed = feed
 		@feed_url = feed.feed_url
 		
@@ -19,8 +19,9 @@ class RSSParser
 				#create! posts if !exists, set attributes
 				Post.update_from_feed(feedzirra_feed, @feed.id)
 				#regex_titles_for_keywords - replaced by Echonest API call
-				#comment out to speed up testing
-				#echonest_extract_artists_from_titles
+				echonest_extract_artists_from_titles
+				look_for_artist_titles_in_post_title
+				#query_soundcloud_direct_with_post_title
 			end
 			@feed
 		else 
@@ -45,19 +46,11 @@ class RSSParser
 							#resolve soundcloud uri to track
 							soundcloud_uri = (hash[:player_url].match re_soundcloud).captures[0] 
 							soundcloud_track = SoundcloudProvider.resolve_uri_to_track(soundcloud_uri)
-							Track.create_from_soundcloud_track(soundcloud_track, hash[:post]) 
-							
+							Track.create_from_soundcloud_track(soundcloud_track, hash[:post])							
 					when "Youtube"
 						then
 						# resolve via oembed, call track method to create with youtube info
-						# @match.captures[4] = $5 is the vid id in this case
-							Rails.logger.debug """
-
-							hash value at :player_url is #{hash[:player_url]}
-
-							re_youtube is #{re_youtube}
-
-							"""
+						# @match.captures[4] = $5 is the vid id in this case							
 							vid_id = (hash[:player_url].match re_youtube).captures[4] 
 							if (youtube_vid = Youtube.oembed(vid_id)) 
 								Track.create_from_youtube_vid(vid_id, youtube_vid, hash[:post])
@@ -66,6 +59,23 @@ class RSSParser
 			end
 		end
 	end
+
+	def query_soundcloud_direct_with_post_title
+		@feed.posts.each do | post |
+		  soundcloud_track = 
+	    SoundcloudProvider.query_for_single_track_from_title(post.title)
+	    if soundcloud_track
+	      #create track with parent post
+	      Track.create_from_soundcloud_track(soundcloud_track, post)
+	    end
+	    post.tracks.each do |track|
+	      unless track.soundcloud_embed
+	        track.pull_soundcloud_embed
+	      end
+	    end
+    end 
+	end
+
 
 	private
 
@@ -133,12 +143,6 @@ class RSSParser
 	def identify_player_type(player_url)
 		# switch depending on type
 		if (player_url.include? 'soundcloud')
-			Rails.logger.debug"""
-
-			in identify player type : player_url #{player_url}
-
-
-			"""
 			return "Soundcloud"
 		elsif (player_url.include? 'youtube')
 			return "Youtube"
@@ -147,6 +151,27 @@ class RSSParser
 		end
 	end
 
+
+	def look_for_artist_titles_in_post_title
+		d = DiscogsApi.new
+		@feed.posts.each do |post|
+			post.keywords.each do |keyword|
+				#pull list of discogs releases-titles for each keyword (=artist, found
+				#by echonest)
+				titles = d.list_titles_by_artist(keyword.value)
+				titles.each do |title|
+					if (post.title.downcase.include?(title.downcase))
+						#create a track if single result found
+						if (soundcloud_track =
+						SoundcloudProvider.query_for_first_track(
+							keyword.value + " " + title))
+							Track.create_from_soundcloud_track(soundcloud_track, post)
+						end
+					end
+				end
+			end
+		end
+	end
 
 			
 		

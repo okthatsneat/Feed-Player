@@ -48,19 +48,6 @@ class FeedsController < ApplicationController
       rss_parser.extract_tracks_from_embeds
       # pull the posts to create tracks from, query Soundcloud
       # TODO encapsulate in rss_parser.method
-      @feed.posts.each do | post |
-        soundcloud_track = 
-        SoundcloudProvider.query_for_single_track_from_title(post.title)
-        if soundcloud_track
-          #create track with parent post
-          Track.create_from_soundcloud_track(soundcloud_track, post)
-        end
-        post.tracks.each do |track|
-          unless track.soundcloud_embed
-            track.pull_soundcloud_embed
-          end
-        end
-      end 
       format.html { redirect_to @feed, notice: 'Feed was successfully created.' }
       format.json { render json: @feed, status: :created, location: @feed }
     else
