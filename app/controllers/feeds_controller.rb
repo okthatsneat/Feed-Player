@@ -14,14 +14,6 @@ class FeedsController < ApplicationController
   # GET /feeds/1.json
   def show
     @feed = Feed.find(params[:id])
-    @feed.posts.each do | post |
-      RSSParser.extract_tracks_from_soundcloud_embeds(post)
-      post.tracks.each do |track|
-        unless track.soundcloud_embed?
-          track.pull_soundcloud_embed
-        end
-      end
-    end 
     respond_to do |format|
       format.html # show.html.erb
       format.json { render json: @feed }
@@ -48,12 +40,14 @@ class FeedsController < ApplicationController
   # POST /feeds.json
   def create
     @feed = Feed.new(params[:feed])
-
     respond_to do |format|
     # parse feed with Feedzirra and set attributes, create posts
-      if RSSParser.new(@feed).parse
-      # insert stuff to create tracks
+    if (rss_parser = RSSParser.new(@feed))
+      # get the embeded content and create tracks
+      rss_parser.parse
+      rss_parser.extract_tracks_from_embeds
       # pull the posts to create tracks from, query Soundcloud
+      # TODO encapsulate in rss_parser.method
       @feed.posts.each do | post |
         soundcloud_track = 
         SoundcloudProvider.query_for_single_track_from_title(post.title)
@@ -62,13 +56,14 @@ class FeedsController < ApplicationController
           Track.create_from_soundcloud_track(soundcloud_track, post)
         end
         post.tracks.each do |track|
-        track.pull_soundcloud_embed
+          unless track.soundcloud_embed
+            track.pull_soundcloud_embed
+          end
         end
       end 
-        
-        format.html { redirect_to @feed, notice: 'Feed was successfully created.' }
-        format.json { render json: @feed, status: :created, location: @feed }
-      else
+      format.html { redirect_to @feed, notice: 'Feed was successfully created.' }
+      format.json { render json: @feed, status: :created, location: @feed }
+    else
         format.html { render action: "new" }
         format.json { render json: @feed.errors, status: :unprocessable_entity }
       end

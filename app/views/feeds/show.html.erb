@@ -49,7 +49,12 @@
     
     <td>
       <% post.tracks.each do | track | %> 
-      <%= track.soundcloud_embed.html_safe %>
+        <% if track.soundcloud_embed %> 
+          <%= track.soundcloud_embed.html_safe %>
+        <% end %>
+        <% if track.youtube_embed %>
+          <%= track.youtube_embed.html_safe %>
+        <% end %>
       <% end %>
     </td>
     <% end %>

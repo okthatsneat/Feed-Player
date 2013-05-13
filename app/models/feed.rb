@@ -4,7 +4,7 @@ class Feed < ActiveRecord::Base
 
 	def update_from_feed(feedzirra_feed)
   	# FIXME exists? is a class, not an instance method. 
-  	unless Feed.exists? :url => feedzirra_feed.url 
+  	unless Feed.exists? :feed_url => feedzirra_feed.feed_url 
     	#this also saves it to the db with validations
     	self.update_attributes(
 		    :title          => feedzirra_feed.title,

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130508130524) do
+ActiveRecord::Schema.define(:version => 20130511160349) do
 
   create_table "feeds", :force => true do |t|
     t.string   "url"
@@ -67,10 +67,12 @@ ActiveRecord::Schema.define(:version => 20130508130524) do
     t.string   "title"
     t.string   "soundcloud_uri"
     t.string   "spotify_uri"
-    t.datetime "created_at",       :null => false
-    t.datetime "updated_at",       :null => false
+    t.datetime "created_at",                      :null => false
+    t.datetime "updated_at",                      :null => false
     t.string   "soundcloud_url"
     t.text     "soundcloud_embed"
+    t.string   "youtube_id"
+    t.text     "youtube_embed",    :limit => 255
   end
 
 end

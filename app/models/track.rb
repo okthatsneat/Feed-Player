@@ -27,4 +27,20 @@ class Track < ActiveRecord::Base
 		end
 	end
 
+
+	def self.create_from_youtube_vid(vid_id, youtube_vid, post)
+		if Track.exists? :youtube_id => vid_id
+			if post.tracks.find_by_youtube_id(vid_id)
+				# do nothing				
+			else
+				Track.find_by_youtube_id(vid_id).posts << post
+			end
+		else
+			post.tracks.create do |track|
+        track.title						= youtube_vid['title']
+        track.youtube_id			= vid_id
+        track.youtube_embed		= youtube_vid['html']
+	    end 
+		end
+	end
 end

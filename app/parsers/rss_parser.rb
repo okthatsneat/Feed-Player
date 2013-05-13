@@ -11,7 +11,7 @@ class RSSParser
 
 	def parse
 		#fetch and parse feed with Feezirra
-		feedzirra_feed = Feedzirra::Feed.fetch_and_parse(@feed_url)
+		feedzirra_feed = Feedzirra::Feed.fetch_and_parse(@feed_url) 
 		# if this fails feedzirra_feed is the Fixnum error code, not the feed object
 		unless feedzirra_feed.is_a?(Fixnum)
 			#if !exists, set attributes and save to db
@@ -25,6 +25,45 @@ class RSSParser
 			@feed
 		else 
 			FALSE
+		end
+	end
+
+	def extract_tracks_from_embeds
+		re_soundcloud = /(api\.soundcloud\.com[^&]*)/
+		# credit https://gist.github.com/afeld/1254889 for regex 
+		re_youtube = /(youtu\.be\/|youtube\.com\/(watch\?(.*&)?v=|(embed|v)\/))([^\?&"'>]+)/
+		
+		extract_player_urls_from_iframes_in_posts_bodies
+		
+		if @player_urls
+			@player_urls.each do | hash |
+				player_url = hash[:player_url]
+				player_type = identify_player_type(player_url)
+				case player_type
+				 	when "Soundcloud"
+						then
+							#resolve soundcloud uri to track
+							soundcloud_uri = (hash[:player_url].match re_soundcloud).captures[0] 
+							soundcloud_track = SoundcloudProvider.resolve_uri_to_track(soundcloud_uri)
+							Track.create_from_soundcloud_track(soundcloud_track, hash[:post]) 
+							
+					when "Youtube"
+						then
+						# resolve via oembed, call track method to create with youtube info
+						# @match.captures[4] = $5 is the vid id in this case
+							Rails.logger.debug """
+
+							hash value at :player_url is #{hash[:player_url]}
+
+							re_youtube is #{re_youtube}
+
+							"""
+							vid_id = (hash[:player_url].match re_youtube).captures[4] 
+							if (youtube_vid = Youtube.oembed(vid_id)) 
+								Track.create_from_youtube_vid(vid_id, youtube_vid, hash[:post])
+							end
+				end
+			end
 		end
 	end
 
@@ -76,47 +115,41 @@ class RSSParser
 		end
 	end
 
-	def self.extract_tracks_from_soundcloud_embeds(post)
-		# parse html in post body with nokogiri
-		doc = Nokogiri::HTML(Post.find(post.id).body)
-		#find all iframes, decode their src value to regexable string
-		doc.xpath("//iframe").each do |iframe|
-			player_url = URI.decode(iframe.attributes['src'].value)
-			Rails.logger.debug """
-			<<<<<<<<<<<<<<<<<<<<<<
-
-			in extract_tracks_from_soundcloud_embeds: 
-			player_url is #{player_url}
-
-
-			>>>>>>>>>>>>>>>>>>>>>>>>
-			"""
-
-
-			#regex soundcloud uri from player_url, if present, create track
-			match = player_url.match /(api\.soundcloud\.com[^&]*)/
-			if match
-				
-			Rails.logger.debug """
-			<<<<<<<<<<<<<<<<<<<<<<
-
-			in if match , extract_tracks_from_soundcloud_embeds: 
-			first capture is #{match.captures.first}
-
-			>>>>>>>>>>>>>>>>>>>>>>>>
-			"""
-
-				#resolve soundcloud uri to souncloud track
-				if (soundcloud_track = 
-					SoundcloudProvider.resolve_uri_to_track(match.captures.first))
-					
-					Track.create_from_soundcloud_track(soundcloud_track, post) 
-				end
-
+	
+	def extract_player_urls_from_iframes_in_posts_bodies
+		# parse html in posts bodies with nokogiri
+		@player_urls = []
+		@feed.posts.each do |post|
+			doc = Nokogiri::HTML(post.body)
+			#find all iframes, decode their player_url = src value to regexable string, 
+			#store post with player url 
+			doc.xpath("//iframe").each do |iframe|
+				@player_urls << 
+				{player_url: URI.decode(iframe.attributes['src'].value), post: post}
 			end
 		end
-		
 	end
+
+	def identify_player_type(player_url)
+		# switch depending on type
+		if (player_url.include? 'soundcloud')
+			Rails.logger.debug"""
+
+			in identify player type : player_url #{player_url}
+
+
+			"""
+			return "Soundcloud"
+		elsif (player_url.include? 'youtube')
+			return "Youtube"
+		else
+			 return "None"
+		end
+	end
+
+
+			
+		
 
 	
 
