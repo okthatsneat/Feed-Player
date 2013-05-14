@@ -10,8 +10,18 @@ class SoundcloudProvider
 
 	def self.get_embed_html5(soundcloud_url)
 		client = Soundcloud.new(:client_id => SOUNDCLOUD_CLIENT_ID)
-		embed_info = client.get('/oembed', :url => soundcloud_url)
-		embed_info['html']
+		begin
+			embed_info = client.get('/oembed', :url => soundcloud_url)
+			embed_info['html']
+		rescue Soundcloud::ResponseError => e
+			Rails.logger.debug"""
+			
+			Soundcloud::ResponseError says: #{e.message}
+			input soundcloud_url was #{soundcloud_url}
+			
+			"""
+		end
+
 	end
 
 	def self.query_for_single_track_from_title(title)

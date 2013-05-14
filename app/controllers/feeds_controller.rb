@@ -14,6 +14,10 @@ class FeedsController < ApplicationController
   # GET /feeds/1.json
   def show
     @feed = Feed.find(params[:id])
+    @feed.posts.each do |post|
+      RSSParser.update_embeds(post)
+    end
+
     respond_to do |format|
       format.html # show.html.erb
       format.json { render json: @feed }
@@ -46,6 +50,7 @@ class FeedsController < ApplicationController
       # get the embeded content and create tracks
       rss_parser.parse
       rss_parser.extract_tracks_from_embeds
+
       # pull the posts to create tracks from, query Soundcloud
       # TODO encapsulate in rss_parser.method
       format.html { redirect_to @feed, notice: 'Feed was successfully created.' }

@@ -6,8 +6,10 @@ class Track < ActiveRecord::Base
   has_and_belongs_to_many :posts
 
   def pull_soundcloud_embed
-	  self.soundcloud_embed = SoundcloudProvider.get_embed_html5(self.soundcloud_uri)
-	  self.save
+	  if (self.soundcloud_uri)
+		  self.soundcloud_embed = SoundcloudProvider.get_embed_html5(self.soundcloud_uri)
+		  self.save
+		end
   end
 
   def self.create_from_soundcloud_track(soundcloud_track, post)

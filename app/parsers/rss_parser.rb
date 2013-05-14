@@ -5,8 +5,7 @@ class RSSParser
 
 	def initialize(feed)
 		@feed = feed
-		@feed_url = feed.feed_url
-		
+		@feed_url = feed.feed_url		
 	end
 
 	def parse
@@ -16,12 +15,16 @@ class RSSParser
 		unless feedzirra_feed.is_a?(Fixnum)
 			#if !exists, set attributes and save to db
 			if @feed.update_from_feed(feedzirra_feed)
-				#create! posts if !exists, set attributes
+				#create! posts if !exists, set attributes from RSS feed
 				Post.update_from_feed(feedzirra_feed, @feed.id)
-				#regex_titles_for_keywords - replaced by Echonest API call
-				echonest_extract_artists_from_titles
-				look_for_artist_titles_in_post_title
-				#query_soundcloud_direct_with_post_title
+				@feed.posts.each do |post|
+					@post = post
+					extract_tracks_from_embeds
+					#regex_titles_for_keywords - replaced by Echonest API call
+					#echonest_extract_artists_from_titles
+					#look_for_artist_titles_in_post_title
+					#query_soundcloud_direct_with_post_title	
+				end				
 			end
 			@feed
 		else 
@@ -30,34 +33,25 @@ class RSSParser
 	end
 
 	def extract_tracks_from_embeds
-		re_soundcloud = /(api\.soundcloud\.com[^&]*)/
-		# credit https://gist.github.com/afeld/1254889 for regex 
-		re_youtube = /(youtu\.be\/|youtube\.com\/(watch\?(.*&)?v=|(embed|v)\/))([^\?&"'>]+)/
+		#strategy: first extract from body and summary feed fields. if none present
+		#head over to the post.url and check there. 
+
+				
+		player_urls = []
+		player_urls = HtmlParser.new(@post.summary).extract_player_urls_from_iframes
+		player_urls.concat(HtmlParser.new(@post.body).extract_player_urls_from_iframes)
 		
-		extract_player_urls_from_iframes_in_posts_bodies
-		
-		if @player_urls
-			@player_urls.each do | hash |
-				player_url = hash[:player_url]
-				player_type = identify_player_type(player_url)
-				case player_type
-				 	when "Soundcloud"
-						then
-							#resolve soundcloud uri to track
-							soundcloud_uri = (hash[:player_url].match re_soundcloud).captures[0] 
-							soundcloud_track = SoundcloudProvider.resolve_uri_to_track(soundcloud_uri)
-							Track.create_from_soundcloud_track(soundcloud_track, hash[:post])							
-					when "Youtube"
-						then
-						# resolve via oembed, call track method to create with youtube info
-						# @match.captures[4] = $5 is the vid id in this case							
-							vid_id = (hash[:player_url].match re_youtube).captures[4] 
-							if (youtube_vid = Youtube.oembed(vid_id)) 
-								Track.create_from_youtube_vid(vid_id, youtube_vid, hash[:post])
-							end
-				end
-			end
-		end
+		unless player_urls.empty?
+			if ("None" == (create_tracks_from_player_urls(player_urls)))
+				# have to head over to the website to check for embeded content
+				# all player_urls were bullshit or not supported yet
+				create_tracks_from_embeds_on_website_behind_post				
+			end	
+		else
+			# no player_urls where found in neither summary nor body, so head over to the 
+			# website to check for embeded content
+			create_tracks_from_embeds_on_website_behind_post
+		end		
 	end
 
 	def query_soundcloud_direct_with_post_title
@@ -67,17 +61,81 @@ class RSSParser
 	    if soundcloud_track
 	      #create track with parent post
 	      Track.create_from_soundcloud_track(soundcloud_track, post)
-	    end
-	    post.tracks.each do |track|
-	      unless track.soundcloud_embed
-	        track.pull_soundcloud_embed
-	      end
-	    end
+	    end	    
     end 
 	end
 
+	def look_for_artist_titles_in_post_title
+		d = DiscogsApi.new
+		@feed.posts.each do |post|
+			post.keywords.each do |keyword|
+				#pull list of discogs releases-titles for each keyword (=artist, found
+				#by echonest)
+				titles = d.list_titles_by_artist(keyword.value)
+				titles.each do |title|
+					if (post.title.downcase.include?(title.downcase))
+						#create a track if single result found
+						if (soundcloud_track =
+						SoundcloudProvider.query_for_first_track(
+							keyword.value + " " + title))
+							Track.create_from_soundcloud_track(soundcloud_track, post)
+						end
+					end
+				end
+			end
+		end
+	end
+
+	def self.update_embeds(post)
+		post.tracks.each do |track|
+	  	unless track.soundcloud_embed
+	    	track.pull_soundcloud_embed
+	  	end
+	  end
+	end
 
 	private
+
+	def create_tracks_from_embeds_on_website_behind_post
+		player_urls = HtmlParser.new(
+			HTTParty.get(@post.url)).extract_player_urls_from_iframes
+		unless (player_urls.empty?)
+			create_tracks_from_player_urls(player_urls)
+		end
+	end
+
+	def create_tracks_from_player_urls(player_urls)
+		@re_soundcloud = /(api\.soundcloud\.com[^&]*)/
+		# credit https://gist.github.com/afeld/1254889 for regex 
+		@re_youtube = /(youtu\.be\/|youtube\.com\/(watch\?(.*&)?v=|(embed|v)\/))([^\?&"'>]+)/
+
+		player_urls.each do |player_url|
+			player_type = identify_player_type(player_url)
+			case player_type
+				when "Soundcloud"
+					#resolve soundcloud uri to track
+					soundcloud_uri = (player_url.match @re_soundcloud).captures[0] 
+					soundcloud_track = SoundcloudProvider.resolve_uri_to_track(soundcloud_uri)
+					Track.create_from_soundcloud_track(soundcloud_track, @post)							
+				when "Youtube"
+					# resolve via oembed, call track method to create with youtube info
+					# @match.captures[4] = $5 is the vid id in this case
+					Rails.logger.debug"""
+					
+					player_url is #{player_url}					
+					@re_youtube is #{@re_youtube}
+					player_url.mactch @re_youtube is#{player_url.match @re_youtube}
+
+					"""
+
+					vid_id = (player_url.match @re_youtube).captures[4] 
+					if (youtube_vid = Youtube.oembed(vid_id)) 
+						Track.create_from_youtube_vid(vid_id, youtube_vid, @post)
+					end
+			else return "None"								
+			end
+		end
+	end
 
 	def echonest_extract_artists_from_titles
 		#construct the API call. 
@@ -103,8 +161,6 @@ class RSSParser
 		end
 	end
 
-
-
 	def regex_titles_for_keywords
 		# matches the word before and after common artist - title delimiters
 		# like “:”, “-“, or “–“
@@ -123,60 +179,16 @@ class RSSParser
 				end
 			end
 		end
-	end
-
-	
-	def extract_player_urls_from_iframes_in_posts_bodies
-		# parse html in posts bodies with nokogiri
-		@player_urls = []
-		@feed.posts.each do |post|
-			doc = Nokogiri::HTML(post.body)
-			#find all iframes, decode their player_url = src value to regexable string, 
-			#store post with player url 
-			doc.xpath("//iframe").each do |iframe|
-				@player_urls << 
-				{player_url: URI.decode(iframe.attributes['src'].value), post: post}
-			end
-		end
-	end
+	end	
 
 	def identify_player_type(player_url)
 		# switch depending on type
-		if (player_url.include? 'soundcloud')
+		if (player_url =~ @re_soundcloud)
 			return "Soundcloud"
-		elsif (player_url.include? 'youtube')
+		elsif (player_url =~ @re_youtube)
 			return "Youtube"
 		else
 			 return "None"
 		end
 	end
-
-
-	def look_for_artist_titles_in_post_title
-		d = DiscogsApi.new
-		@feed.posts.each do |post|
-			post.keywords.each do |keyword|
-				#pull list of discogs releases-titles for each keyword (=artist, found
-				#by echonest)
-				titles = d.list_titles_by_artist(keyword.value)
-				titles.each do |title|
-					if (post.title.downcase.include?(title.downcase))
-						#create a track if single result found
-						if (soundcloud_track =
-						SoundcloudProvider.query_for_first_track(
-							keyword.value + " " + title))
-							Track.create_from_soundcloud_track(soundcloud_track, post)
-						end
-					end
-				end
-			end
-		end
-	end
-
-			
-		
-
-	
-
-
 end
