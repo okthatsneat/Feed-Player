@@ -49,10 +49,6 @@ class FeedsController < ApplicationController
     if (rss_parser = RSSParser.new(@feed))
       # get the embeded content and create tracks
       rss_parser.parse
-      rss_parser.extract_tracks_from_embeds
-
-      # pull the posts to create tracks from, query Soundcloud
-      # TODO encapsulate in rss_parser.method
       format.html { redirect_to @feed, notice: 'Feed was successfully created.' }
       format.json { render json: @feed, status: :created, location: @feed }
     else

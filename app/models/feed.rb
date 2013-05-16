@@ -1,5 +1,5 @@
 class Feed < ActiveRecord::Base
-  attr_accessible :etag, :feed_url, :last_modified, :title, :url
+  attr_accessible :etag, :feed_url, :last_modified, :title, :url, :top_level_domain
   has_many :posts , :dependent => :destroy
 
 	def update_from_feed(feedzirra_feed)
@@ -10,7 +10,9 @@ class Feed < ActiveRecord::Base
 		    :title          => feedzirra_feed.title,
 		    :url            => feedzirra_feed.url,
 		    :etag           => feedzirra_feed.etag,       
-		    :last_modified  => feedzirra_feed.last_modified
+		    :last_modified  => feedzirra_feed.last_modified,
+		    :top_level_domain => 
+		    (feedzirra_feed.url.match /(https?:\/\/www\.|https?:\/\/)(.[^\/]*)/).captures[1]
 		  )
 		else
 			false

@@ -15,4 +15,9 @@ class HtmlParser
 		return player_urls		
 	end
 
+	def extract_links
+		#TODO
+	end
+
+
 end

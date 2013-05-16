@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130511160349) do
+ActiveRecord::Schema.define(:version => 20130515140343) do
 
   create_table "feeds", :force => true do |t|
     t.string   "url"
@@ -19,8 +19,9 @@ ActiveRecord::Schema.define(:version => 20130511160349) do
     t.string   "feed_url"
     t.string   "etag"
     t.datetime "last_modified"
-    t.datetime "created_at",    :null => false
-    t.datetime "updated_at",    :null => false
+    t.datetime "created_at",       :null => false
+    t.datetime "updated_at",       :null => false
+    t.string   "top_level_domain"
   end
 
   create_table "keyword_posts", :force => true do |t|

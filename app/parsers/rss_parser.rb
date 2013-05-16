@@ -19,8 +19,8 @@ class RSSParser
 				Post.update_from_feed(feedzirra_feed, @feed.id)
 				@feed.posts.each do |post|
 					@post = post
-					extract_tracks_from_embeds
-					#regex_titles_for_keywords - replaced by Echonest API call
+					#extract_tracks_from_embeds #this works!
+					#regex_titles_for_keywords # replaced by Echonest API call
 					#echonest_extract_artists_from_titles
 					#look_for_artist_titles_in_post_title
 					#query_soundcloud_direct_with_post_title	
@@ -147,18 +147,25 @@ class RSSParser
 		api_type = 'artist'
 		api_method = 'extract'
 		api_key = 'ZHRJX1PLWUWJZRIL8'
-		
-		@api_call = Proc.new{|text| base_uri + '/' + api_type + '/' + api_method + '?' + 'api_key='+ api_key + '&format=json' + "&text=#{text}" + '&results=10'}
+		buckets = '&bucket=news&bucket=blogs&bucket=reviews&bucket=songs'
+		api_call = Proc.new{|text| base_uri + '/' + api_type + '/' + api_method + '?' + 'api_key='+ api_key + '&format=json' + "&text=#{text}" + '&results=10' + buckets}
+		text = URI::encode(@post.title)
+		response = HTTParty.get(api_call.call(text))
+		response["response"]["artists"].each do |artist|
+			#grab artist related press needed for validation 
 
-		@feed.posts.each do |post|
-			text = URI::encode(post.title)
-			#Rails.logger.debug "text after URI encoding is #{text}"
-			response = HTTParty.get(@api_call.call(text))
-			response["response"]["artists"].each do |artist|
+			#validate the artist found
+			if (validate_artist(artist))
 				#set up keyword for each returned artist name
-				KeywordPost.create_keyword_with_post!(artist["name"], post.id)
+				KeywordPost.create_keyword_with_post!(artist["name"], @post.id)
 			end
-		end
+		end		
+	end
+
+	def validate_artist(artist)
+		#query artist related blogs,reviews,news found by echnonest 
+		#for occurence of filter source. 
+
 	end
 
 	def regex_titles_for_keywords
