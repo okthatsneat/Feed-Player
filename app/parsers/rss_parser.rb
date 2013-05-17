@@ -1,4 +1,5 @@
 # encoding: UTF-8
+require 'pry'
 class RSSParser
 	include HTTParty
   format :json
@@ -21,8 +22,7 @@ class RSSParser
 					@post = post
 					#extract_tracks_from_embeds #this works!
 					#regex_titles_for_keywords # replaced by Echonest API call
-					#echonest_extract_artists_from_titles
-					#look_for_artist_titles_in_post_title
+					echonest_extract_artists_from_titles
 					#query_soundcloud_direct_with_post_title	
 				end				
 			end
@@ -54,44 +54,31 @@ class RSSParser
 		end		
 	end
 
-	def query_soundcloud_direct_with_post_title
-		@feed.posts.each do | post |
-		  soundcloud_track = 
-	    SoundcloudProvider.query_for_single_track_from_title(post.title)
-	    if soundcloud_track
-	      #create track with parent post
-	      Track.create_from_soundcloud_track(soundcloud_track, post)
-	    end	    
-    end 
+	def query_soundcloud_direct_with_post_title		
+	  soundcloud_track = 
+    SoundcloudProvider.query_for_single_track_from_title(@post.title)
+    if soundcloud_track
+      #create track with parent post
+      Track.create_from_soundcloud_track(soundcloud_track, @post)
+    end     
 	end
 
-	def look_for_artist_titles_in_post_title
-		d = DiscogsApi.new
-		@feed.posts.each do |post|
-			post.keywords.each do |keyword|
-				#pull list of discogs releases-titles for each keyword (=artist, found
-				#by echonest)
-				titles = d.list_titles_by_artist(keyword.value)
-				titles.each do |title|
-					if (post.title.downcase.include?(title.downcase))
-						#create a track if single result found
-						if (soundcloud_track =
-						SoundcloudProvider.query_for_first_track(
-							keyword.value + " " + title))
-							Track.create_from_soundcloud_track(soundcloud_track, post)
-						end
-					end
-				end
-			end
+	def look_for_artist_titles_in_post_title(artist_name)
+		d = DiscogsApi.new		
+		#pull list of discogs releases-titles for each keyword (=artist, found
+		#by echonest)
+		titles = d.list_titles_by_artist(artist_name)
+		titles_found = []
+		titles.each do |title|
+			if (@post.title.downcase.include?(title.downcase))
+				titles_found << title
+			end		
 		end
-	end
-
-	def self.update_embeds(post)
-		post.tracks.each do |track|
-	  	unless track.soundcloud_embed
-	    	track.pull_soundcloud_embed
-	  	end
-	  end
+		unless (titles_found.empty?)
+			titles_found
+		else
+			false
+		end				
 	end
 
 	private
@@ -139,33 +126,55 @@ class RSSParser
 
 	def echonest_extract_artists_from_titles
 		#construct the API call. 
-		# ex: http://developer.echonest.com/api/v4/artist/
-		# extract?api_key=ZHRJX1PLWUWJZRIL8&format=json&
-		# text=Siriusmo%20is%20my%20favorite%20,%20but%20I%20also%20like%20hrvatski&results=10
-
 		base_uri = 'http://developer.echonest.com/api/v4'
 		api_type = 'artist'
 		api_method = 'extract'
 		api_key = 'ZHRJX1PLWUWJZRIL8'
+		#grab artist related press needed for validation 
 		buckets = '&bucket=news&bucket=blogs&bucket=reviews&bucket=songs'
 		api_call = Proc.new{|text| base_uri + '/' + api_type + '/' + api_method + '?' + 'api_key='+ api_key + '&format=json' + "&text=#{text}" + '&results=10' + buckets}
 		text = URI::encode(@post.title)
 		response = HTTParty.get(api_call.call(text))
-		response["response"]["artists"].each do |artist|
-			#grab artist related press needed for validation 
-
-			#validate the artist found
-			if (validate_artist(artist))
-				#set up keyword for each returned artist name
-				KeywordPost.create_keyword_with_post!(artist["name"], @post.id)
+		Rails.logger.debug"api call is #{api_call.call(text)}"
+		response['response']['artists'].each do |artist|			
+			artist_name = artist['name']
+			if (titles_found = look_for_artist_titles_in_post_title(artist_name))
+				#set up keyword for each validated artist
+				KeywordPost.create_keyword_with_post!(artist_name, @post.id)
+				#query sound providers for artist-title result				
+				titles_found.each do |title|
+					if (soundcloud_track =
+					SoundcloudProvider.query_for_single_track_from_title(
+						artist_name + " " + title.gsub("#{artist_name}", "")))
+						Track.create_from_soundcloud_track(soundcloud_track, @post)
+					end
+				end			
 			end
 		end		
 	end
 
+	# cool idea, unfortunately echnonest doesn't have enough press 
+	# of offer to make this work
 	def validate_artist(artist)
 		#query artist related blogs,reviews,news found by echnonest 
-		#for occurence of filter source. 
-
+		#for occurence in filter source history. 
+		urls = []
+		blogs = artist['blogs'] 
+		news = artist['news']
+		reviews = artist['reviews']
+		outlets = [] << blogs << news << reviews		
+		outlets.each do |outlet|
+			if (outlet)
+				outlet.each do |outlet|
+					url = outlet['url']
+					if (url =~ /#{@feed.top_level_domain}/)						
+						return true
+					end
+				end
+			end
+		end		
+	# if it reaches this point, there was no match
+	return false		
 	end
 
 	def regex_titles_for_keywords
@@ -175,17 +184,15 @@ class RSSParser
 		# match groups of captitalized words, optionally delimited with , or "" 
 		re2 = /([A-Z]'?\w+,?(?:\s"?[A-Z]'?\w+,?"?)+)/
 		regexes = [] << re1 << re2
-		# dump all matches as keywords
-		@feed.posts.each do | post |
-			regexes.each do | re |
-				match = post.title.match re
-				if match
-					match.captures.each do | capture |
-					KeywordPost.create_keyword_with_post!(capture, post.id)
-					end
+		# dump all matches as keywords		
+		regexes.each do | re |
+			match = @post.title.match re
+			if match
+				match.captures.each do | capture |
+				KeywordPost.create_keyword_with_post!(capture, @post.id)
 				end
 			end
-		end
+		end		
 	end	
 
 	def identify_player_type(player_url)

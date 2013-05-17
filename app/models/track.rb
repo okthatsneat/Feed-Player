@@ -5,13 +5,7 @@ class Track < ActiveRecord::Base
   has_many :keywords, :through => :keyword_tracks
   has_and_belongs_to_many :posts
 
-  def pull_soundcloud_embed
-	  if (self.soundcloud_uri)
-		  self.soundcloud_embed = SoundcloudProvider.get_embed_html5(self.soundcloud_uri)
-		  self.save
-		end
-  end
-
+ 
   def self.create_from_soundcloud_track(soundcloud_track, post)
 		if Track.exists? :soundcloud_uri => soundcloud_track.uri
 			if post.tracks.find_by_soundcloud_uri(soundcloud_track.uri)
@@ -25,6 +19,7 @@ class Track < ActiveRecord::Base
 				track.soundcloud_uri		=	soundcloud_track.uri
 				track.soundcloud_url 		= 
 				(soundcloud_track.user.permalink_url + '/' + soundcloud_track.permalink)
+				track.soundcloud_embed = SoundcloudProvider.get_embed_html5(track.soundcloud_uri)
 			end 
 		end
 	end

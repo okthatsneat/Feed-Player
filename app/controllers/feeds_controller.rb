@@ -13,11 +13,7 @@ class FeedsController < ApplicationController
   # GET /feeds/1
   # GET /feeds/1.json
   def show
-    @feed = Feed.find(params[:id])
-    @feed.posts.each do |post|
-      RSSParser.update_embeds(post)
-    end
-
+    @feed = Feed.find(params[:id])   
     respond_to do |format|
       format.html # show.html.erb
       format.json { render json: @feed }
