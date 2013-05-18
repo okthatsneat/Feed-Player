@@ -56,7 +56,7 @@ class RSSParser
 
 	def query_soundcloud_direct_with_post_title		
 	  soundcloud_track = 
-    SoundcloudProvider.query_for_single_track_from_title(@post.title)
+    SoundcloudProvider.query(@post.title)
     if soundcloud_track
       #create track with parent post
       Track.create_from_soundcloud_track(soundcloud_track, @post)
@@ -130,32 +130,50 @@ class RSSParser
 		api_type = 'artist'
 		api_method = 'extract'
 		api_key = 'ZHRJX1PLWUWJZRIL8'
-		#grab artist related press needed for validation 
+		#grab artist related press 
 		buckets = '&bucket=news&bucket=blogs&bucket=reviews&bucket=songs'
-		api_call = Proc.new{|text| base_uri + '/' + api_type + '/' + api_method + '?' + 'api_key='+ api_key + '&format=json' + "&text=#{text}" + '&results=10' + buckets}
+		api_request_url = Proc.new{|text| base_uri + '/' + api_type + '/' + api_method + '?' + 'api_key='+ api_key + '&format=json' + "&text=#{text}" + '&results=10' + buckets}
 		text = URI::encode(@post.title)
-		response = HTTParty.get(api_call.call(text))
-		Rails.logger.debug"api call is #{api_call.call(text)}"
-		response['response']['artists'].each do |artist|			
-			artist_name = artist['name']
-			if (titles_found = look_for_artist_titles_in_post_title(artist_name))
-				#set up keyword for each validated artist
-				KeywordPost.create_keyword_with_post!(artist_name, @post.id)
-				#query sound providers for artist-title result				
-				titles_found.each do |title|
-					if (soundcloud_track =
-					SoundcloudProvider.query_for_single_track_from_title(
-						artist_name + " " + title.gsub("#{artist_name}", "")))
-						Track.create_from_soundcloud_track(soundcloud_track, @post)
-					end
-				end			
+		# wrap api call related code in block for retry		
+		api_call = Proc.new do
+			response = HTTParty.get(api_request_url.call(text))		
+		 	artists = response['response']['artists']			
+			artists.each do |artist|
+				artist_name = artist['name']
+				titles_found = look_for_artist_titles_in_post_title(artist_name)
+				in_summary = @post.summary =~ /#{artist_name}/
+				in_body = @post.body =~ /#{artist_name}/
+				Rails.logger.debug" in_summary is #{in_summary}, in_body is #{in_body}, titles_found is #{titles_found}"
+				if (titles_found && (in_summary || in_body))
+					#set up keyword and provider request for each validated artist
+					KeywordPost.create_keyword_with_post!(artist_name, @post.id)
+					#query sound providers for artist-title result				
+					titles_found.each do |title|						 
+						soundcloud_track =
+						SoundcloudProvider.query(
+							artist_name + " " + title.gsub("#{artist_name}", ""))
+						Rails.logger.debug"soundcloud_track is #{soundcloud_track}"
+						if (soundcloud_track)
+							Track.create_from_soundcloud_track(soundcloud_track, @post)
+						end
+					end			
+				end
 			end
-		end		
+		end
+		begin
+			api_call.call
+		#artists.each will throw no method error if artists is nil
+		rescue NoMethodError => e
+			#retry api request
+			t = ThreadedApiCall.new({}, &api_call)
+			t.join
+			t.result
+		end							
 	end
-
+	
 	# cool idea, unfortunately echnonest doesn't have enough press 
 	# of offer to make this work
-	def validate_artist(artist)
+	def validate_echonest_artist_with_echonest_outlets(artist)
 		#query artist related blogs,reviews,news found by echnonest 
 		#for occurence in filter source history. 
 		urls = []
@@ -176,6 +194,12 @@ class RSSParser
 	# if it reaches this point, there was no match
 	return false		
 	end
+
+	
+	def present_in_post_summary?(artist_name)
+		@post.summary.include?(artist_name)
+	end
+
 
 	def regex_titles_for_keywords
 		# matches the word before and after common artist - title delimiters
