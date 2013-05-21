@@ -6,8 +6,8 @@ class SoundcloudProvider
 	
 	def self.query(searchTerm)
 		client = Soundcloud.new(:client_id => SOUNDCLOUD_CLIENT_ID)
-		#this throws 503 service unavailable sometimes, need to retry
-		api_call = Proc.new do |searchTerm|
+		#this throws 503 service unavailable sometimes, need to retry, wrap in proc
+		api_call = Proc.new do 
 			#query for playlists and tracks
 			playlists = client.get('/playlists', :q => searchTerm, :filter => 'streamable')
 			tracks = client.get('/tracks', :q => searchTerm, :filter => 'streamable')
@@ -18,8 +18,8 @@ class SoundcloudProvider
 					#verify and return best result
 					result.each do |item|
 						(searchTerm.split(' ')).each do |search_word|
-							unless ((item.title =~ /#{search_word}/i).nil?)
-								Rails.logger.debug"search word that broke the checking loop is #{search_word}" 
+							unless (item.title =~ /#{search_word}/i)
+								#Rails.logger.debug"search word that broke the checking loop is #{search_word}" 
 								break
 							end
 							#found a matching item
@@ -41,8 +41,7 @@ class SoundcloudProvider
 			if e.response.message == "Service Unavailable"
 				#retry request
 				Rails.logger.debug"in rescue block soundcloud 503 response error "
-
-				t = ThreadedApiCall.new({}, &api_call(searchTerm))
+				t = ThreadedApiCall.new( {}, &api_call)
 				# if the main thread needs to wait for this, call 
 				t.join
 				t.result

@@ -2,7 +2,7 @@
 require 'pry'
 class RSSParser
 	include HTTParty
-  format :json
+	format :json
 
 	def initialize(feed)
 		@feed = feed
@@ -20,27 +20,58 @@ class RSSParser
 				Post.update_from_feed(feedzirra_feed, @feed.id)
 				@feed.posts.each do |post|
 					@post = post
-					#extract_tracks_from_embeds #this works!
-					#regex_titles_for_keywords # replaced by Echonest API call
-					echonest_extract_artists_from_titles
-					#query_soundcloud_direct_with_post_title	
-				end				
+					# call first - extract_tracks_from_embeds #this works!
+					artist_names = echonest_extract_artists_from_titles
+					unless (artist_names.empty?)
+						artist_names.each do |artist_name|						 
+							titles_found = look_for_discogs_artist_titles_in_post_title(artist_name)						
+							unless (titles_found.empty?)
+								titles_found.each do |title|
+									if (artist_name == title) 
+										# break if not present in post.title twice!
+										if ( (@post.title.match /#{title}/i).captures.length < 2	)
+											break
+										end 
+									end
+									#query provider
+									query = artist_name + " " + title.gsub("#{artist_name}", "")
+									soundcloud_track = SoundcloudProvider.query(query)
+									#ceate track
+									if (soundcloud_track)
+										Rails.logger.debug"query for track created is #{query}"
+										Track.create_from_soundcloud_track(soundcloud_track, @post)
+										Rails.logger.debug"track is #{soundcloud_track.title}"
+									end			
+								end
+								#set up keyword for this validated artist
+								KeywordPost.create_keyword_with_post!(artist_name, @post.id)							
+							else 
+								if (search_term_present_in_body_or_summary?(artist_name) || Keyword.exists?(:value => artist_name))
+									# TODO case only artist present ------------------------------------------------
+									# query for latest, most popular track?
+								end
+							end
+						end
+					end
+					#	case no artists detected -----------------------------------------------
+					# TODO case Various Artists release not detected by Echonest 					
+					# TODO case only release title may be present in @post.title 
+						# echonest extract artist on @post.summary 
+						# discogs check for titles of those artists in @post.title				
+				end # end loop through posts				
 			end
 			@feed
-		else 
+		else
 			FALSE
 		end
 	end
 
 	def extract_tracks_from_embeds
 		#strategy: first extract from body and summary feed fields. if none present
-		#head over to the post.url and check there. 
-
-				
+		#head over to the post.url and check there.
 		player_urls = []
 		player_urls = HtmlParser.new(@post.summary).extract_player_urls_from_iframes
-		player_urls.concat(HtmlParser.new(@post.body).extract_player_urls_from_iframes)
-		
+		player_urls.concat(HtmlParser.new(@post.body).extract_player_urls_from_iframes)		
 		unless player_urls.empty?
 			if ("None" == (create_tracks_from_player_urls(player_urls)))
 				# have to head over to the website to check for embeded content
@@ -55,15 +86,15 @@ class RSSParser
 	end
 
 	def query_soundcloud_direct_with_post_title		
-	  soundcloud_track = 
-    SoundcloudProvider.query(@post.title)
-    if soundcloud_track
-      #create track with parent post
-      Track.create_from_soundcloud_track(soundcloud_track, @post)
-    end     
+		soundcloud_track = 
+		SoundcloudProvider.query(@post.title)
+		if soundcloud_track
+			#create track with parent post
+			Track.create_from_soundcloud_track(soundcloud_track, @post)
+		end
 	end
 
-	def look_for_artist_titles_in_post_title(artist_name)
+	def look_for_discogs_artist_titles_in_post_title(artist_name)
 		d = DiscogsApi.new		
 		#pull list of discogs releases-titles for each keyword (=artist, found
 		#by echonest)
@@ -71,14 +102,11 @@ class RSSParser
 		titles_found = []
 		titles.each do |title|
 			if (@post.title.downcase.include?(title.downcase))
+				#check for self-titled releases
 				titles_found << title
 			end		
 		end
-		unless (titles_found.empty?)
-			titles_found
-		else
-			false
-		end				
+		titles_found						
 	end
 
 	private
@@ -124,6 +152,7 @@ class RSSParser
 		end
 	end
 
+	# returns array of artists found in @post.title
 	def echonest_extract_artists_from_titles
 		#construct the API call. 
 		base_uri = 'http://developer.echonest.com/api/v4'
@@ -137,40 +166,31 @@ class RSSParser
 		# wrap api call related code in block for retry		
 		api_call = Proc.new do
 			response = HTTParty.get(api_request_url.call(text))		
-		 	artists = response['response']['artists']			
-			artists.each do |artist|
-				artist_name = artist['name']
-				titles_found = look_for_artist_titles_in_post_title(artist_name)
-				in_summary = @post.summary =~ /#{artist_name}/
-				in_body = @post.body =~ /#{artist_name}/
-				Rails.logger.debug" in_summary is #{in_summary}, in_body is #{in_body}, titles_found is #{titles_found}"
-				if (titles_found && (in_summary || in_body))
-					#set up keyword and provider request for each validated artist
-					KeywordPost.create_keyword_with_post!(artist_name, @post.id)
-					#query sound providers for artist-title result				
-					titles_found.each do |title|						 
-						soundcloud_track =
-						SoundcloudProvider.query(
-							artist_name + " " + title.gsub("#{artist_name}", ""))
-						Rails.logger.debug"soundcloud_track is #{soundcloud_track}"
-						if (soundcloud_track)
-							Track.create_from_soundcloud_track(soundcloud_track, @post)
-						end
-					end			
+		 	raise "failed api call" if (response['response']['status']['code'] != 0)
+		 	artists = response['response']['artists']
+		 	artist_names = []
+		 	unless artists.nil?
+				artists.each do |artist|
+			 		artist_names << artist['name']
 				end
 			end
+		 	return artist_names
 		end
 		begin
 			api_call.call
 		#artists.each will throw no method error if artists is nil
-		rescue NoMethodError => e
+		rescue RuntimeError => e
 			#retry api request
 			t = ThreadedApiCall.new({}, &api_call)
 			t.join
 			t.result
 		end							
 	end
-	
+
+	def search_term_present_in_body_or_summary?(search_term)
+		(@post.summary =~ /#{search_term}/i) || (@post.body =~ /#{search_term}/i)
+	end
+
 	# cool idea, unfortunately echnonest doesn't have enough press 
 	# of offer to make this work
 	def validate_echonest_artist_with_echonest_outlets(artist)
@@ -194,12 +214,10 @@ class RSSParser
 	# if it reaches this point, there was no match
 	return false		
 	end
-
 	
 	def present_in_post_summary?(artist_name)
 		@post.summary.include?(artist_name)
 	end
-
 
 	def regex_titles_for_keywords
 		# matches the word before and after common artist - title delimiters
