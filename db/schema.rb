@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130515140343) do
+ActiveRecord::Schema.define(:version => 20130521104827) do
 
   create_table "feeds", :force => true do |t|
     t.string   "url"
@@ -23,6 +23,8 @@ ActiveRecord::Schema.define(:version => 20130515140343) do
     t.datetime "updated_at",       :null => false
     t.string   "top_level_domain"
   end
+
+  add_index "feeds", ["feed_url"], :name => "index_feeds_on_feed_url", :unique => true
 
   create_table "keyword_posts", :force => true do |t|
     t.string   "title_occurrence"
@@ -58,6 +60,8 @@ ActiveRecord::Schema.define(:version => 20130515140343) do
     t.integer  "feed_id"
   end
 
+  add_index "posts", ["guid"], :name => "index_posts_on_guid", :unique => true
+
   create_table "posts_tracks", :id => false, :force => true do |t|
     t.integer "post_id"
     t.integer "track_id"
@@ -75,5 +79,8 @@ ActiveRecord::Schema.define(:version => 20130515140343) do
     t.string   "youtube_id"
     t.text     "youtube_embed",    :limit => 255
   end
+
+  add_index "tracks", ["soundcloud_uri"], :name => "index_tracks_on_soundcloud_uri", :unique => true
+  add_index "tracks", ["youtube_id"], :name => "index_tracks_on_youtube_id", :unique => true
 
 end

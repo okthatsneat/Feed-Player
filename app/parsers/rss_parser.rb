@@ -20,44 +20,9 @@ class RSSParser
 				Post.update_from_feed(feedzirra_feed, @feed.id)
 				@feed.posts.each do |post|
 					@post = post
-					# call first - extract_tracks_from_embeds #this works!
+					next if extract_tracks_from_embeds 
 					artist_names = echonest_extract_artists_from_titles
-					unless (artist_names.empty?)
-						artist_names.each do |artist_name|						 
-							titles_found = look_for_discogs_artist_titles_in_post_title(artist_name)						
-							unless (titles_found.empty?)
-								titles_found.each do |title|
-									if (artist_name == title) 
-										# break if not present in post.title twice!
-										if ( (@post.title.match /#{title}/i).captures.length < 2	)
-											break
-										end 
-									end
-									#query provider
-									query = artist_name + " " + title.gsub("#{artist_name}", "")
-									soundcloud_track = SoundcloudProvider.query(query)
-									#ceate track
-									if (soundcloud_track)
-										Rails.logger.debug"query for track created is #{query}"
-										Track.create_from_soundcloud_track(soundcloud_track, @post)
-										Rails.logger.debug"track is #{soundcloud_track.title}"
-									end			
-								end
-								#set up keyword for this validated artist
-								KeywordPost.create_keyword_with_post!(artist_name, @post.id)							
-							else 
-								if (search_term_present_in_body_or_summary?(artist_name) || Keyword.exists?(:value => artist_name))
-									# TODO case only artist present ------------------------------------------------
-									# query for latest, most popular track?
-								end
-							end
-						end
-					end
-					#	case no artists detected -----------------------------------------------
-					# TODO case Various Artists release not detected by Echonest 					
-					# TODO case only release title may be present in @post.title 
-						# echonest extract artist on @post.summary 
-						# discogs check for titles of those artists in @post.title				
+					validate_and_create_tracks_semantically(artist_names)								
 				end # end loop through posts				
 			end
 			@feed
@@ -73,17 +38,60 @@ class RSSParser
 		player_urls = HtmlParser.new(@post.summary).extract_player_urls_from_iframes
 		player_urls.concat(HtmlParser.new(@post.body).extract_player_urls_from_iframes)		
 		unless player_urls.empty?
-			if ("None" == (create_tracks_from_player_urls(player_urls)))
+			unless (create_tracks_from_player_urls(player_urls))
 				# have to head over to the website to check for embeded content
-				# all player_urls were bullshit or not supported yet
-				create_tracks_from_embeds_on_website_behind_post				
+				# all player_urls were not supported yet
+				return create_tracks_from_embeds_on_website_behind_post				
+			else
+				return true
 			end	
 		else
 			# no player_urls where found in neither summary nor body, so head over to the 
 			# website to check for embeded content
-			create_tracks_from_embeds_on_website_behind_post
-		end		
+			return create_tracks_from_embeds_on_website_behind_post
+		end
+		return false		
 	end
+
+	def validate_and_create_tracks_semantically(artist_names)
+		unless (artist_names.empty?)
+			artist_names.each do |artist_name|						 
+				titles_found = look_for_discogs_artist_titles_in_post_title(artist_name)						
+				unless (titles_found.empty?)
+					titles_found.each do |title|
+						if (artist_name == title) 
+							# break if not present in post.title twice!
+							if ( (@post.title.match /#{title}/i).captures.length < 2	)
+								break
+							end 
+						end
+						#query provider
+						query = artist_name + " " + title.gsub("#{artist_name}", "")
+						soundcloud_track = SoundcloudProvider.query(query)
+						#ceate track
+						if (soundcloud_track)
+							Rails.logger.debug"query for track created is #{query}"
+							Track.create_from_soundcloud_track(soundcloud_track, @post)
+							Rails.logger.debug"track is #{soundcloud_track.title}"
+						end			
+					end
+					#set up keyword for this validated artist
+					KeywordPost.create_keyword_with_post!(artist_name, @post.id)							
+				else 
+					if (search_term_present_in_body_or_summary?(artist_name) || Keyword.exists?(:value => artist_name))
+						# TODO case only artist present ------------------------------------------------
+						# query for latest, most popular track?
+					end
+				end
+			end
+		end
+		#	case no artists detected -----------------------------------------------
+		# TODO case Various Artists release not detected by Echonest 					
+		# TODO case only release title may be present in @post.title 
+			# echonest extract artist on @post.summary 
+			# discogs check for titles of those artists in @post.title	
+	end
+
 
 	def query_soundcloud_direct_with_post_title		
 		soundcloud_track = 
@@ -115,15 +123,15 @@ class RSSParser
 		player_urls = HtmlParser.new(
 			HTTParty.get(@post.url)).extract_player_urls_from_iframes
 		unless (player_urls.empty?)
-			create_tracks_from_player_urls(player_urls)
+			return create_tracks_from_player_urls(player_urls)
 		end
+		return false
 	end
 
 	def create_tracks_from_player_urls(player_urls)
 		@re_soundcloud = /(api\.soundcloud\.com[^&]*)/
 		# credit https://gist.github.com/afeld/1254889 for regex 
 		@re_youtube = /(youtu\.be\/|youtube\.com\/(watch\?(.*&)?v=|(embed|v)\/))([^\?&"'>]+)/
-
 		player_urls.each do |player_url|
 			player_type = identify_player_type(player_url)
 			case player_type
@@ -131,23 +139,16 @@ class RSSParser
 					#resolve soundcloud uri to track
 					soundcloud_uri = (player_url.match @re_soundcloud).captures[0] 
 					soundcloud_track = SoundcloudProvider.resolve_uri_to_track(soundcloud_uri)
-					Track.create_from_soundcloud_track(soundcloud_track, @post)							
+					Track.create_from_soundcloud_track(soundcloud_track, @post)
+					return true							
 				when "Youtube"
-					# resolve via oembed, call track method to create with youtube info
-					# @match.captures[4] = $5 is the vid id in this case
-					Rails.logger.debug"""
-					
-					player_url is #{player_url}					
-					@re_youtube is #{@re_youtube}
-					player_url.mactch @re_youtube is#{player_url.match @re_youtube}
-
-					"""
-
 					vid_id = (player_url.match @re_youtube).captures[4] 
 					if (youtube_vid = Youtube.oembed(vid_id)) 
 						Track.create_from_youtube_vid(vid_id, youtube_vid, @post)
-					end
-			else return "None"								
+						return true
+					end					
+				else
+					return false								
 			end
 		end
 	end

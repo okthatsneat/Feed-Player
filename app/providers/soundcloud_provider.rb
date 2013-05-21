@@ -19,7 +19,7 @@ class SoundcloudProvider
 					result.each do |item|
 						(searchTerm.split(' ')).each do |search_word|
 							unless (item.title =~ /#{search_word}/i)
-								#Rails.logger.debug"search word that broke the checking loop is #{search_word}" 
+								Rails.logger.debug"search word that broke the checking loop is #{search_word}" 
 								break
 							end
 							#found a matching item
