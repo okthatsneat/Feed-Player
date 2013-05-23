@@ -1,7 +1,10 @@
 class Feed < ActiveRecord::Base
-  attr_accessible :etag, :feed_url, :last_modified, :title, :url, :top_level_domain
+  attr_accessible :etag, :feed_url, :last_modified, :title, :url, :top_level_domain, :feeds_attributes
   has_many :posts , :dependent => :destroy
+  has_and_belongs_to_many :playlists
+	accepts_nested_attributes_for :playlists
 
+  
 	def update_from_feed(feedzirra_feed)
   	# FIXME exists? is a class, not an instance method. 
   	unless Feed.exists? :feed_url => feedzirra_feed.feed_url 

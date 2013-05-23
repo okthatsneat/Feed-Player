@@ -10,7 +10,8 @@ gem 'nokogiri'
 gem 'discogs-wrapper'
 gem 'omniauth-facebook'
 gem 'pry'
-
+gem 'pismo'
+gem 'googleajax'
 
 group :development, :test do
   gem 'sqlite3', '1.3.5'

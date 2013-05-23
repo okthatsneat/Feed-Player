@@ -5,10 +5,12 @@
   <%= stylesheet_link_tag    "application", :media => "all" %>
   <%= javascript_include_tag "application" %>
   <%= csrf_meta_tags %>
+	<script src="https://www.google.com/jsapi" charset="utf-8" type="text/javascript" ></script>
 </head>
 <body>
 
 <%= yield %>
 <%= debug(params) if Rails.env.development? %>
 </body>
+
 </html>

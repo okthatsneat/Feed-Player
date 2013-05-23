@@ -19,5 +19,21 @@ class HtmlParser
 		#TODO
 	end
 
+	def parse_available_feeds_from_url(top_level_domain,search_term)
+		GoogleAjax.referrer = "localhost:3000/"
+		retry_count = 0
+		begin
+			# FIXME validate top level domain
+			GoogleAjax::Feed.find("site:#{top_level_domain} #{search_term}")
+			#extract unique feeds from hash
+		rescue "api call error"
+			#repeat or something
+			Rails.logger.debug"api call failure: GoogleAjax::Feed.find"
+			retry_count++
+			sleep(1)
+			retry unless (retry_count > 2)
+		end
+
+	end
 
 end

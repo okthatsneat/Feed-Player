@@ -1,0 +1,24 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Title:</b>
+  <%= @playlist.title %>
+</p>
+
+<p>
+  
+    <% @playlist.feeds.each do |feed| %>
+  <tr>  
+    <td>
+      <%= feed.feed_url %>
+    </td>
+      
+    <% end %>
+  </tr>
+</table>
+</p>
+
+
+
+<%= link_to 'Edit', edit_playlist_path(@playlist) %> |
+<%= link_to 'Back', playlists_path %>

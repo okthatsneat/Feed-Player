@@ -29,6 +29,7 @@ GEM
       i18n (= 0.6.1)
       multi_json (~> 1.0)
     arel (3.0.2)
+    awesome_print (1.1.0)
     builder (3.0.4)
     capybara (1.1.2)
       mime-types (>= 1.16)
@@ -39,6 +40,7 @@ GEM
       xpath (~> 0.1.4)
     childprocess (0.3.9)
       ffi (~> 1.0, >= 1.0.11)
+    chronic (0.9.1)
     coderay (1.0.9)
     coffee-rails (3.2.2)
       coffee-script (>= 2.2.0)
@@ -58,6 +60,7 @@ GEM
       multi_json (~> 1.0)
     faraday (0.8.7)
       multipart-post (~> 1.1)
+    fast-stemmer (1.0.2)
     feedzirra (0.0.31)
       activesupport (>= 3.0.8)
       builder (~> 3.0.0)
@@ -69,6 +72,8 @@ GEM
       rdoc (~> 3.8)
       sax-machine (~> 0.0.20)
     ffi (1.8.1)
+    googleajax (1.0.1)
+      json (>= 1.0.0)
     hashie (2.0.4)
     hike (1.2.2)
     httmultiparty (0.3.10)
@@ -113,6 +118,12 @@ GEM
       oauth2 (~> 0.8.0)
       omniauth (~> 1.0)
     pg (0.12.2)
+    pismo (0.7.4)
+      awesome_print
+      chronic
+      fast-stemmer
+      nokogiri
+      sanitize
     polyglot (0.3.3)
     pry (0.9.12)
       coderay (~> 1.0.5)
@@ -157,6 +168,9 @@ GEM
       railties (>= 3.0)
       rspec (~> 2.11.0)
     rubyzip (0.9.9)
+    sanitize (2.0.3)
+      nokogiri (>= 1.4.4, < 1.6)
+      nokogiri (>= 1.4.4, < 1.6)
     sass (3.2.8)
     sass-rails (3.2.5)
       railties (~> 3.2.0)
@@ -202,11 +216,13 @@ DEPENDENCIES
   discogs-wrapper
   echonest-ruby-api
   feedzirra
+  googleajax
   httparty
   jquery-rails (= 2.0.2)
   nokogiri
   omniauth-facebook
   pg (= 0.12.2)
+  pismo
   pry
   rails (= 3.2.13)
   rspec-rails (= 2.11.0)

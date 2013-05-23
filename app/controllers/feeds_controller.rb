@@ -38,7 +38,7 @@ class FeedsController < ApplicationController
 
   # POST /feeds
   # POST /feeds.json
-  def create
+  def create    
     @feed = Feed.new(params[:feed])
     respond_to do |format|
     # parse feed with Feedzirra and set attributes, create posts

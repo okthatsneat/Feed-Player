@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130521104827) do
+ActiveRecord::Schema.define(:version => 20130523161302) do
 
   create_table "feeds", :force => true do |t|
     t.string   "url"
@@ -25,6 +25,11 @@ ActiveRecord::Schema.define(:version => 20130521104827) do
   end
 
   add_index "feeds", ["feed_url"], :name => "index_feeds_on_feed_url", :unique => true
+
+  create_table "feeds_playlists", :id => false, :force => true do |t|
+    t.integer "playlist_id"
+    t.integer "feed_id"
+  end
 
   create_table "keyword_posts", :force => true do |t|
     t.string   "title_occurrence"
@@ -46,6 +51,21 @@ ActiveRecord::Schema.define(:version => 20130521104827) do
     t.string   "value"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
+  end
+
+  create_table "playlist_tracks", :force => true do |t|
+    t.integer  "position"
+    t.integer  "playlist_id"
+    t.integer  "track_id"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
+  end
+
+  create_table "playlists", :force => true do |t|
+    t.string   "title"
+    t.text     "description"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
   end
 
   create_table "posts", :force => true do |t|

@@ -3,6 +3,9 @@ FilterPlayer::Application.routes.draw do
     resources :posts
   end
   
+  resources :playlists do
+    resources :feeds
+  end
 
 
   resources :tracks do

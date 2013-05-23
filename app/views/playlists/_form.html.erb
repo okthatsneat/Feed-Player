@@ -1,0 +1,44 @@
+
+
+
+<%= form_for(@playlist) do |f| %>
+  <% if @playlist.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@playlist.errors.count, "error") %> prohibited this playlist from being saved:</h2>
+
+      <ul>
+      <% @playlist.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  
+  <p>
+    <div class="field">
+      <%= f.label :title %><br />
+      <%= f.text_field :title %>
+    </div>
+  </p>
+  <p>
+ 
+  <ul id="feeds">
+    <%= f.fields_for :feeds do |ff| %>
+    <li>
+    <%= ff.label :feed_url %><br />
+    <%= ff.text_field :feed_url %>
+    </li>
+    <% end %>
+  </ul>
+
+
+  </p>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>
+<input id="feed-search" placeholder="search for feeds">
+<p id="feed-search-error"></p>
+<ul id="feed-search-results"></ul>
+

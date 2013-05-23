@@ -4,6 +4,9 @@ class Track < ActiveRecord::Base
   has_many :keyword_tracks , :dependent => :destroy
   has_many :keywords, :through => :keyword_tracks
   has_and_belongs_to_many :posts
+  has_many :playlist_tracks
+  has_many :playlists, :through => :playlist_tracks
+
 
  
   def self.create_from_soundcloud_track(soundcloud_track, post)

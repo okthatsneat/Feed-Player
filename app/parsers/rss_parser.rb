@@ -163,11 +163,14 @@ class RSSParser
 		#grab artist related press 
 		buckets = '&bucket=news&bucket=blogs&bucket=reviews&bucket=songs'
 		api_request_url = Proc.new{|text| base_uri + '/' + api_type + '/' + api_method + '?' + 'api_key='+ api_key + '&format=json' + "&text=#{text}" + '&results=10' + buckets}
-		text = URI::encode(@post.title)
+		text = CGI.escape(@post.title)
 		# wrap api call related code in block for retry		
 		api_call = Proc.new do
 			response = HTTParty.get(api_request_url.call(text))		
-		 	raise "failed api call" if (response['response']['status']['code'] != 0)
+		 	if (response['response']['status']['code'] != 0)
+		 		Rails.logger.debug"failed api call response is #{response['response'].to_yaml}"
+		 		raise "failed api call"		 		
+		 	end 
 		 	artists = response['response']['artists']
 		 	artist_names = []
 		 	unless artists.nil?
@@ -182,7 +185,9 @@ class RSSParser
 		#artists.each will throw no method error if artists is nil
 		rescue RuntimeError => e
 			#retry api request
-			t = ThreadedApiCall.new({}, &api_call)
+			t = ThreadedApiCall.new({
+				:name => "echonest artist extract api call", 
+				:max_attempts  => 3 }, &api_call)
 			t.join
 			t.result
 		end							
