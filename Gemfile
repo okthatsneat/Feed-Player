@@ -12,7 +12,9 @@ gem 'omniauth-facebook'
 gem 'pry'
 gem 'pismo'
 gem 'googleajax'
-
+gem 'sidekiq'
+gem 'sinatra', require: false
+gem 'slim'
 group :development, :test do
   gem 'sqlite3', '1.3.5'
   gem 'rspec-rails', '2.11.0'

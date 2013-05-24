@@ -24,9 +24,7 @@ class PlaylistsController < ApplicationController
   # GET /playlists/new.json
   def new
     @playlist = Playlist.new
-    #@playlist.feeds.build
-
-    @feed_urls = []
+    
       respond_to do |format|
       format.html # new.html.erb
       format.json { render json: @playlist }
@@ -41,10 +39,17 @@ class PlaylistsController < ApplicationController
   # POST /playlists
   # POST /playlists.json
   def create    
-    @playlist = Playlist.new(params[:playlist])
-    
+    # create playlist with title, and related feeds with feed_urls
+    @playlist = Playlist.new(params[:playlist])    
     respond_to do |format|
-    if (@playlist.save)
+    if @playlist.save
+      # call workers on each feed, which again will call workers on each post
+      @playlist.feeds.map do |feed|
+        FeedWorker.perform_async(feed.id)
+      end
+      # and send the user to a blank page currently. 
+      # TODO: implement that page polling the db for playlist related tracks with ajax 
+
       format.html { redirect_to @playlist, notice: 'Playlist was successfully created.' }
       format.json { render json: @playlist, status: :created, location: @playlist }
     else

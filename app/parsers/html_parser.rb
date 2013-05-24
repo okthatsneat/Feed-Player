@@ -19,6 +19,7 @@ class HtmlParser
 		#TODO
 	end
 
+	# not in use, since done on the frontend with jQuery 
 	def parse_available_feeds_from_url(top_level_domain,search_term)
 		GoogleAjax.referrer = "localhost:3000/"
 		retry_count = 0

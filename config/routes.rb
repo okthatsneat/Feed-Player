@@ -1,4 +1,9 @@
+require 'sidekiq/web'
+
+
 FilterPlayer::Application.routes.draw do
+  mount Sidekiq::Web, at: "/sidekiq"
+
   resources :feeds do
     resources :posts
   end

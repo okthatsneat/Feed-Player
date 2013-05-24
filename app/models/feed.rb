@@ -1,5 +1,5 @@
 class Feed < ActiveRecord::Base
-  attr_accessible :etag, :feed_url, :last_modified, :title, :url, :top_level_domain, :feeds_attributes
+  attr_accessible :etag, :feed_url, :last_modified, :title, :url, :top_level_domain
   has_many :posts , :dependent => :destroy
   has_and_belongs_to_many :playlists
 	accepts_nested_attributes_for :playlists

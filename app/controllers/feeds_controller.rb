@@ -42,9 +42,9 @@ class FeedsController < ApplicationController
     @feed = Feed.new(params[:feed])
     respond_to do |format|
     # parse feed with Feedzirra and set attributes, create posts
-    if (rss_parser = RSSParser.new(@feed))
+    if (feed_parser = FeedParser.new(@feed))
       # get the embeded content and create tracks
-      rss_parser.parse
+      feed_parser.parse
       format.html { redirect_to @feed, notice: 'Feed was successfully created.' }
       format.json { render json: @feed, status: :created, location: @feed }
     else
