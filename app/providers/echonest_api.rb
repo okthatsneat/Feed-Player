@@ -1,4 +1,4 @@
-class Echonest
+class EchonestApi
 
 	# returns array of artists found in post.title
 	def self.extract_artists_from_titles(post_id)
@@ -15,10 +15,10 @@ class Echonest
 		# wrap api call related code in block for retry
 		retry_count = 0		
 		api_call = Proc.new do
-			response = HTTParty.get(api_request_url.call(text))		
+			raise "echonest api response is nil error" unless (response = HTTParty.get(api_request_url.call(text)))		
 		 	if (response['response']['status']['code'] != 0)
 		 		Rails.logger.debug"failed api call response is #{response['response'].to_yaml}"
-		 		raise "failed api call"		 		
+		 		raise "failed echonest api call with response #{response['response'].to_yaml}"		 		
 		 	end 
 		 	artists = response['response']['artists']
 		 	artist_names = []
@@ -35,7 +35,7 @@ class Echonest
 		rescue RuntimeError => e
 			#retry api request
 			retry_count++
-			Rails.logger.debug"Echonest Api call failed, so far #{pluralize(retry_count, 'failure')}"
+			#Rails.logger.debug"Echonest Api call failed, so far #{pluralize(retry_count, 'failure')}"
 			sleep(1)			
 			retry unless (retry_count > 2)
 		end							

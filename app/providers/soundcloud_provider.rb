@@ -7,6 +7,7 @@ class SoundcloudProvider
 	def self.query(searchTerm)
 		client = Soundcloud.new(:client_id => SOUNDCLOUD_CLIENT_ID)
 		#this throws 503 service unavailable sometimes, need to retry, wrap in proc
+		retry_count = 0
 		api_call = Proc.new do 
 			#query for playlists and tracks
 			playlists = client.get('/playlists', :q => searchTerm, :filter => 'streamable')
@@ -37,15 +38,10 @@ class SoundcloudProvider
 			Rails.logger.debug"in query soundcloud begin block"
 			api_call.call(searchTerm)
 		rescue Soundcloud::ResponseError => e
-			#binding.pry
-			if e.response.message == "Service Unavailable"
-				#retry request
-				Rails.logger.debug"in rescue block soundcloud 503 response error "
-				t = ThreadedApiCall.new( {}, &api_call)
-				# if the main thread needs to wait for this, call 
-				t.join
-				t.result
-			end
+			retry_count++
+			#Rails.logger.debug "in rescue block soundcloud 503 response error at retry #{retry_count}"
+			sleep(1)			
+			retry unless (retry_count > 2)			
 		end
 	end
 

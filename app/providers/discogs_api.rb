@@ -13,7 +13,7 @@ class DiscogsApi
 				return []
 			end
 		end
-		artist = URI.encode(artist)
+		artist = CGI.escape(artist)
 		begin
 			#Rails.logger.debug"in list_titles_by_artist of discogs, artist is #{artist}"
 			_artist = @wrapper.get_artist(artist)
