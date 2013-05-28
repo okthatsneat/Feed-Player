@@ -1,9 +1,9 @@
 class KeywordsController < ApplicationController
-	
-	def index
-	end
+  
+  def index
+  end
 
-	def update
-	end
+  def update
+  end
 
 end

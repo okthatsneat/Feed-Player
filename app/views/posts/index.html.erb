@@ -1,20 +1,20 @@
 <title>Rss Parser Development</title>
 <h1>Posts</h1>
 <table class="posts">
-	
-	<tr>
-		<th> Post.title </th>
-		<th> Post.keywords </th>
-		<th> Post.embed </th>
+  
+  <tr>
+    <th> Post.title </th>
+    <th> Post.keywords </th>
+    <th> Post.embed </th>
   </tr>
   
-  	<% @posts.each do |post| %>
+    <% @posts.each do |post| %>
   <tr>  
     <td>
       <%= post.title %>
     </td>
-		<td>keyword</td>
+    <td>keyword</td>
     <td>embed</td>
-  	<% end %>
+    <% end %>
   </tr>
 </table>
