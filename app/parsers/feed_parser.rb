@@ -1,3 +1,6 @@
+# require discogs before starting PostWorker for thread saftey
+require 'discogs'
+
 class FeedParser
   def initialize(feed)
     @feed = feed

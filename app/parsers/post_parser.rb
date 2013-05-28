@@ -67,7 +67,39 @@ include HTTParty
       # discogs check for titles of those artists in @post.title  
   end
 
+  def echonest_artist_song_in_provider_response(echonest_artist, soundcloud_response)
+    # return first match of echonest artist song in soundcloud response item title
+    echonest_artist['songs'].each do |song|
+      soundcloud_response.each do |result|
+        unless (result.empty?)
+        #verify and return best result
+          result.each do |item|
+            unless (item.title =~ /#{song['title']}/i)
+              next
+            end
+            #found a matching item              
+            return item
+          end
+        end
+      end
+    end
+  end
+
+  def validate_and_create_tracks_after_provider_request(echonest_artist)
+    #query provider with full post.title
+    soundcloud_response = SoundcloudProvider.query_and_return_raw(@post.title)
+    #traverse response checking for presence of songs by artists (from echonest)
+    soundcloud track = echonest_artist_song_in_provider_response(echonest_artist, soundcloud_response)
+    if soundcloud_track
+      Track.create_from_soundcloud_track(soundcloud_track, @post)           
+      #set up keyword for this validated artist
+      KeywordPost.create_keyword_with_post!(echonest_artist['name'], @post.id)
+    end
+  end        
+
   private 
+
+
 
   def query_soundcloud_direct_with_post_title    
     soundcloud_track = 

@@ -1,4 +1,4 @@
-require 'discogs'
+#require 'discogs'
 class DiscogsApi
   
   def initialize

@@ -7,7 +7,13 @@ class PostWorker
     post_parser = PostParser.new(post_id)          
     return if post_parser.extract_tracks_from_embeds
     #else
-    artist_names = EchonestApi.extract_artists_from_titles(post_id)
-    post_parser.validate_and_create_tracks_semantically(artist_names)
+    #old strategy with discogs
+    #artist_names = EchonestApi.extract_artists_from_titles(post_id)
+    #post_parser.validate_and_create_tracks_semantically(artist_names)
+
+    #new strategy with validation after direct soundcloud response
+    (EchonestApi.extract_artist_objects_from_title(post_id)).each do |echonest_artist|
+      post_parser.validate_and_create_tracks_after_provider_request(echonest_artist)
+    end
   end
 end
