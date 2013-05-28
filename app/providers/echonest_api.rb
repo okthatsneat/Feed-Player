@@ -15,9 +15,9 @@ class EchonestApi
 		# wrap api call related code in block for retry
 		retry_count = 0		
 		api_call = Proc.new do
-			raise "echonest api response is nil error" unless (response = HTTParty.get(api_request_url.call(text)))		
+			response = HTTParty.get(api_request_url.call(text))
 		 	if (response['response']['status']['code'] != 0)
-		 		Rails.logger.debug"failed api call response is #{response['response'].to_yaml}"
+		 		puts"failed api call response is #{response['response'].to_yaml}"
 		 		raise "failed echonest api call with response #{response['response'].to_yaml}"		 		
 		 	end 
 		 	artists = response['response']['artists']

@@ -31,7 +31,7 @@ include HTTParty
 	def validate_and_create_tracks_semantically(artist_names)
 		unless (artist_names.empty?)
 			artist_names.each do |artist_name|						 
-				titles_found = look_for_discogs_artist_titles_in_post_title(artist_name)						
+				titles_found = look_for_discogs_artist_titles_in_post_title(artist_name)										
 				unless (titles_found.empty?)
 					titles_found.each do |title|
 						if (artist_name == title) 

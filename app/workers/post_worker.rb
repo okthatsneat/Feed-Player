@@ -1,5 +1,6 @@
 class PostWorker
   include Sidekiq::Worker
+	sidekiq_options :queue => :posts_queue, :backtrace => true
   
   def perform(post_id)
 		# get the embeded content and create tracks   

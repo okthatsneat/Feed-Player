@@ -15,7 +15,8 @@ class DiscogsApi
 		end
 		artist = CGI.escape(artist)
 		begin
-			#Rails.logger.debug"in list_titles_by_artist of discogs, artist is #{artist}"
+			#discogs api has rate limit of 1 request per second
+			sleep(1)
 			_artist = @wrapper.get_artist(artist)
 			#Rails.logger.debug"in list_titles_by_artist of discogs, discogs artist object is #{_artist}"		
 			if _artist.releases.nil?
