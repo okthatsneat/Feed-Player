@@ -21,12 +21,15 @@ class FeedParser
         #create! posts if !exists, set attributes from RSS feed
         Post.update_from_feed(feedzirra_feed, @feed.id)
         @feed.posts.each do |post|
-          #post_parser = PostParser.new(post.id)          
-          #return if post_parser.extract_tracks_from_embeds
+          post_parser = PostParser.new(post.id)          
+          return if post_parser.extract_tracks_from_embeds
           #artist_names = EchonestApi.extract_artists_from_titles(post.id)
           #post_parser.validate_and_create_tracks_semantically(artist_names)
-          PostWorker.perform_async(post.id)
-          Rails.logger.debug"called post worker for post #{post.title} of feed #{post.feed.title}"                    
+          #PostWorker.perform_async(post.id)
+          #Rails.logger.debug"called post worker for post #{post.title} of feed #{post.feed.title}"
+          (EchonestApi.extract_artist_objects_from_title(post.id)).each do |echonest_artist|
+            post_parser.validate_and_create_tracks_after_provider_request(echonest_artist)
+          end                    
         end # end loop through posts        
       end
       @feed

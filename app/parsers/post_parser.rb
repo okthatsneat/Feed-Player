@@ -28,6 +28,8 @@ include HTTParty
     return false    
   end
 
+  # great idea, but at 1 request per second and ip rate limit (discogs) too slow. 
+  # great with a commercial api key
   def validate_and_create_tracks_semantically(artist_names)
     unless (artist_names.empty?)
       artist_names.each do |artist_name|             
@@ -67,40 +69,45 @@ include HTTParty
       # discogs check for titles of those artists in @post.title  
   end
 
-  def echonest_artist_song_in_provider_response(echonest_artist, soundcloud_response)
-    # return first match of echonest artist song in soundcloud response item title
-    echonest_artist['songs'].each do |song|
-      soundcloud_response.each do |result|
-        unless (result.empty?)
-        #verify and return best result
-          result.each do |item|
-            unless (item.title =~ /#{song['title']}/i)
-              next
-            end
-            #found a matching item              
-            return item
-          end
-        end
-      end
-    end
-  end
-
+  # pro: no discogs api calls, faster. con: can't detect release titles, only songs
   def validate_and_create_tracks_after_provider_request(echonest_artist)
     #query provider with full post.title
     soundcloud_response = SoundcloudProvider.query_and_return_raw(@post.title)
     #traverse response checking for presence of songs by artists (from echonest)
-    soundcloud track = echonest_artist_song_in_provider_response(echonest_artist, soundcloud_response)
-    if soundcloud_track
-      Track.create_from_soundcloud_track(soundcloud_track, @post)           
-      #set up keyword for this validated artist
+    soundcloud_results = echonest_artist_song_in_provider_response(echonest_artist, soundcloud_response)
+    unless soundcloud_results.empty?
       KeywordPost.create_keyword_with_post!(echonest_artist['name'], @post.id)
+      #if track, sort by most popular, create track for first element.  
+      soundcloud_results.delete_if{|item| item[:playback_count].nil?}.sort_by{|track| track[:playback_count]}
+      Track.create_from_soundcloud_track(soundcloud_results.first, @post)
     end
-  end        
+  end     
 
-  private 
+  private
 
-
-
+  def echonest_artist_song_in_provider_response(echonest_artist, soundcloud_response)
+    # return first match of echonest artist song in soundcloud response item title
+    matching_soundcloud_items = []
+    #array of format [playlists[], tracks[]]
+    soundcloud_response.each do |result|            
+      unless (result.empty?)
+      #verify and return best results: both artist and song by artist present in title - good match. 
+        result.each do |item|
+          echonest_artist['songs'].each do |song|
+            if ( 
+              ((item.title =~ /#{song['title']}/i) && (item.title =~ /#{echonest_artist['name']}/i))
+              ||
+              ((item.title =~ /#{song['title']}/i) && (item.user.username =~ /#{echonest_artist['name']}/i))
+               )
+                matching_soundcloud_items << item          
+            end
+          end
+        end
+      end
+    end
+    return matching_soundcloud_items
+  end
+     
   def query_soundcloud_direct_with_post_title    
     soundcloud_track = 
     SoundcloudProvider.query(@post.title)
