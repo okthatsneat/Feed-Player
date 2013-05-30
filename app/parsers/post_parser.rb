@@ -78,7 +78,10 @@ include HTTParty
     unless soundcloud_results.empty?
       KeywordPost.create_keyword_with_post!(echonest_artist['name'], @post.id)
       #if track, sort by most popular, create track for first element.  
+      Rails.logger.debug"soundcloud results array is #{soundcloud_results.to_yaml}"
+
       soundcloud_results.delete_if{|item| item[:playback_count].nil?}.sort_by{|track| track[:playback_count]}
+      Rails.logger.debug"creating track for soundcloud result #{soundcloud_results.first}"
       Track.create_from_soundcloud_track(soundcloud_results.first, @post)
     end
   end     
@@ -94,12 +97,11 @@ include HTTParty
       #verify and return best results: both artist and song by artist present in title - good match. 
         result.each do |item|
           echonest_artist['songs'].each do |song|
-            if ( 
-              ((item.title =~ /#{song['title']}/i) && (item.title =~ /#{echonest_artist['name']}/i))
-              ||
-              ((item.title =~ /#{song['title']}/i) && (item.user.username =~ /#{echonest_artist['name']}/i))
-               )
-                matching_soundcloud_items << item          
+            match_condition1 = ((item.title =~ /#{CGI.escape(song['title'])}/i) && (item.title =~ /#{CGI.escape(echonest_artist['name'])}/i))
+            match_condition2 = ((item.title =~ /#{CGI.escape(song['title'])}/i) && (item.user.username =~ /#{CGI.escape(echonest_artist['name'])}/i))
+            if ( match_condition1 || match_condition2 )
+              matching_soundcloud_items << item
+              puts "#{item.title} added"          
             end
           end
         end

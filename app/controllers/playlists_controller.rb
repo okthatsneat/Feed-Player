@@ -50,7 +50,7 @@ class PlaylistsController < ApplicationController
         #sleep(1)
         feed_parser = FeedParser.new(feed)
         feed_parser.parse
-        #Rails.logger.debug"called parse on feed #{feed.id}"
+        Rails.logger.debug"called parse on feed #{feed.id}"
       end
       # and send the user to a blank page currently. 
       # TODO: implement that page polling the db for playlist related tracks with ajax 
