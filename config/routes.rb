@@ -9,9 +9,14 @@ FilterPlayer::Application.routes.draw do
   end
   
   resources :playlists do
-    resources :feeds
+    resources :feeds 
   end
 
+  resources :playlist do
+    resources :feeds do
+      resources :tracks
+    end
+  end
 
   resources :tracks do
     resources :keywords

@@ -15,6 +15,19 @@ class HtmlParser
     return player_urls    
   end
 
+  def query_string_for_coverart_image
+    if (coverart_url = get_coverart_url)
+      google_reverse_image_search_base = "https://www.google.com/searchbyimage?&image_url="
+      user_agent = "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.97 Safari/537.11"
+      response = HTTParty.get(google_reverse_image_search_base + coverart_url, :headers => {"User-Agent" => user_agent})
+      _doc = Nokogiri::HTML(response)
+      xpath_query = "//body/div[@id='main']/div/div[@id='cnt']/div[@id='rcnt']/div[@id='center_col']/div[@id='res']/div[@id='topstuff']"
+      return _doc.at(xpath_query).children.last.children.children.text
+    else
+      return false
+    end
+  end
+
   def extract_links
     #TODO
   end
@@ -35,6 +48,16 @@ class HtmlParser
       retry unless (retry_count > 2)
     end
 
+  end
+
+  private
+
+  def get_coverart_url
+    unless @doc.css("meta[property='og:image']").blank?
+      coverart_url = @doc.css("meta[property='og:image']").first.attributes["content"].value
+      return CGI.escape(coverart_url)      
+    end
+    
   end
 
 end

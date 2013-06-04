@@ -1,6 +1,4 @@
 class PostParser
-include HTTParty
-  format :json
 
   def initialize(post_id)
     @post = Post.find(post_id)
@@ -28,8 +26,41 @@ include HTTParty
     return false    
   end
 
-  # great idea, but at 1 request per second and ip rate limit (discogs) too slow. 
-  # great with a commercial api key
+  #stategy - extract coverart from post, reverse google image search that,
+  #query provider whith google's guess what this image represents. 
+  def create_tracks_for_coverart    
+    query_string = HtmlParser.new(
+      HTTParty.get(@post.url)).query_string_for_coverart_image
+    Rails.logger.debug"query string from google is (#{query_string})"
+    #check if there is a return from google, and if google has a best guess at all
+    if (query_string && !(query_string.include?("No other sizes of this image found")) && !(query_string.include?("Find other sizes of this image")) )
+      # validate query string to represent either an artist name, or an 
+      # artist-song, artist-release combination. reject if not.
+      #get Echonest artist objects
+      EchonestApi.extract_artist_objects_from_string(query_string).each do |echonest_artist_object|
+        #check if 100% artist name match
+        is_artist_name = EchonestApi.full_artist_name_match?(query_string, echonest_artist_object)
+        # check if Artist and song combination
+        is_artist_song = EchonestApi.artist_song_combination?(query_string, echonest_artist_object)
+        # check if Artist and release combination
+        is_artist_release = DiscogsApi.new().artist_release_combination?(query_string, echonest_artist_object)
+          # save found artist keyword, query provider with query string
+        if (is_artist_name || is_artist_song || is_artist_release)
+          # save found artist as keyword
+          KeywordPost.create_keyword_with_post!(echonest_artist_object['name'], @post.id)
+          # query provider with validated string 
+          if (soundcloud_track = SoundcloudProvider.query(query_string))
+            Track.create_from_soundcloud_track(soundcloud_track, @post)
+            return true
+          end     
+        end
+      end      
+    end
+    return false
+  end
+
+  # great idea, but at 1 request per second and ip rate limit (discogs) a little slow. 
+  # great with a commercial api key.  
   def validate_and_create_tracks_semantically(artist_names)
     unless (artist_names.empty?)
       artist_names.each do |artist_name|             
@@ -38,7 +69,7 @@ include HTTParty
           titles_found.each do |title|
             if (artist_name == title) 
               # break if not present in post.title twice!
-              if ( (@post.title.match /#{title}/i).captures.length < 2  )
+              if ( (@post.title.match(/#{title}/i)).captures.length < 2  )
                 break
               end 
             end
@@ -69,7 +100,10 @@ include HTTParty
       # discogs check for titles of those artists in @post.title  
   end
 
-  # pro: no discogs api calls, faster. con: can't detect release titles, only songs
+  # pro: no discogs api calls, faster. con: can't detect release titles, only songs, fails if the post title 
+  # has anything but artist -title. really only works well on the pitchfork feed right now. and has a bug - 
+  # if the first element is a playlist, and that's removed from the array, sorting the result array
+  # will result in a nil first element, which i then try to create a track from... 
   def validate_and_create_tracks_after_provider_request(echonest_artist)
     #query provider with full post.title
     soundcloud_response = SoundcloudProvider.query_and_return_raw(@post.title)
@@ -88,6 +122,8 @@ include HTTParty
 
   private
 
+  # this one will proove handy sometime, and should be included into the semantic algorithm to optimize
+  # detection rate. 
   def echonest_artist_song_in_provider_response(echonest_artist, soundcloud_response)
     # return first match of echonest artist song in soundcloud response item title
     matching_soundcloud_items = []
@@ -110,6 +146,7 @@ include HTTParty
     return matching_soundcloud_items
   end
      
+  # experimental, not in use. 
   def query_soundcloud_direct_with_post_title    
     soundcloud_track = 
     SoundcloudProvider.query(@post.title)

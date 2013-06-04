@@ -4,7 +4,7 @@ class SoundcloudProvider
 	SOUNDCLOUD_CLIENT_ID     = "902d3c2d6d4c5c5f1dc5bee41cb01e2b"
 	SOUNDCLOUD_CLIENT_SECRET = "65315148695ebb66eb6f1035dbff5c81"
 	
-	# only returns a soundcloud set or track if it matches the entire request argument
+	# only returns a soundcloud set or track if its title matches the entire request argument
 	def self.query(searchTerm)
 		client = Soundcloud.new(:client_id => SOUNDCLOUD_CLIENT_ID)
 		#this throws 503 service unavailable sometimes, need to retry, wrap in proc
@@ -45,7 +45,7 @@ class SoundcloudProvider
 		end
 	end
 
-	#FIXME refactor - version of query that doesn't filter out anything and just returns the response
+	#FIXME refactor - version of query that doesn't filter out anything and just returns the results array
 	def self.query_and_return_raw(searchTerm)
 	  client = Soundcloud.new(:client_id => SOUNDCLOUD_CLIENT_ID)
 	  #this throws 503 service unavailable sometimes, need to retry, wrap in proc
