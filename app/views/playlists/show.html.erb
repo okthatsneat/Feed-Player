@@ -9,7 +9,7 @@
 <p>
 <table>  
     <% @playlist.feeds.each do |feed| %>
-  <tr>  
+    <tr>  
     <td>
       <%= feed.feed_url %>
     </td>
@@ -18,8 +18,8 @@
 </table>
 </p>
 
-<%= content_tag :div, id: "tracks", data: {url: playlist_feeds_tracks_url(@playlist) } do %>
-  <%= render @playlist.feeds.tracks %>
+<%= content_tag :div, id: "tracks", data: @tracks do %>
+  <%= render @tracks %>
 <% end %>
 
 <%= link_to 'Edit', edit_playlist_path(@playlist) %> |
