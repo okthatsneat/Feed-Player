@@ -32,11 +32,10 @@ class PostParser
     query_string = HtmlParser.new(
       HTTParty.get(@post.url)).query_string_for_coverart_image
     Rails.logger.debug"query string from google is (#{query_string})"
-    #check if there is a return from google, and if google has a best guess at all
-    if (query_string && !(query_string.include?("No other sizes of this image found")) && !(query_string.include?("Find other sizes of this image")) )
-      # validate query string to represent either an artist name, or an 
-      # artist-song, artist-release combination. reject if not.
-      #get Echonest artist objects
+    # validate query string to represent either an artist name, or an 
+    # artist-song, artist-release combination. reject if not.
+    #get Echonest artist objects
+    if (query_string)
       EchonestApi.extract_artist_objects_from_string(query_string).each do |echonest_artist_object|
         #check if 100% artist name match
         is_artist_name = EchonestApi.full_artist_name_match?(query_string, echonest_artist_object)
@@ -46,6 +45,18 @@ class PostParser
         is_artist_release = DiscogsApi.new().artist_release_combination?(query_string, echonest_artist_object)
           # save found artist keyword, query provider with query string
         if (is_artist_name || is_artist_song || is_artist_release)
+          Rails.logger.debug"""
+          <<< in create_tracks_for_coverart 
+
+          query_string is #{query_string}
+          is_artist_name is #{is_artist_name} 
+          is_artist_song is #{is_artist_song} 
+          is_artist_release is #{is_artist_release}
+          echonest_artist_object['name'] is #{echonest_artist_object['name']}
+
+          >>>>
+          """
+
           # save found artist as keyword
           KeywordPost.create_keyword_with_post!(echonest_artist_object['name'], @post.id)
           # query provider with validated string 
@@ -54,7 +65,7 @@ class PostParser
             return true
           end     
         end
-      end      
+      end
     end
     return false
   end
@@ -73,7 +84,7 @@ class PostParser
                 break
               end 
             end
-            #query provider
+            #found valid artist - release combo, so query provider with that
             query = artist_name + " " + title.gsub("#{artist_name}", "")
             soundcloud_track = SoundcloudProvider.query(query)
             #ceate track
@@ -81,6 +92,8 @@ class PostParser
               Rails.logger.debug"query for track created is #{query}"
               Track.create_from_soundcloud_track(soundcloud_track, @post)
               Rails.logger.debug"track is #{soundcloud_track.title}"
+            else
+              Rails.logger.debug"query for track NOT created is #{query}"
             end      
           end
           #set up keyword for this validated artist
@@ -164,7 +177,6 @@ class PostParser
     titles_found = []
     titles.each do |title|
       if (@post.title.downcase.include?(title.downcase))
-        #check for self-titled releases
         titles_found << title
       end    
     end

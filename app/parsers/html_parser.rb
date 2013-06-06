@@ -1,5 +1,5 @@
 class HtmlParser
-
+  @@file_name_helper = 0 
   def initialize(html_document)
     @doc = Nokogiri::HTML(html_document)
   end
@@ -21,8 +21,18 @@ class HtmlParser
       user_agent = "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.97 Safari/537.11"
       response = HTTParty.get(google_reverse_image_search_base + coverart_url, :headers => {"User-Agent" => user_agent})
       _doc = Nokogiri::HTML(response)
-      xpath_query = "//body/div[@id='main']/div/div[@id='cnt']/div[@id='rcnt']/div[@id='center_col']/div[@id='res']/div[@id='topstuff']"
-      return _doc.at(xpath_query).children.last.children.children.text
+      xpath_query = "//body/div[@id='main']/div/div[@id='cnt']/div[@id='rcnt']/div[@id='center_col']/div[@id='res']/div[@id='topstuff']"     
+      query_string = _doc.at(xpath_query).children.last.children.children.text
+      #check if there is a return from google, and if google has a best guess at all
+      if ( query_string && !(query_string.empty?) && !(query_string.include?("No other sizes of this image found")) && !(query_string.include?("Find other sizes of this image")) )
+        return query_string
+      else
+        # write response to file for examination
+        File.open("/log/Google_Rev_Img_failed_responses/GoogleLog#{@@file_name_helper}.html", 'w') { |file| file.write(
+          response.encode('utf-8', :invalid => :replace, :undef => :replace, :replace => '_')) }
+        @@file_name_helper+=1
+        return false
+      end      
     else
       return false
     end

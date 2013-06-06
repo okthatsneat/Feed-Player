@@ -15,7 +15,7 @@ class PlaylistsController < ApplicationController
   # GET /playlists/1
   # GET //playlists.json
   def show
-    @playlist = Playlist.find(params[:id])
+    @playlist = Playlist.find(params[:id])    
     respond_to do |format|
       format.html # show.html.erb
       format.json { render json: @playlist }
@@ -47,12 +47,12 @@ class PlaylistsController < ApplicationController
     if @playlist.save
       # call workers on each feed, which again will call workers on each post
       @playlist.feeds.each do |feed|
-        #Rails.logger.debug"called FeedWorker for feed #{feed.id}"
-        #FeedWorker.perform_async(feed.id)
+        Rails.logger.debug"called FeedWorker for feed #{feed.id}"
+        FeedWorker.perform_async(feed.id)
         #sleep(1)
-        feed_parser = FeedParser.new(feed)
-        feed_parser.parse
-        Rails.logger.debug"called parse on feed #{feed.id}"
+        #feed_parser = FeedParser.new(feed)
+        #feed_parser.parse
+        #Rails.logger.debug"called parse on feed #{feed.id}"
       end
       # and send the user to a blank page currently. 
       # TODO: implement that page polling the db for playlist related tracks with ajax 
@@ -106,6 +106,7 @@ class PlaylistsController < ApplicationController
         end
       end
     end if params[:id]
+    return @tracks
   end
 
 end

@@ -18,7 +18,7 @@
 </table>
 </p>
 
-<%= content_tag :div, id: "tracks", data: @tracks do %>
+<%= content_tag :div, id: "tracks", data: {url: playlist_url(@playlist)} do %>
   <%= render @tracks %>
 <% end %>
 

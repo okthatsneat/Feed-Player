@@ -1,0 +1,8 @@
+<%= div_for track, data: {id: track.id} do %>
+  <% if track.soundcloud_embed %> 
+  	<%= track.soundcloud_embed.html_safe %>
+  <% end %>
+  <% if track.youtube_embed %>
+  	<%= track.youtube_embed.html_safe %>
+  <% end %>
+<% end %>
