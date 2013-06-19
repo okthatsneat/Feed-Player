@@ -8,9 +8,7 @@ gem 'soundcloud'
 gem 'jquery-rails', '2.0.2'
 gem 'nokogiri'
 gem 'discogs-wrapper'
-gem 'omniauth-facebook'
 gem 'pry'
-gem 'pismo'
 gem 'googleajax'
 gem 'sidekiq'
 gem 'sinatra', require: false
@@ -27,7 +25,7 @@ group :assets do
   gem 'sass-rails'
   gem 'coffee-rails', '3.2.2'
   gem 'uglifier', '1.2.3'
-	gem "bootstrap-sass"
+	gem 'bootstrap-sass'
 end
 
 group :test do
