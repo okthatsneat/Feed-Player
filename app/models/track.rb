@@ -46,15 +46,14 @@ class Track < ActiveRecord::Base
   private
 
   #save new track to all related playlists, using the post object.
-  def update_playlists
-    Rails.logger.debug"is this thing on? if so, value of posts is (#{self.posts})"
+  def update_playlists(post)
+    Rails.logger.debug"it works!"
     # also the future place to check for user preferences that would reject the track for the playlist
-    self.posts.each do |post|
-      post.feed.playlists.each do |playlist|
-        #FIXME shield against duplicate entries
-        PlaylistTracks.create(playlist: playlist, track: self)
-      end 
-    end
+
+    post.feed.playlists.each do |playlist|
+      #FIXME shield against duplicate entries
+      PlaylistTrack.create(playlist: playlist, track: self)
+    end    
   end
 
 end

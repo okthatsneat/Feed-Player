@@ -1,6 +1,4 @@
 class PlaylistsController < ApplicationController
-  before_filter :load_tracks
-
   # GET /playlists
   # GET /playlists.json
   def index
@@ -15,7 +13,8 @@ class PlaylistsController < ApplicationController
   # GET /playlists/1
   # GET //playlists.json
   def show
-    @playlist = Playlist.find(params[:id])    
+    @playlist = Playlist.find(params[:id])
+    @tracks = @playlist.tracks    
     respond_to do |format|
       format.html # show.html.erb
       format.json { render json: @playlist }
@@ -96,17 +95,17 @@ class PlaylistsController < ApplicationController
 
   private
 
-  def load_tracks 
-    # fetch all related feeds
-    @tracks = []
-    Playlist.find(params[:id]).feeds.each do |feed|
-      feed.posts.each do |post| 
-        post.tracks.each do |track|
-          @tracks << track
-        end
-      end
-    end if params[:id]
-    return @tracks
-  end
+  # def load_tracks 
+  #   # fetch all related feeds
+  #   @tracks = []
+  #   Playlist.find(params[:id]).feeds.each do |feed|
+  #     feed.posts.each do |post| 
+  #       post.tracks.each do |track|
+  #         @tracks << track
+  #       end
+  #     end
+  #   end if params[:id]
+  #   return @tracks
+  # end
 
 end
