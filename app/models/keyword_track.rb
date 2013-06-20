@@ -1,4 +1,4 @@
-class KeyWord_Track < ActiveRecord::Base
+class KeywordTrack < ActiveRecord::Base
   belongs_to :keyword
   belongs_to :track
 

@@ -28,9 +28,9 @@ class HtmlParser
         return query_string
       else
         # write response to file for examination
-        File.open("/log/Google_Rev_Img_failed_responses/GoogleLog#{@@file_name_helper}.html", 'w') { |file| file.write(
-          response.encode('utf-8', :invalid => :replace, :undef => :replace, :replace => '_')) }
-        @@file_name_helper+=1
+        #File.open("/log/Google_Rev_Img_failed_responses/GoogleLog#{@@file_name_helper}.html", 'w') { |file| file.write(
+        #  response.encode('utf-8', :invalid => :replace, :undef => :replace, :replace => '_')) }
+        #@@file_name_helper+=1
         return false
       end      
     else

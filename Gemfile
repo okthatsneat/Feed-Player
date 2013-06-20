@@ -17,6 +17,8 @@ gem 'slim'
 group :development, :test do
   gem 'pg'
   gem 'rspec-rails', '2.11.0'
+  gem 'railroady'
+  gem 'rails-erd'
 end
 
 # Gems used only for assets and not required
