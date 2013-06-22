@@ -1,7 +1,7 @@
 require 'sidekiq/web'
 
 
-FilterPlayer::Application.routes.draw do
+FeedPlayer::Application.routes.draw do
   mount Sidekiq::Web, at: "/sidekiq"
 
   resources :feeds do
