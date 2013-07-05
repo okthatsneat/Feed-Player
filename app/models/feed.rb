@@ -4,7 +4,6 @@ class Feed < ActiveRecord::Base
   has_and_belongs_to_many :playlists
   accepts_nested_attributes_for :playlists
 
-  
   def update_from_feed(feedzirra_feed)
     #this also saves it to the db with validations
     self.update_attributes(

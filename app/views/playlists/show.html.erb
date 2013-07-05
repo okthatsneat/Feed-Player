@@ -18,8 +18,8 @@
 </table>
 </p>
 
-<%= content_tag :div, id: "tracks", data: {url: playlist_url(@playlist)} do %>
-  <%= render @tracks %>
+<%= content_tag :div, id: "tracks", data: {url: playlist_tracks_url(@playlist)} do %>
+  <%= render @playlist.tracks %>
 <% end %>
 
 <%= link_to 'Edit', edit_playlist_path(@playlist) %> |

@@ -66,8 +66,9 @@ class HtmlParser
     unless @doc.css("meta[property='og:image']").blank?
       coverart_url = @doc.css("meta[property='og:image']").first.attributes["content"].value
       return CGI.escape(coverart_url)      
-    end
-    
+    else
+      return false
+    end    
   end
 
 end

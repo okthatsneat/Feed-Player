@@ -14,7 +14,7 @@ class PlaylistsController < ApplicationController
   # GET //playlists.json
   def show
     @playlist = Playlist.find(params[:id])
-    @tracks = @playlist.tracks    
+    @tracks = @playlist.tracks
     respond_to do |format|
       format.html # show.html.erb
       format.json { render json: @playlist }

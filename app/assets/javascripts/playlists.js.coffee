@@ -1,15 +1,3 @@
-#polling for new tracks on fresh playlist
-@TrackPoller =
-  poll: ->
-    setTimeout @request, 3000
-
-  request: ->
-    $.get($('#tracks').data('url'))
-
-jQuery ->
-  if $('#tracks').length > 0
-    TrackPoller.poll()
-
 #implements the rss feed search and pick 
 #global: google, jQuery
  

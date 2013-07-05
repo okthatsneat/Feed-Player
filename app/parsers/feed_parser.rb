@@ -18,8 +18,9 @@ class FeedParser
       if @feed.update_from_feed(feedzirra_feed)
         Rails.logger.debug"inside if update_from_feed(feedzirra_feed) - @feed is #{@feed}"
         #create! posts if !exists, set attributes from RSS feed
-        Post.update_from_feed(feedzirra_feed, @feed.id)
-        @feed.posts.each do |post|
+        new_feed_entries = Post.update_from_feed(feedzirra_feed, @feed.id)
+        Rails.logger.debug"new feed entries is (#{new_feed_entries})"
+        new_feed_entries.each do |post|
           #post_parser = PostParser.new(post.id)          
           #next if post_parser.extract_tracks_from_embeds
           #post_parser.create_tracks_for_coverart

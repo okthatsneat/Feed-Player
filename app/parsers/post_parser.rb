@@ -39,18 +39,17 @@ class PostParser
       EchonestApi.extract_artist_objects_from_string(query_string).each do |echonest_artist_object|
         #check if 100% artist name match
         is_artist_name = EchonestApi.full_artist_name_match?(query_string, echonest_artist_object)
-        # check if Artist and song combination
-        is_artist_song = EchonestApi.artist_song_combination?(query_string, echonest_artist_object)
+        # check if Artist and song combination - not useful; an image representing an artist-song combination rarely exists
+        # is_artist_song = EchonestApi.artist_song_combination?(query_string, echonest_artist_object)
         # check if Artist and release combination
         is_artist_release = DiscogsApi.new().artist_release_combination?(query_string, echonest_artist_object)
           # save found artist keyword, query provider with query string
-        if (is_artist_name || is_artist_song || is_artist_release)
+        if (is_artist_name || is_artist_release)
           Rails.logger.debug"""
           <<< in create_tracks_for_coverart 
 
           query_string is #{query_string}
           is_artist_name is #{is_artist_name} 
-          is_artist_song is #{is_artist_song} 
           is_artist_release is #{is_artist_release}
           echonest_artist_object['name'] is #{echonest_artist_object['name']}
 
@@ -63,48 +62,57 @@ class PostParser
           if (soundcloud_track = SoundcloudProvider.query(query_string))
             Track.create_from_soundcloud_track(soundcloud_track, @post)
             return true
-          end     
+          end        
         end
       end
-    end
-    return false
+      #iterated through all echonest artist objects, didn't create a track, so strategy fail
+      return false
+    else
+      # no query string, so no dice. 
+      return false
+    end    
   end
 
   # great idea, but at 1 request per second and ip rate limit (discogs) a little slow. 
   # great with a commercial api key.  
-  def validate_and_create_tracks_semantically(artist_names)
+  def validate_and_create_tracks_semantically
+    Rails.logger.debug"in validate_and_create_tracks_semantically for post #{@post.title}"
+    artist_names = EchonestApi.extract_artists_from_titles(@post.id)
+    Rails.logger.debug"Echonest artist names for post #{@post.title} are #{artist_names}"
     unless (artist_names.empty?)
       artist_names.each do |artist_name|             
-        titles_found = look_for_discogs_artist_titles_in_post_title(artist_name)                    
+        titles_found = look_for_discogs_artist_titles_in_post_title(artist_name)
+        Rails.logger.debug"titles_found for artist #{artist_name} are #{titles_found}"                    
         unless (titles_found.empty?)
           titles_found.each do |title|
-            if (artist_name == title) 
-              # break if not present in post.title twice!
+            Rails.logger.debug"found title #{title} for artist #{artist_name}"
+            if (artist_name.eql?(title)) 
+              # break if not present in post.title twice
+              Rails.logger.debug"artist name #{artist_name} equals title #{title}" 
               if ( (@post.title.match(/#{title}/i)).captures.length < 2  )
                 break
               end 
             end
             #found valid artist - release combo, so query provider with that
-            query = artist_name + " " + title.gsub("#{artist_name}", "")
+            query = artist_name + " " + title
             soundcloud_track = SoundcloudProvider.query(query)
             #ceate track
             if (soundcloud_track)
               Rails.logger.debug"query for track created is #{query}"
               Track.create_from_soundcloud_track(soundcloud_track, @post)
               Rails.logger.debug"track is #{soundcloud_track.title}"
+              return true
             else
               Rails.logger.debug"query for track NOT created is #{query}"
+              return false
             end      
           end
           #set up keyword for this validated artist
-          KeywordPost.create_keyword_with_post!(artist_name, @post.id)              
-        else 
-          if (search_term_present_in_body_or_summary?(artist_name) || Keyword.exists?(:value => artist_name))
-            # TODO case only artist present ------------------------------------------------
-            # query for latest, most popular track?
-          end
+          KeywordPost.create_keyword_with_post!(artist_name, @post.id)
         end
       end
+    else
+      return false
     end
     #  case no artists detected -----------------------------------------------
     # TODO case Various Artists release not detected by Echonest           
@@ -176,7 +184,8 @@ class PostParser
     titles = d.list_titles_by_artist(artist_name)
     titles_found = []
     titles.each do |title|
-      if (@post.title.downcase.include?(title.downcase))
+      #FIXME escape title to satisfy Regex syntax
+      if (@post.title =~ /#{title}/i)
         titles_found << title
       end    
     end
@@ -194,7 +203,7 @@ class PostParser
 
   def create_tracks_from_player_urls(player_urls)
     @re_soundcloud = /(api\.soundcloud\.com[^&]*)/
-    # credit https://gist.github.com/afeld/1254889 for regex 
+    # credit: https://gist.github.com/afeld/1254889 for youtube regex 
     @re_youtube = /(youtu\.be\/|youtube\.com\/(watch\?(.*&)?v=|(embed|v)\/))([^\?&"'>]+)/
     player_urls.each do |player_url|
       player_type = identify_player_type(player_url)
@@ -204,7 +213,7 @@ class PostParser
           soundcloud_uri = (player_url.match @re_soundcloud).captures[0] 
           soundcloud_track = SoundcloudProvider.resolve_uri_to_track(soundcloud_uri)
           Track.create_from_soundcloud_track(soundcloud_track, @post)
-          return true              
+          return true
         when "Youtube"
           vid_id = (player_url.match @re_youtube).captures[4] 
           if (youtube_vid = Youtube.oembed(vid_id)) 

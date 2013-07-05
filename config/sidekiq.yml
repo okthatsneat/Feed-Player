@@ -1,10 +1,10 @@
-# Sample configuration file for Sidekiq.
+# Configuration file for Sidekiq.
 # Options here can still be overridden by cmd line args.
 #   sidekiq -C config.yml
 ---
 :verbose: false
+:pidfile: ./tmp/pids/sidekiq.pid
 :concurrency:  10
 :queues:
-  - [feeds, 7]
-  - [posts, 5]
-  - [non_prio, 3]
+  - [feeds_queue, 7]
+  - [posts_queue, 5]

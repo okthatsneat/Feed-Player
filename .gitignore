@@ -15,3 +15,6 @@ doc/
 .project
 .DS_Store
 .idea
+# Ignore shell scripts to start and restart terminal processes
+app-start.sh
+app-restart.sh

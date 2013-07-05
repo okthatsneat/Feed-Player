@@ -13,9 +13,7 @@ FeedPlayer::Application.routes.draw do
   end
 
   resources :playlist do
-    resources :feeds do
-      resources :tracks
-    end
+    resources :tracks
   end
 
   resources :tracks do

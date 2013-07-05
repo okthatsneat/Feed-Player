@@ -1,11 +1,13 @@
 class TracksController < ApplicationController
+  before_filter :load_playlist
   
   def index
-  @tracks = Track.all
-  respond_to do |format|
-        format.html # index.html.erb
-        format.json { render json: @tracks }
-      end
+    Rails.logger.debug"TracksController index called"
+    @tracks = @playlist.tracks.where('track_id > ?', params[:after].to_i)
+    respond_to do |format|
+      format.js   {}
+    end
+
   end
 
   def load
@@ -21,6 +23,13 @@ class TracksController < ApplicationController
 
   def destroy
   end
+
+  private
+
+  def load_playlist
+    @playlist = Playlist.find(params[:playlist_id])
+  end
+
 
 
 end

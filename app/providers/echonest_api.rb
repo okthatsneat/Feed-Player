@@ -25,7 +25,7 @@ class EchonestApi
       artist_names = []
       unless artists.nil?
         artists.each do |artist|
-          artist_names << artist['name']
+          artist_names << artist['name'] unless artist['name'].eql?('a') # useless artist 'a' echonest finds all the time 
         end
       end
       return artist_names
@@ -101,7 +101,6 @@ class EchonestApi
     end     
     begin      
       api_call.call
-      #artists.each will throw no method error if artists is nil
     rescue RuntimeError => e
       #retry api request
       retry_count++

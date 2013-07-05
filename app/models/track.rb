@@ -44,7 +44,7 @@ class Track < ActiveRecord::Base
   end
 
   private
-
+  
   #save new track to all related playlists, using the post object.
   def update_playlists(post)
     Rails.logger.debug"it works!"
@@ -54,5 +54,6 @@ class Track < ActiveRecord::Base
       PlaylistTrack.create(playlist: playlist, track: self)
     end    
   end
+
 
 end
