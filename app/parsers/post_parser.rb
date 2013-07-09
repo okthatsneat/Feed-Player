@@ -80,8 +80,12 @@ class PostParser
     artist_names = EchonestApi.extract_artists_from_titles(@post.id)
     Rails.logger.debug"Echonest artist names for post #{@post.title} are #{artist_names}"
     unless (artist_names.empty?)
-      artist_names.each do |artist_name|             
-        titles_found = look_for_discogs_artist_titles_in_post_title(artist_name)
+      artist_names.each do |artist_name|
+        #get a response object from discogs with all main releases for that artist
+        d = DiscogsApi.new
+        titles = d.list_titles_by_artist(artist_name) # format is {:release_id=>"1", :release_title=>"title"}
+        #check that object for post.title release title matches
+        titles_found = look_for_discogs_artist_titles_in_post_title(titles)
         Rails.logger.debug"titles_found for artist #{artist_name} are #{titles_found}"                    
         unless (titles_found.empty?)
           titles_found.each do |title|
@@ -93,53 +97,31 @@ class PostParser
                 break
               end 
             end
+            #set up keyword for this validated artist
+            KeywordPost.create_keyword_with_post!(artist_name, @post.id)
             #found valid artist - release combo, so query provider with that
             query = artist_name + " " + title
-            soundcloud_track = SoundcloudProvider.query(query)
-            #ceate track
-            if (soundcloud_track)
-              Rails.logger.debug"query for track created is #{query}"
-              Track.create_from_soundcloud_track(soundcloud_track, @post)
-              Rails.logger.debug"track is #{soundcloud_track.title}"
-              return true
-            else
-              Rails.logger.debug"query for track NOT created is #{query}"
-              return false
-            end      
-          end
-          #set up keyword for this validated artist
-          KeywordPost.create_keyword_with_post!(artist_name, @post.id)
+            return query_soundcloud_and_create_track(query)            
+          end          
+        else
+          #if non found, check for post.title artist song matches
+          if (songs = d.list_songs_by_releases(titles))
+            song_found = look_for_discogs_artist_song_in_post_title(songs)
+            if (song_found)
+              #set up keyword for validated artist
+              KeywordPost.create_keyword_with_post!(artist_name, @post.id)
+              #query artist_name song combination
+              query = artist_name + ' ' + song_found
+              return query_soundcloud_and_create_track(query)          
+            end          
+          end          
         end
       end
-    else
+      return false
+    else    
       return false
     end
-    #  case no artists detected -----------------------------------------------
-    # TODO case Various Artists release not detected by Echonest           
-    # TODO case only release title may be present in @post.title 
-      # echonest extract artist on @post.summary 
-      # discogs check for titles of those artists in @post.title  
   end
-
-  # pro: no discogs api calls, faster. con: can't detect release titles, only songs, fails if the post title 
-  # has anything but artist -title. really only works well on the pitchfork feed right now. and has a bug - 
-  # if the first element is a playlist, and that's removed from the array, sorting the result array
-  # will result in a nil first element, which i then try to create a track from... 
-  def validate_and_create_tracks_after_provider_request(echonest_artist)
-    #query provider with full post.title
-    soundcloud_response = SoundcloudProvider.query_and_return_raw(@post.title)
-    #traverse response checking for presence of songs by artists (from echonest)
-    soundcloud_results = echonest_artist_song_in_provider_response(echonest_artist, soundcloud_response)
-    unless soundcloud_results.empty?
-      KeywordPost.create_keyword_with_post!(echonest_artist['name'], @post.id)
-      #if track, sort by most popular, create track for first element.  
-      Rails.logger.debug"soundcloud results array is #{soundcloud_results.to_yaml}"
-
-      soundcloud_results.delete_if{|item| item[:playback_count].nil?}.sort_by{|track| track[:playback_count]}
-      Rails.logger.debug"creating track for soundcloud result #{soundcloud_results.first}"
-      Track.create_from_soundcloud_track(soundcloud_results.first, @post)
-    end
-  end     
 
   private
 
@@ -177,20 +159,46 @@ class PostParser
     end
   end
 
-  def look_for_discogs_artist_titles_in_post_title(artist_name)
-    d = DiscogsApi.new    
-    #pull list of discogs releases-titles for each keyword (=artist, found
-    #by echonest)
-    titles = d.list_titles_by_artist(artist_name)
+  def look_for_discogs_artist_titles_in_post_title(titles)
     titles_found = []
-    titles.each do |title|
-      #FIXME escape title to satisfy Regex syntax
-      if (@post.title =~ /#{title}/i)
-        titles_found << title
-      end    
+    #FIXME
+    titles.each do |title|     
+      if (@post.title =~ /\b#{title[:release_title]}\b/i)
+        titles_found << title[:release_title]
+      end
     end
     titles_found            
   end
+
+  #takes an array of songs
+  def look_for_discogs_artist_song_in_post_title(songs)
+    Rails.logger.debug"songs are #{songs}"
+    Rails.logger.debug"@post.title is (#{@post.title})"
+    songs.each do |song|
+      if (song)
+        if (@post.title =~ /\b#{song}\b/i)
+          return song
+        end
+      end
+    end
+    return false
+  end
+
+  def query_soundcloud_and_create_track(query)
+    soundcloud_track = SoundcloudProvider.query(query)
+    #ceate track
+    if (soundcloud_track)
+      Rails.logger.debug"query for track created is #{query} from post title #{@post.title}"
+      Track.create_from_soundcloud_track(soundcloud_track, @post)
+      Rails.logger.debug"soundcloud track is #{soundcloud_track.title}"
+      return true
+    else
+      Rails.logger.debug"query for soundcloud track NOT created is #{query} for post title #{@post.title}"
+      return false
+    end
+  end
+
+
 
   def create_tracks_from_embeds_on_website_behind_post
     player_urls = HtmlParser.new(

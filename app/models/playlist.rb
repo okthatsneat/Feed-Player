@@ -16,13 +16,10 @@ class Playlist < ActiveRecord::Base
 
 	def update_playlist_track_with_feed(feed)
 		Rails.logger.debug"update_playlist_track_with_feed callback triggered!"
-		#pull all related feeds, their already parsed posts, their already existing tracks and relate them to 
-		# this playlist. 
+		# pull the added feed's tracks through their posts and relate them to this playlist. 
 		# this is also where filters will go that kick tracks out of playlists by user constraints.
 		feed.posts.collect(&:tracks).flatten.each do |track|
-			# FIXME unless self.tracks => track already exists
-			PlaylistTrack.create(playlist:self, track:track)
-
+			PlaylistTrack.create(playlist:self, track:track) unless self.tracks.exists?(track.id)
 		end 
 	end
 

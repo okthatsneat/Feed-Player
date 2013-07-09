@@ -5,15 +5,12 @@ class PostWorker
   def perform(post_id)
     # get the embeded content and create tracks   
     post_parser = PostParser.new(post_id)          
-    return if post_parser.extract_tracks_from_embeds
+    #return if
+    #post_parser.extract_tracks_from_embeds
     #else
-    return if post_parser.create_tracks_for_coverart
-    # else old strategy with discogs    
-    post_parser.validate_and_create_tracks_semantically
-
-    #new strategy with validation after direct soundcloud response (has problems)
-    #(EchonestApi.extract_artist_objects_from_title(post_id)).each do |echonest_artist|
-    #  post_parser.validate_and_create_tracks_after_provider_request(echonest_artist)
-    #end
+    #return if
+    #post_parser.create_tracks_for_coverart
+    # else strategy with discogs validated echonest extract artists in post title    
+    post_parser.validate_and_create_tracks_semantically    
   end
 end

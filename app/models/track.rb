@@ -50,8 +50,7 @@ class Track < ActiveRecord::Base
     Rails.logger.debug"it works!"
     # also the future place to check for user preferences that would reject the track for the playlist
     post.feed.playlists.each do |playlist|
-      #FIXME shield against duplicate entries
-      PlaylistTrack.create(playlist: playlist, track: self)
+      PlaylistTrack.create(playlist: playlist, track: self) unless playlist.tracks.exists?(self)
     end    
   end
 
