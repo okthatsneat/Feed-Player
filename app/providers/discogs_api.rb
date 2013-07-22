@@ -53,7 +53,7 @@ class DiscogsApi
   def artist_release_combination?(query_string, echonest_artist_object)
   query_string.downcase!    
     list_titles_by_artist(echonest_artist_object['name']).each do |title|
-      if ( query_string.include?(title.downcase) && query_string.include?(echonest_artist_object['name'].downcase) )
+      if ( query_string.include?(title[:release_title].downcase) && query_string.include?(echonest_artist_object['name'].downcase) )
         return true
       end
     end      
@@ -69,7 +69,8 @@ class DiscogsApi
       # rescue Discogs error stemming from too many calls per second.
       # discogs api has rate limit of 1 request per second (actually 60 per minute)
       # so let this thread sleep if requests start to fail.
-      sleep(30)
+      Rails.logger.debug"Discogs timed out, thread sleeps for 60s now"
+      sleep(60)
       retry
     rescue URI::InvalidURIError
       return []

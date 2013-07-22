@@ -14,14 +14,38 @@ class PostParser
       unless (create_tracks_from_player_urls(player_urls))
         # have to head over to the website to check for embeded content
         # all player_urls were not supported yet
-        return create_tracks_from_embeds_on_website_behind_post        
+        if (create_tracks_from_embeds_on_website_behind_post)
+          Rails.logger.debug"""
+
+          in extract_tracks_from_embeds success
+          @post.title is #{@post.title}
+
+          """
+          return true
+        else
+          return false
+        end        
       else
+        Rails.logger.debug"""
+
+        in extract_tracks_from_embeds success
+        @post.title is #{@post.title}
+
+        """
         return true
       end  
     else
       # no player_urls where found in neither summary nor body, so head over to the 
       # website to check for embeded content
-      return create_tracks_from_embeds_on_website_behind_post
+      if (create_tracks_from_embeds_on_website_behind_post)
+        Rails.logger.debug"""
+        in extract_tracks_from_embeds success
+        @post.title is #{@post.title}
+        """
+        return true
+      else
+        return false
+      end
     end
     return false    
   end
@@ -31,11 +55,13 @@ class PostParser
   def create_tracks_for_coverart    
     query_string = HtmlParser.new(
       HTTParty.get(@post.url)).query_string_for_coverart_image
-    Rails.logger.debug"query string from google is (#{query_string})"
+    Rails.logger.debug"query string from google is (#{query_string}) for post #{@post.title}"
     # validate query string to represent either an artist name, or an 
     # artist-song, artist-release combination. reject if not.
     #get Echonest artist objects
     if (query_string)
+      #capitalize so Echonest recognizes artists
+      query_string = query_string.split(' ').map(&:capitalize).join(' ')
       EchonestApi.extract_artist_objects_from_string(query_string).each do |echonest_artist_object|
         #check if 100% artist name match
         is_artist_name = EchonestApi.full_artist_name_match?(query_string, echonest_artist_object)
@@ -46,8 +72,10 @@ class PostParser
           # save found artist keyword, query provider with query string
         if (is_artist_name || is_artist_release)
           Rails.logger.debug"""
-          <<< in create_tracks_for_coverart 
+          <<< 
 
+          in create_tracks_for_coverart success 
+          @post.title is #{@post.title}
           query_string is #{query_string}
           is_artist_name is #{is_artist_name} 
           is_artist_release is #{is_artist_release}
@@ -94,27 +122,35 @@ class PostParser
               # break if not present in post.title twice
               Rails.logger.debug"artist name #{artist_name} equals title #{title}" 
               if ( (@post.title.match(/#{title}/i)).captures.length < 2  )
-                break
+                next
               end 
             end
             #set up keyword for this validated artist
             KeywordPost.create_keyword_with_post!(artist_name, @post.id)
-            #found valid artist - release combo, so query provider with that
             query = artist_name + " " + title
+            Rails.logger.debug"""
+
+            in validate_and_create_tracks_semantically success
+            @post.title is #{@post.title}
+            query is #{query}
+
+            """
+            #found valid artist - release combo, so query provider with that
             return query_soundcloud_and_create_track(query)            
           end          
         else
           #if non found, check for post.title artist song matches
-          if (songs = d.list_songs_by_releases(titles))
-            song_found = look_for_discogs_artist_song_in_post_title(songs)
-            if (song_found)
-              #set up keyword for validated artist
-              KeywordPost.create_keyword_with_post!(artist_name, @post.id)
-              #query artist_name song combination
-              query = artist_name + ' ' + song_found
-              return query_soundcloud_and_create_track(query)          
-            end          
-          end          
+          #FIXME does not quite find the right tracks yet
+          # if (songs = d.list_songs_by_releases(titles))
+          #   song_found = look_for_discogs_artist_song_in_post_title(songs)
+          #   if (song_found)
+          #     #set up keyword for validated artist
+          #     KeywordPost.create_keyword_with_post!(artist_name, @post.id)
+          #     #query artist_name song combination
+          #     query = artist_name + ' ' + song_found
+          #     return query_soundcloud_and_create_track(query)          
+          #   end          
+          # end          
         end
       end
       return false
