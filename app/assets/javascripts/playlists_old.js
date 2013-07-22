@@ -20,8 +20,8 @@
                                 if (currentValue !== feedSearchValue) {
                                     feedSearchValue = $.trim(currentValue);
                                     if (feedSearchValue !== '') {
-                                        google.feeds.findFeeds(feedSearchValue, (function (searchValue) {
-                                            return function (result) {
+                                        google.feeds.findFeeds(feedSearchValue,  (function (searchValue) {
+                                            return function findfeedscallback (result) {
                                                 if (searchValue === $('#feed-search').val()) {
                                                     if (!result.error) {
                                                         var entry,

@@ -1,6 +1,3 @@
-#implements the rss feed search and pick 
-#global: google, jQuery
- 
 (($) ->
   "use strict"
   setUp = ->
@@ -15,7 +12,7 @@
                 feedSearchValue = $.trim(currentValue)
                 if feedSearchValue isnt ""
                   google.feeds.findFeeds feedSearchValue, ((searchValue) ->
-                    (result) ->
+                    findfeedscallback = (result) ->
                       if searchValue is $("#feed-search").val()
                         unless result.error
                           entry = undefined
@@ -25,14 +22,20 @@
                           i = 0
                           while i < result.entries.length
                             entry = result.entries[i]
-                            $("#feed-search-results").append "<li><a href=\"" + entry.url + "\">" + entry.title + "</a><button name=\"add-feed\">add feed</button></li>"
+                            $("#feed-search-results").append "<li><a href=\"" 
+                            + entry.url + "\">" + entry.title 
+                            + "</a><button name=\"add-feed\">add feed</button></li>"
                             i += 1
                           $("#feed-search-results button[name=\"add-feed\"]").on "click", ->
                             index = $("form ul li").length
                             $(this).attr "disabled", "disabled"
-                            $("form ul").append "<li>" + $(this).siblings("a").html() + "<input id=\"playlist_feeds_attributes_" + index + "_feed_url\" name=\"playlist[feeds_attributes][" + index + "][feed_url]\" size=\"30\" type=\"text\" value=\"" + $(this).siblings("a").attr("href") + "\"></li>"
+                            $("form ul").append "<li>" 
+                            + $(this).siblings("a").html() 
+                            + "<input id=\"playlist_feeds_attributes_" + index 
+                            + "_feed_url\" name=\"playlist[feeds_attributes][" 
+                            + index + "][feed_url]\" size=\"30\" type=\"text\" value=\"" 
+                            + $(this).siblings("a").attr("href") + "\"></li>"
                             $("form button[type=\"submit\"]").show()
-
                         else
                           $("#feed-search-error").text result.error.message
                           $("#feed-search-results").empty()
