@@ -85,10 +85,11 @@ class PostParser
           """
 
           # save found artist as keyword
-          KeywordPost.create_keyword_with_post!(echonest_artist_object['name'], @post.id)
+          keyword_post = KeywordPost.create_keyword_with_post!(echonest_artist_object['name'], @post.id)
           # query provider with validated string 
           if (soundcloud_track = SoundcloudProvider.query(query_string))
-            Track.create_from_soundcloud_track(soundcloud_track, @post)
+            KeywordTrack.create!(keyword_id: keyword_post.keyword.id,
+             track_id: Track.create_from_soundcloud_track(soundcloud_track, @post).id )
             return true
           end        
         end
@@ -126,7 +127,7 @@ class PostParser
               end 
             end
             #set up keyword for this validated artist
-            KeywordPost.create_keyword_with_post!(artist_name, @post.id)
+            keyword_post = KeywordPost.create_keyword_with_post!(artist_name, @post.id)
             query = artist_name + " " + title
             Rails.logger.debug"""
 
@@ -136,7 +137,10 @@ class PostParser
 
             """
             #found valid artist - release combo, so query provider with that
-            return query_soundcloud_and_create_track(query)            
+            if (track = query_soundcloud_and_create_track(query) )
+              KeywordTrack.create!(keyword_id: keyword_post.keyword.id,
+                track_id: track.id)
+            end            
           end          
         else
           #if non found, check for post.title artist song matches
@@ -225,9 +229,8 @@ class PostParser
     #ceate track
     if (soundcloud_track)
       Rails.logger.debug"query for track created is #{query} from post title #{@post.title}"
-      Track.create_from_soundcloud_track(soundcloud_track, @post)
       Rails.logger.debug"soundcloud track is #{soundcloud_track.title}"
-      return true
+      return Track.create_from_soundcloud_track(soundcloud_track, @post)      
     else
       Rails.logger.debug"query for soundcloud track NOT created is #{query} for post title #{@post.title}"
       return false
