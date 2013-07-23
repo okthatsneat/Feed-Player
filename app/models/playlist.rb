@@ -1,4 +1,5 @@
 class Playlist < ActiveRecord::Base
+  before_destroy :clean_up_unreferenced_feeds
   has_one :playlist_track, :dependent => :destroy
   has_many :tracks, :through => :playlist_track
   has_and_belongs_to_many :feeds, :after_add => :update_playlist_track_with_feed
@@ -22,5 +23,12 @@ class Playlist < ActiveRecord::Base
 			PlaylistTrack.create(playlist:self, track:track) unless self.tracks.exists?(track.id)
 		end 
 	end
+
+  def clean_up_unreferenced_feeds
+    self.feeds.each do |feed|
+      feed.destroy unless feed.playlists.any?
+    end
+  end
+
 
 end
