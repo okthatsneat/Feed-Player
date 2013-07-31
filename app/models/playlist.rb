@@ -7,7 +7,6 @@ class Playlist < ActiveRecord::Base
   accepts_nested_attributes_for :feeds
 
   def feeds_attributes=(hash)
-  	Rails.logger.debug"hash passed to create feeds is #{hash.to_yaml}"
     hash.each do |sequence,feed_values|
       feeds <<  Feed.find_or_create_by_feed_url(feed_values[:feed_url])
     end
@@ -16,7 +15,6 @@ class Playlist < ActiveRecord::Base
 	private
 
 	def update_playlist_track_with_feed(feed)
-		Rails.logger.debug"update_playlist_track_with_feed callback triggered!"
 		# pull the added feed's tracks through their posts and relate them to this playlist. 
 		# this is also where filters will go that kick tracks out of playlists by user constraints.
 		feed.posts.collect(&:tracks).flatten.each do |track|

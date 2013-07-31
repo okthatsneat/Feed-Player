@@ -9,7 +9,7 @@ class PostParser
     #head over to the post.url and check there.
     player_urls = []
     player_urls = HtmlParser.new(@post.summary).extract_player_urls_from_iframes
-    player_urls.concat(HtmlParser.new(@post.body).extract_player_urls_from_iframes)    
+    player_urls.concat(HtmlParser.new(@post.body).extract_player_urls_from_iframes) unless @post.body.nil?    
     unless player_urls.empty?
       unless (create_tracks_from_player_urls(player_urls))
         # have to head over to the website to check for embeded content
