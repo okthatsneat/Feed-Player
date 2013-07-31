@@ -1,3 +1,4 @@
+# not in use
 class PostsController < ApplicationController
   
   def index
@@ -21,9 +22,5 @@ class PostsController < ApplicationController
   
   def destroy
   end
-
-  def embed
-  end
-
 
 end

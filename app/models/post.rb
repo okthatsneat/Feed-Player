@@ -32,7 +32,6 @@ class Post < ActiveRecord::Base
 
   #save new track to all related playlists, using self.
   def update_playlists(track)
-    Rails.logger.debug"it works!"
     # also the future place to check for user preferences that would reject the track for the playlist
     self.feed.playlists.each do |playlist|
       PlaylistTrack.create(playlist: playlist, track: track) unless playlist.tracks.exists?(track.id)

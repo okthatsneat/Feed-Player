@@ -50,8 +50,7 @@ class PlaylistsController < ApplicationController
         Rails.logger.debug"called FeedWorker for feed #{feed.id}"
         FeedWorker.perform_async(feed.id)
       end
-      # and send the user to a blank page that starts polling for tracks coming in. 
-
+      # and send the user to a blank page that starts polling for tracks coming in.
       format.html { redirect_to @playlist, notice: 'Playlist was successfully created.' }
       format.json { render json: @playlist, status: :created, location: @playlist }
     else
@@ -61,6 +60,7 @@ class PlaylistsController < ApplicationController
     end
   end
 
+  # FIXME handle update playlist
   # PUT /playlists/1
   # PUT /playlists/1.json
   def update
@@ -88,20 +88,5 @@ class PlaylistsController < ApplicationController
       format.json { head :no_content }
     end
   end
-
-  private
-
-  # def load_tracks 
-  #   # fetch all related feeds
-  #   @tracks = []
-  #   Playlist.find(params[:id]).feeds.each do |feed|
-  #     feed.posts.each do |post| 
-  #       post.tracks.each do |track|
-  #         @tracks << track
-  #       end
-  #     end
-  #   end if params[:id]
-  #   return @tracks
-  # end
 
 end
