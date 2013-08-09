@@ -16,5 +16,18 @@ doc/
 .DS_Store
 .idea
 # Ignore shell scripts to start and restart terminal processes
-app-start.sh
-app-restart.sh
+#app-start.sh
+#app-restart.sh
+
+#Ignore algorithm test scripts and output logs
+#./algorithm-tests
+
+#Ignore bachelor thesis pdf - not public unitl graded
+./Bachelor_Thesis
+
+#Ignore convenience shell scripts to start, stop, restart, reset the app
+#./convenience_shellscripts
+
+#Ignore Diagrams until bachelor thesis can be public
+#./Diagrams
+
