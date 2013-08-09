@@ -1,9 +1,10 @@
 This repository holds the code for Philipp Hofmann's bachelor thesis in media and computing, turned in August 1st 2013:   
 
-== Feed Player
-= Music Discovery Through Text And Image Analysis Of Feeds
+= Feed Player
+== Music Discovery Through Text And Image Analysis Of Feeds
 
-Abstract: 
+==Abstract
+
 Reading about music in a preferred media source, finding the music brought to attention and listening to it is a common music discovery pattern. How can it be scaled by automation, and what is the quality of the resulting experience? To answer these questions, state-of-the-art music discovery engines, existing music providers and content aggregators were researched. The building blocks of a novelty concept were established, its qualities reasoned for. As a result, a web application that does RSS feed search, aggregation, parsing for subjects, query for, and display of active music content needed to be implemented. Using an open source web framework, libraries in its eco system, and APIs of services, this was learned and achieved. The targeted automation is possible, demonstrated by proof of concept. The variety the system is able to recommend from depends on the variety within input feeds and their quantity. The subjective quality of the music discovery experience depends on the selected feed content quality. This gives the user control over two key aspects of the music discovery experience: scale and care.
 Keywords: web application, music discovery, information retrieval.
 
