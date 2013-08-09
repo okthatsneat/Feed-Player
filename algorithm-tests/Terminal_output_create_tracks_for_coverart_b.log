@@ -1,0 +1,1455 @@
+Last login: Wed Jul 10 10:19:02 on ttys001
+Philipps-MacBook-Pro:Feed-Player philipphofmann$ ./app-db-reset.sh
+Sidekiq shut down gracefully.
+sidekiq stopped
+redis stopped
+rails stopped
+-- create_table("feeds", {:force=>true})
+NOTICE:  CREATE TABLE will create implicit sequence "feeds_id_seq" for serial column "feeds.id"
+NOTICE:  CREATE TABLE / PRIMARY KEY will create implicit index "feeds_pkey" for table "feeds"
+   -> 0.0268s
+-- add_index("feeds", ["feed_url"], {:name=>"index_feeds_on_feed_url", :unique=>true})
+   -> 0.0055s
+-- create_table("feeds_playlists", {:id=>false, :force=>true})
+   -> 0.0023s
+-- create_table("keyword_posts", {:force=>true})
+NOTICE:  CREATE TABLE will create implicit sequence "keyword_posts_id_seq" for serial column "keyword_posts.id"
+NOTICE:  CREATE TABLE / PRIMARY KEY will create implicit index "keyword_posts_pkey" for table "keyword_posts"
+   -> 0.0359s
+-- create_table("keyword_tracks", {:force=>true})
+NOTICE:  CREATE TABLE will create implicit sequence "keyword_tracks_id_seq" for serial column "keyword_tracks.id"
+NOTICE:  CREATE TABLE / PRIMARY KEY will create implicit index "keyword_tracks_pkey" for table "keyword_tracks"
+   -> 0.0056s
+-- create_table("keywords", {:force=>true})
+NOTICE:  CREATE TABLE will create implicit sequence "keywords_id_seq" for serial column "keywords.id"
+NOTICE:  CREATE TABLE / PRIMARY KEY will create implicit index "keywords_pkey" for table "keywords"
+   -> 0.0051s
+-- create_table("playlist_tracks", {:force=>true})
+NOTICE:  CREATE TABLE will create implicit sequence "playlist_tracks_id_seq" for serial column "playlist_tracks.id"
+NOTICE:  CREATE TABLE / PRIMARY KEY will create implicit index "playlist_tracks_pkey" for table "playlist_tracks"
+   -> 0.0053s
+-- create_table("playlists", {:force=>true})
+NOTICE:  CREATE TABLE will create implicit sequence "playlists_id_seq" for serial column "playlists.id"
+NOTICE:  CREATE TABLE / PRIMARY KEY will create implicit index "playlists_pkey" for table "playlists"
+   -> 0.0062s
+-- create_table("posts", {:force=>true})
+NOTICE:  CREATE TABLE will create implicit sequence "posts_id_seq" for serial column "posts.id"
+NOTICE:  CREATE TABLE / PRIMARY KEY will create implicit index "posts_pkey" for table "posts"
+   -> 0.0066s
+-- add_index("posts", ["guid"], {:name=>"index_posts_on_guid", :unique=>true})
+   -> 0.0030s
+-- create_table("posts_tracks", {:id=>false, :force=>true})
+   -> 0.0023s
+-- create_table("tracks", {:force=>true})
+NOTICE:  CREATE TABLE will create implicit sequence "tracks_id_seq" for serial column "tracks.id"
+NOTICE:  CREATE TABLE / PRIMARY KEY will create implicit index "tracks_pkey" for table "tracks"
+   -> 0.0070s
+-- add_index("tracks", ["soundcloud_uri"], {:name=>"index_tracks_on_soundcloud_uri", :unique=>true})
+   -> 0.0030s
+-- add_index("tracks", ["youtube_id"], {:name=>"index_tracks_on_youtube_id", :unique=>true})
+   -> 0.0042s
+-- initialize_schema_migrations_table()
+   -> 0.0060s
+-- assume_migrated_upto_version(20130523161302, ["/Users/philipphofmann/Dev/rails_projects/Feed-Player/db/migrate"])
+   -> 0.0145s
+postgres reset
+postgres stopped
+postgres started
+rails started
+redis started
+sidekiq started
+Philipps-MacBook-Pro:Feed-Player philipphofmann$ [19024] 10 Jul 14:38:07.504 * Max number of open files set to 10032
+                _._                                                  
+           _.-``__ ''-._                                             
+      _.-``    `.  `_.  ''-._           Redis 2.6.11 (00000000/0) 64 bit
+  .-`` .-```.  ```\/    _.,_ ''-._                                   
+ (    '      ,       .-`  | `,    )     Running in stand alone mode
+ |`-._`-...-` __...-.``-._|'` _.-'|     Port: 6379
+ |    `-._   `._    /     _.-'    |     PID: 19024
+  `-._    `-._  `-./  _.-'    _.-'                                   
+ |`-._`-._    `-.__.-'    _.-'_.-'|                                  
+ |    `-._`-._        _.-'_.-'    |           http://redis.io        
+  `-._    `-._`-.__.-'_.-'    _.-'                                   
+ |`-._`-._    `-.__.-'    _.-'_.-'|                                  
+ |    `-._`-._        _.-'_.-'    |                                  
+  `-._    `-._`-.__.-'_.-'    _.-'                                   
+      `-._    `-.__.-'    _.-'                                       
+          `-._        _.-'                                           
+              `-.__.-'                                               
+
+[19024] 10 Jul 14:38:07.507 # Server started, Redis version 2.6.11
+[19024] 10 Jul 14:38:07.507 * DB loaded from disk: 0.000 seconds
+[19024] 10 Jul 14:38:07.507 * The server is now ready to accept connections on port 6379
+server starting
+=> Booting WEBrick
+=> Rails 3.2.13 application starting in development on http://0.0.0.0:3000
+=> Call with -d to detach
+=> Ctrl-C to shutdown server
+[2013-07-10 14:38:12] INFO  WEBrick 1.3.1
+[2013-07-10 14:38:12] INFO  ruby 1.9.3 (2013-02-22) [x86_64-darwin12.3.0]
+[2013-07-10 14:38:12] INFO  WEBrick::HTTPServer#start: pid=19023 port=3000
+2013-07-10T12:38:12Z 19025 TID-ox3237zdk WARN: FeedWorker - :timeout is unsafe and support has been removed from Sidekiq, see http://bit.ly/OtYpK for details
+2013-07-10T12:38:12Z 19025 TID-ox3237zdk WARN: PostWorker - :timeout is unsafe and support has been removed from Sidekiq, see http://bit.ly/OtYpK for details
+2013-07-10T12:38:12Z 19025 TID-ox3237zdk INFO: Booting Sidekiq 2.11.0 using redis://localhost:6379/0 with options {}
+2013-07-10T12:38:12Z 19025 TID-ox3237zdk INFO: Running in ruby 1.9.3p392 (2013-02-22 revision 39386) [x86_64-darwin12.3.0]
+2013-07-10T12:38:12Z 19025 TID-ox3237zdk INFO: See LICENSE and the LGPL-3.0 for licensing details.
+2013-07-10T12:38:12Z 19025 TID-ox3237zdk INFO: Starting processing, hit Ctrl-C to stop
+2013-07-10T12:38:13Z 19023 TID-oxufw6bg8 INFO: Sidekiq client using redis://localhost:6379/0 with options {}
+
+
+Started GET "/sidekiq/dashboard/stats" for 127.0.0.1 at 2013-07-10 14:38:13 +0200
+
+
+Started GET "/sidekiq/dashboard/stats" for 127.0.0.1 at 2013-07-10 14:38:14 +0200
+
+
+Started GET "/sidekiq/dashboard/stats" for 127.0.0.1 at 2013-07-10 14:38:16 +0200
+[2013-07-10 14:38:16] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+
+
+Started GET "/sidekiq/dashboard/stats" for 127.0.0.1 at 2013-07-10 14:38:18 +0200
+[2013-07-10 14:38:18] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+
+
+Started GET "/sidekiq/dashboard/stats" for 127.0.0.1 at 2013-07-10 14:38:20 +0200
+
+
+Started GET "/sidekiq/dashboard/stats" for 127.0.0.1 at 2013-07-10 14:38:22 +0200
+[2013-07-10 14:38:22] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+
+
+Started GET "/sidekiq/dashboard/stats" for 127.0.0.1 at 2013-07-10 14:38:24 +0200
+[2013-07-10 14:38:24] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+
+
+Started GET "/sidekiq/dashboard/stats" for 127.0.0.1 at 2013-07-10 14:38:26 +0200
+[2013-07-10 14:38:26] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+
+
+Started GET "/sidekiq/dashboard/stats" for 127.0.0.1 at 2013-07-10 14:38:28 +0200
+[2013-07-10 14:38:28] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+
+
+Started GET "/sidekiq/dashboard/stats" for 127.0.0.1 at 2013-07-10 14:38:30 +0200
+[2013-07-10 14:38:30] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+
+
+Started GET "/playlists/" for 127.0.0.1 at 2013-07-10 14:38:31 +0200
+Processing by PlaylistsController#index as HTML
+  Playlist Load (0.4ms)  SELECT "playlists".* FROM "playlists" 
+  Rendered playlists/index.html.erb within layouts/application (3.7ms)
+Completed 200 OK in 254ms (Views: 203.3ms | ActiveRecord: 7.5ms)
+
+
+Started GET "/assets/application.css?body=1" for 127.0.0.1 at 2013-07-10 14:38:32 +0200
+Served asset /application.css - 304 Not Modified (24ms)
+[2013-07-10 14:38:32] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+
+
+Started GET "/assets/bootstrap_and_overrides.css?body=1" for 127.0.0.1 at 2013-07-10 14:38:32 +0200
+Served asset /bootstrap_and_overrides.css - 304 Not Modified (10ms)
+[2013-07-10 14:38:32] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+
+
+Started GET "/assets/bootstrap.css?body=1" for 127.0.0.1 at 2013-07-10 14:38:32 +0200
+Served asset /bootstrap.css - 304 Not Modified (2ms)
+[2013-07-10 14:38:32] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+
+
+Started GET "/assets/feeds.css?body=1" for 127.0.0.1 at 2013-07-10 14:38:32 +0200
+Served asset /feeds.css - 304 Not Modified (5ms)
+[2013-07-10 14:38:32] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+
+
+Started GET "/assets/keywords.css?body=1" for 127.0.0.1 at 2013-07-10 14:38:32 +0200
+Served asset /keywords.css - 304 Not Modified (2ms)
+[2013-07-10 14:38:32] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+
+
+Started GET "/assets/bootstrap-responsive.css?body=1" for 127.0.0.1 at 2013-07-10 14:38:32 +0200
+Served asset /bootstrap-responsive.css - 304 Not Modified (2ms)
+[2013-07-10 14:38:32] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+
+
+Started GET "/assets/playlists.css?body=1" for 127.0.0.1 at 2013-07-10 14:38:32 +0200
+Served asset /playlists.css - 304 Not Modified (28ms)
+[2013-07-10 14:38:32] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+
+
+Started GET "/assets/posts.css?body=1" for 127.0.0.1 at 2013-07-10 14:38:32 +0200
+Served asset /posts.css - 304 Not Modified (1ms)
+[2013-07-10 14:38:32] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+
+
+Started GET "/assets/scaffolds.css?body=1" for 127.0.0.1 at 2013-07-10 14:38:32 +0200
+Served asset /scaffolds.css - 304 Not Modified (3ms)
+[2013-07-10 14:38:32] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+
+
+Started GET "/assets/tracks.css?body=1" for 127.0.0.1 at 2013-07-10 14:38:32 +0200
+Served asset /tracks.css - 304 Not Modified (1ms)
+[2013-07-10 14:38:32] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+
+
+Started GET "/assets/jquery.js?body=1" for 127.0.0.1 at 2013-07-10 14:38:32 +0200
+Served asset /jquery.js - 304 Not Modified (6ms)
+[2013-07-10 14:38:32] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+
+
+Started GET "/assets/jquery_ujs.js?body=1" for 127.0.0.1 at 2013-07-10 14:38:32 +0200
+Served asset /jquery_ujs.js - 304 Not Modified (3ms)
+[2013-07-10 14:38:32] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+
+
+Started GET "/assets/bootstrap.js?body=1" for 127.0.0.1 at 2013-07-10 14:38:32 +0200
+Served asset /bootstrap.js - 304 Not Modified (1ms)
+[2013-07-10 14:38:32] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+
+
+Started GET "/assets/feeds.js?body=1" for 127.0.0.1 at 2013-07-10 14:38:32 +0200
+Served asset /feeds.js - 304 Not Modified (1ms)
+[2013-07-10 14:38:32] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+
+
+Started GET "/assets/keywords.js?body=1" for 127.0.0.1 at 2013-07-10 14:38:32 +0200
+Served asset /keywords.js - 304 Not Modified (1ms)
+[2013-07-10 14:38:32] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+
+
+Started GET "/assets/playlists.js?body=1" for 127.0.0.1 at 2013-07-10 14:38:32 +0200
+Served asset /playlists.js - 304 Not Modified (1ms)
+[2013-07-10 14:38:32] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+
+
+Started GET "/assets/playlists_old.js?body=1" for 127.0.0.1 at 2013-07-10 14:38:32 +0200
+Served asset /playlists_old.js - 304 Not Modified (2ms)
+[2013-07-10 14:38:32] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+
+
+Started GET "/assets/posts.js?body=1" for 127.0.0.1 at 2013-07-10 14:38:32 +0200
+Served asset /posts.js - 304 Not Modified (2ms)
+[2013-07-10 14:38:32] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+
+
+Started GET "/assets/tracks.js?body=1" for 127.0.0.1 at 2013-07-10 14:38:32 +0200
+Served asset /tracks.js - 304 Not Modified (1ms)
+[2013-07-10 14:38:32] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+
+
+Started GET "/assets/application.js?body=1" for 127.0.0.1 at 2013-07-10 14:38:32 +0200
+Served asset /application.js - 304 Not Modified (8ms)
+[2013-07-10 14:38:32] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+
+
+Started GET "/sidekiq/dashboard/stats" for 127.0.0.1 at 2013-07-10 14:38:32 +0200
+[2013-07-10 14:38:32] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+
+
+Started GET "/playlists/new" for 127.0.0.1 at 2013-07-10 14:38:33 +0200
+Processing by PlaylistsController#new as HTML
+  Rendered playlists/_form.html.erb (47.5ms)
+  Rendered playlists/new.html.erb within layouts/application (52.8ms)
+Completed 200 OK in 181ms (Views: 175.7ms | ActiveRecord: 0.0ms)
+[2013-07-10 14:38:33] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+
+
+Started GET "/assets/bootstrap.css?body=1" for 127.0.0.1 at 2013-07-10 14:38:33 +0200
+Served asset /bootstrap.css - 304 Not Modified (0ms)
+[2013-07-10 14:38:33] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+
+
+Started GET "/assets/feeds.css?body=1" for 127.0.0.1 at 2013-07-10 14:38:33 +0200
+Served asset /feeds.css - 304 Not Modified (0ms)
+[2013-07-10 14:38:33] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+
+
+Started GET "/assets/bootstrap-responsive.css?body=1" for 127.0.0.1 at 2013-07-10 14:38:33 +0200
+Served asset /bootstrap-responsive.css - 304 Not Modified (0ms)
+[2013-07-10 14:38:33] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+
+
+Started GET "/assets/bootstrap_and_overrides.css?body=1" for 127.0.0.1 at 2013-07-10 14:38:33 +0200
+Served asset /bootstrap_and_overrides.css - 304 Not Modified (2ms)
+[2013-07-10 14:38:33] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+
+
+Started GET "/assets/application.css?body=1" for 127.0.0.1 at 2013-07-10 14:38:33 +0200
+Served asset /application.css - 304 Not Modified (4ms)
+[2013-07-10 14:38:33] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+
+
+Started GET "/assets/keywords.css?body=1" for 127.0.0.1 at 2013-07-10 14:38:33 +0200
+Served asset /keywords.css - 304 Not Modified (0ms)
+[2013-07-10 14:38:33] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+
+
+Started GET "/assets/playlists.css?body=1" for 127.0.0.1 at 2013-07-10 14:38:33 +0200
+Served asset /playlists.css - 304 Not Modified (0ms)
+[2013-07-10 14:38:33] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+
+
+Started GET "/assets/posts.css?body=1" for 127.0.0.1 at 2013-07-10 14:38:33 +0200
+Served asset /posts.css - 304 Not Modified (0ms)
+[2013-07-10 14:38:33] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+
+
+Started GET "/assets/scaffolds.css?body=1" for 127.0.0.1 at 2013-07-10 14:38:33 +0200
+Served asset /scaffolds.css - 304 Not Modified (0ms)
+[2013-07-10 14:38:33] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+
+
+Started GET "/assets/tracks.css?body=1" for 127.0.0.1 at 2013-07-10 14:38:33 +0200
+Served asset /tracks.css - 304 Not Modified (0ms)
+[2013-07-10 14:38:33] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+
+
+Started GET "/assets/jquery.js?body=1" for 127.0.0.1 at 2013-07-10 14:38:33 +0200
+Served asset /jquery.js - 304 Not Modified (0ms)
+[2013-07-10 14:38:33] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+
+
+Started GET "/assets/jquery_ujs.js?body=1" for 127.0.0.1 at 2013-07-10 14:38:33 +0200
+Served asset /jquery_ujs.js - 304 Not Modified (0ms)
+[2013-07-10 14:38:33] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+
+
+Started GET "/assets/bootstrap.js?body=1" for 127.0.0.1 at 2013-07-10 14:38:33 +0200
+Served asset /bootstrap.js - 304 Not Modified (0ms)
+[2013-07-10 14:38:33] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+
+
+Started GET "/assets/keywords.js?body=1" for 127.0.0.1 at 2013-07-10 14:38:33 +0200
+Served asset /keywords.js - 304 Not Modified (0ms)
+[2013-07-10 14:38:33] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+
+
+Started GET "/assets/feeds.js?body=1" for 127.0.0.1 at 2013-07-10 14:38:33 +0200
+Served asset /feeds.js - 304 Not Modified (0ms)
+[2013-07-10 14:38:33] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+
+
+Started GET "/assets/playlists.js?body=1" for 127.0.0.1 at 2013-07-10 14:38:33 +0200
+Served asset /playlists.js - 304 Not Modified (0ms)
+[2013-07-10 14:38:33] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+
+
+Started GET "/assets/playlists_old.js?body=1" for 127.0.0.1 at 2013-07-10 14:38:33 +0200
+Served asset /playlists_old.js - 304 Not Modified (1ms)
+[2013-07-10 14:38:33] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+
+
+Started GET "/assets/posts.js?body=1" for 127.0.0.1 at 2013-07-10 14:38:33 +0200
+Served asset /posts.js - 304 Not Modified (0ms)
+[2013-07-10 14:38:33] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+
+
+Started GET "/assets/tracks.js?body=1" for 127.0.0.1 at 2013-07-10 14:38:33 +0200
+Served asset /tracks.js - 304 Not Modified (0ms)
+[2013-07-10 14:38:33] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+
+
+Started GET "/assets/application.js?body=1" for 127.0.0.1 at 2013-07-10 14:38:33 +0200
+Served asset /application.js - 304 Not Modified (0ms)
+[2013-07-10 14:38:33] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+
+
+Started GET "/sidekiq/dashboard/stats" for 127.0.0.1 at 2013-07-10 14:38:34 +0200
+[2013-07-10 14:38:34] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+
+
+Started GET "/sidekiq/dashboard/stats" for 127.0.0.1 at 2013-07-10 14:38:36 +0200
+[2013-07-10 14:38:36] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+
+
+Started GET "/sidekiq/dashboard/stats" for 127.0.0.1 at 2013-07-10 14:38:38 +0200
+[2013-07-10 14:38:38] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+
+
+Started GET "/sidekiq/dashboard/stats" for 127.0.0.1 at 2013-07-10 14:38:40 +0200
+[2013-07-10 14:38:40] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+
+
+Started GET "/sidekiq/dashboard/stats" for 127.0.0.1 at 2013-07-10 14:38:42 +0200
+[2013-07-10 14:38:42] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+
+
+Started GET "/sidekiq/dashboard/stats" for 127.0.0.1 at 2013-07-10 14:38:44 +0200
+[2013-07-10 14:38:44] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+
+
+Started GET "/sidekiq/dashboard/stats" for 127.0.0.1 at 2013-07-10 14:38:46 +0200
+[2013-07-10 14:38:46] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+
+
+Started GET "/sidekiq/dashboard/stats" for 127.0.0.1 at 2013-07-10 14:38:48 +0200
+[2013-07-10 14:38:48] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+
+
+Started GET "/sidekiq/dashboard/stats" for 127.0.0.1 at 2013-07-10 14:38:50 +0200
+[2013-07-10 14:38:50] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+
+
+Started GET "/sidekiq/dashboard/stats" for 127.0.0.1 at 2013-07-10 14:38:52 +0200
+[2013-07-10 14:38:52] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+
+
+Started GET "/sidekiq/dashboard/stats" for 127.0.0.1 at 2013-07-10 14:38:54 +0200
+[2013-07-10 14:38:54] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+
+
+Started GET "/sidekiq/dashboard/stats" for 127.0.0.1 at 2013-07-10 14:38:56 +0200
+[2013-07-10 14:38:56] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+
+
+Started GET "/sidekiq/dashboard/stats" for 127.0.0.1 at 2013-07-10 14:38:58 +0200
+[2013-07-10 14:38:58] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+
+
+Started GET "/sidekiq/dashboard/stats" for 127.0.0.1 at 2013-07-10 14:39:00 +0200
+[2013-07-10 14:39:00] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+
+
+Started GET "/sidekiq/dashboard/stats" for 127.0.0.1 at 2013-07-10 14:39:02 +0200
+[2013-07-10 14:39:02] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+
+
+Started GET "/sidekiq/dashboard/stats" for 127.0.0.1 at 2013-07-10 14:39:04 +0200
+[2013-07-10 14:39:04] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+
+
+Started GET "/sidekiq/dashboard/stats" for 127.0.0.1 at 2013-07-10 14:39:06 +0200
+[2013-07-10 14:39:06] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+2013-07-10T12:39:08Z 19023 TID-oxufun0lo WARN: FeedWorker - :timeout is unsafe and support has been removed from Sidekiq, see http://bit.ly/OtYpK for details
+
+
+Started POST "/playlists" for 127.0.0.1 at 2013-07-10 14:39:08 +0200
+Processing by PlaylistsController#create as HTML
+  Parameters: {"utf8"=>"✓", "authenticity_token"=>"0IVVky97GPqIvVRc3MWJzjLvfHwzP3ql77CIBbKElXo=", "playlist"=>{"title"=>"Create Tracks For Coverart Algorithm Test", "feeds_attributes"=>{"0"=>{"feed_url"=>"http://de-bug.de/pod/feed"}, "1"=>{"feed_url"=>"http://www.localsuicide.com/feed/"}}}, "commit"=>"Create Playlist"}
+hash passed to create feeds is --- !ruby/hash:ActiveSupport::HashWithIndifferentAccess
+'0': !ruby/hash:ActiveSupport::HashWithIndifferentAccess
+  feed_url: http://de-bug.de/pod/feed
+'1': !ruby/hash:ActiveSupport::HashWithIndifferentAccess
+  feed_url: http://www.localsuicide.com/feed/
+
+  Feed Load (0.9ms)  SELECT "feeds".* FROM "feeds" WHERE "feeds"."feed_url" = 'http://de-bug.de/pod/feed' LIMIT 1
+   (0.2ms)  BEGIN
+  SQL (7.4ms)  INSERT INTO "feeds" ("created_at", "etag", "feed_url", "last_modified", "title", "top_level_domain", "updated_at", "url") VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING "id"  [["created_at", Wed, 10 Jul 2013 12:39:08 UTC +00:00], ["etag", nil], ["feed_url", "http://de-bug.de/pod/feed"], ["last_modified", nil], ["title", nil], ["top_level_domain", nil], ["updated_at", Wed, 10 Jul 2013 12:39:08 UTC +00:00], ["url", nil]]
+   (0.4ms)  COMMIT
+update_playlist_track_with_feed callback triggered!
+  Post Load (0.3ms)  SELECT "posts".* FROM "posts" WHERE "posts"."feed_id" = 1
+  Feed Load (0.3ms)  SELECT "feeds".* FROM "feeds" WHERE "feeds"."feed_url" = 'http://www.localsuicide.com/feed/' LIMIT 1
+   (0.1ms)  BEGIN
+  SQL (0.3ms)  INSERT INTO "feeds" ("created_at", "etag", "feed_url", "last_modified", "title", "top_level_domain", "updated_at", "url") VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING "id"  [["created_at", Wed, 10 Jul 2013 12:39:08 UTC +00:00], ["etag", nil], ["feed_url", "http://www.localsuicide.com/feed/"], ["last_modified", nil], ["title", nil], ["top_level_domain", nil], ["updated_at", Wed, 10 Jul 2013 12:39:08 UTC +00:00], ["url", nil]]
+   (0.4ms)  COMMIT
+update_playlist_track_with_feed callback triggered!
+  Post Load (0.2ms)  SELECT "posts".* FROM "posts" WHERE "posts"."feed_id" = 2
+params hash is --- !ruby/hash:ActiveSupport::HashWithIndifferentAccess
+utf8: ✓
+authenticity_token: 0IVVky97GPqIvVRc3MWJzjLvfHwzP3ql77CIBbKElXo=
+playlist: !ruby/hash:ActiveSupport::HashWithIndifferentAccess
+  title: Create Tracks For Coverart Algorithm Test
+  feeds_attributes: !ruby/hash:ActiveSupport::HashWithIndifferentAccess
+    '0': !ruby/hash:ActiveSupport::HashWithIndifferentAccess
+      feed_url: http://de-bug.de/pod/feed
+    '1': !ruby/hash:ActiveSupport::HashWithIndifferentAccess
+      feed_url: http://www.localsuicide.com/feed/
+commit: Create Playlist
+action: create
+controller: playlists
+
+   (0.1ms)  BEGIN
+  SQL (0.8ms)  INSERT INTO "playlists" ("created_at", "description", "title", "updated_at") VALUES ($1, $2, $3, $4) RETURNING "id"  [["created_at", Wed, 10 Jul 2013 12:39:08 UTC +00:00], ["description", nil], ["title", "Create Tracks For Coverart Algorithm Test"], ["updated_at", Wed, 10 Jul 2013 12:39:08 UTC +00:00]]
+   (0.2ms)  INSERT INTO "feeds_playlists" ("playlist_id", "feed_id") VALUES (1, 1)
+   (0.1ms)  INSERT INTO "feeds_playlists" ("playlist_id", "feed_id") VALUES (1, 2)
+   (0.3ms)  COMMIT
+called FeedWorker for feed 1
+called FeedWorker for feed 2
+Redirected to http://localhost:3000/playlists/1
+Completed 302 Found in 104ms (ActiveRecord: 17.0ms)
+2013-07-10T12:39:08Z 19025 TID-ox32735gw FeedWorker JID-f797cb3ac6930c91a5df9c84 INFO: start
+2013-07-10T12:39:08Z 19025 TID-ox326yqx4 FeedWorker JID-599eb03c59b42396b9ecbd37 INFO: start
+
+
+Started GET "/playlists/1" for 127.0.0.1 at 2013-07-10 14:39:08 +0200
+Processing by PlaylistsController#show as HTML
+  Parameters: {"id"=>"1"}
+  Playlist Load (0.5ms)  SELECT "playlists".* FROM "playlists" WHERE "playlists"."id" = $1 LIMIT 1  [["id", "1"]]
+  Feed Load (0.5ms)  SELECT "feeds".* FROM "feeds" INNER JOIN "feeds_playlists" ON "feeds"."id" = "feeds_playlists"."feed_id" WHERE "feeds_playlists"."playlist_id" = 1
+  Track Load (0.7ms)  SELECT "tracks".* FROM "tracks" INNER JOIN "playlist_tracks" ON "tracks"."id" = "playlist_tracks"."track_id" WHERE "playlist_tracks"."playlist_id" = 1
+  Rendered collection (0.0ms)
+  Rendered playlists/show.html.erb within layouts/application (49.9ms)
+  Feed Load (37.2ms)  SELECT "feeds".* FROM "feeds" WHERE "feeds"."id" = $1 LIMIT 1  [["id", 1]]
+in FeedParser::parse
+  Feed Load (10.9ms)  SELECT "feeds".* FROM "feeds" WHERE "feeds"."id" = $1 LIMIT 1  [["id", 2]]
+in FeedParser::parse
+Completed 200 OK in 228ms (Views: 181.6ms | ActiveRecord: 5.0ms)
+
+
+Started GET "/assets/application.css?body=1" for 127.0.0.1 at 2013-07-10 14:39:08 +0200
+Served asset /application.css - 304 Not Modified (4ms)
+[2013-07-10 14:39:08] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+
+
+Started GET "/assets/feeds.css?body=1" for 127.0.0.1 at 2013-07-10 14:39:08 +0200
+Served asset /feeds.css - 304 Not Modified (0ms)
+[2013-07-10 14:39:08] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+
+
+Started GET "/assets/bootstrap-responsive.css?body=1" for 127.0.0.1 at 2013-07-10 14:39:08 +0200
+Served asset /bootstrap-responsive.css - 304 Not Modified (0ms)
+[2013-07-10 14:39:08] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+
+
+Started GET "/assets/bootstrap_and_overrides.css?body=1" for 127.0.0.1 at 2013-07-10 14:39:08 +0200
+Served asset /bootstrap_and_overrides.css - 304 Not Modified (2ms)
+[2013-07-10 14:39:08] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+
+
+Started GET "/assets/keywords.css?body=1" for 127.0.0.1 at 2013-07-10 14:39:08 +0200
+Served asset /keywords.css - 304 Not Modified (0ms)
+[2013-07-10 14:39:08] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+
+
+Started GET "/assets/bootstrap.css?body=1" for 127.0.0.1 at 2013-07-10 14:39:08 +0200
+Served asset /bootstrap.css - 304 Not Modified (0ms)
+[2013-07-10 14:39:08] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+
+
+Started GET "/assets/playlists.css?body=1" for 127.0.0.1 at 2013-07-10 14:39:08 +0200
+Served asset /playlists.css - 304 Not Modified (0ms)
+[2013-07-10 14:39:08] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+
+
+Started GET "/assets/scaffolds.css?body=1" for 127.0.0.1 at 2013-07-10 14:39:08 +0200
+Served asset /scaffolds.css - 304 Not Modified (0ms)
+[2013-07-10 14:39:08] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+
+
+Started GET "/assets/posts.css?body=1" for 127.0.0.1 at 2013-07-10 14:39:08 +0200
+Served asset /posts.css - 304 Not Modified (0ms)
+[2013-07-10 14:39:08] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+
+
+Started GET "/assets/tracks.css?body=1" for 127.0.0.1 at 2013-07-10 14:39:08 +0200
+Served asset /tracks.css - 304 Not Modified (0ms)
+[2013-07-10 14:39:08] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+
+
+Started GET "/assets/jquery.js?body=1" for 127.0.0.1 at 2013-07-10 14:39:08 +0200
+Served asset /jquery.js - 304 Not Modified (0ms)
+[2013-07-10 14:39:08] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+
+
+Started GET "/assets/jquery_ujs.js?body=1" for 127.0.0.1 at 2013-07-10 14:39:08 +0200
+Served asset /jquery_ujs.js - 304 Not Modified (0ms)
+[2013-07-10 14:39:08] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+
+
+Started GET "/assets/bootstrap.js?body=1" for 127.0.0.1 at 2013-07-10 14:39:08 +0200
+Served asset /bootstrap.js - 304 Not Modified (0ms)
+[2013-07-10 14:39:08] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+
+
+Started GET "/assets/feeds.js?body=1" for 127.0.0.1 at 2013-07-10 14:39:08 +0200
+Served asset /feeds.js - 304 Not Modified (0ms)
+[2013-07-10 14:39:08] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+
+
+Started GET "/assets/keywords.js?body=1" for 127.0.0.1 at 2013-07-10 14:39:08 +0200
+Served asset /keywords.js - 304 Not Modified (0ms)
+[2013-07-10 14:39:08] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+
+
+Started GET "/assets/playlists.js?body=1" for 127.0.0.1 at 2013-07-10 14:39:08 +0200
+Served asset /playlists.js - 304 Not Modified (0ms)
+[2013-07-10 14:39:08] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+
+
+Started GET "/assets/playlists_old.js?body=1" for 127.0.0.1 at 2013-07-10 14:39:08 +0200
+Served asset /playlists_old.js - 304 Not Modified (0ms)
+[2013-07-10 14:39:08] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+
+
+Started GET "/assets/posts.js?body=1" for 127.0.0.1 at 2013-07-10 14:39:08 +0200
+Served asset /posts.js - 304 Not Modified (0ms)
+[2013-07-10 14:39:08] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+
+
+Started GET "/assets/tracks.js?body=1" for 127.0.0.1 at 2013-07-10 14:39:08 +0200
+Served asset /tracks.js - 304 Not Modified (0ms)
+[2013-07-10 14:39:08] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+
+
+Started GET "/assets/application.js?body=1" for 127.0.0.1 at 2013-07-10 14:39:08 +0200
+Served asset /application.js - 304 Not Modified (0ms)
+[2013-07-10 14:39:08] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+
+
+Started GET "/sidekiq/dashboard/stats" for 127.0.0.1 at 2013-07-10 14:39:08 +0200
+2013-07-10T12:39:09Z 19025 TID-ox32cjl2o PostWorker JID-33506761c61aabf8263f83ea INFO: start
+2013-07-10T12:39:09Z 19025 TID-ox32cehlo PostWorker JID-18812430c31ec8bc3a04a42d INFO: start
+2013-07-10T12:39:09Z 19025 TID-ox32cgxhk PostWorker JID-b73810054d185b072de033bf INFO: start
+2013-07-10T12:39:09Z 19025 TID-ox327b5a0 PostWorker JID-642499b75c33b00d3d128f42 INFO: start
+2013-07-10T12:39:09Z 19025 TID-ox325xgmc PostWorker JID-21a350d4a0d27d5e4d063ac3 INFO: start
+2013-07-10T12:39:09Z 19025 TID-ox326h62c PostWorker JID-3f2776d3a7479927beec882a INFO: start
+2013-07-10T12:39:09Z 19025 TID-ox32ce72s PostWorker JID-8fc63d1127d4760c1aa117a7 INFO: start
+2013-07-10T12:39:09Z 19025 TID-ox327dws8 PostWorker JID-6a66b1d23198c1f373f60e7a INFO: start
+2013-07-10T12:39:09Z 19025 TID-ox326yqx4 FeedWorker JID-599eb03c59b42396b9ecbd37 INFO: done: 0.807 sec
+2013-07-10T12:39:09Z 19025 TID-ox326yqx4 PostWorker JID-92f590883c750b36d0fe6055 INFO: start
+after fetch_and_parse, feedzirra_feed is #<Feedzirra::Parser::RSS:0x007fdfabc9b570>
+   (0.2ms)  BEGIN
+   (0.6ms)  UPDATE "feeds" SET "title" = 'LOCAL SUICIDE', "url" = 'http://www.localsuicide.com', "etag" = '"d440332b26fa07875782d39cfc236ada"', "last_modified" = '2013-07-09 10:31:26.000000', "top_level_domain" = 'localsuicide.com', "updated_at" = '2013-07-10 12:39:08.939504' WHERE "feeds"."id" = 2
+   (0.5ms)  COMMIT
+inside if update_from_feed(feedzirra_feed) - @feed is #<Feed:0x007fdfacc75ce8>
+  Post Exists (1.0ms)  SELECT 1 AS one FROM "posts" WHERE "posts"."guid" = 'http://www.localsuicide.com/?p=23103' LIMIT 1
+   (0.1ms)  BEGIN
+  SQL (1.1ms)  INSERT INTO "posts" ("body", "created_at", "feed_id", "guid", "published_at", "summary", "title", "updated_at", "url") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING "id"  [["body", nil], ["created_at", Wed, 10 Jul 2013 12:39:08 UTC +00:00], ["feed_id", 2], ["guid", "http://www.localsuicide.com/?p=23103"], ["published_at", Tue, 09 Jul 2013 10:31:26 UTC +00:00], ["summary", "22-year-old rapper Cakes Da Killa from New York is full of spunk and turning heads thanks to his rapid-fire rhymes and witty edge. The fact that he&#8217;s gay is simply the icing on the cake. Now queer music platform Expatriarch&#8230; <a href=\"http://www.localsuicide.com/lsd-presents-cakes-da-killa-festsaal-kreuzberg-berlin/\" class=\"read_more\"><b>READ MORE</b></a>"], ["title", "LSD presents: Cakes Da Killa @Festsaal Kreuzberg (Berlin)"], ["updated_at", Wed, 10 Jul 2013 12:39:08 UTC +00:00], ["url", "http://www.localsuicide.com/lsd-presents-cakes-da-killa-festsaal-kreuzberg-berlin/"]]
+   (0.4ms)  COMMIT
+  Post Exists (0.5ms)  SELECT 1 AS one FROM "posts" WHERE "posts"."guid" = 'http://www.localsuicide.com/?p=23202' LIMIT 1
+   (0.1ms)  BEGIN
+  SQL (0.5ms)  INSERT INTO "posts" ("body", "created_at", "feed_id", "guid", "published_at", "summary", "title", "updated_at", "url") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING "id"  [["body", nil], ["created_at", Wed, 10 Jul 2013 12:39:09 UTC +00:00], ["feed_id", 2], ["guid", "http://www.localsuicide.com/?p=23202"], ["published_at", Mon, 08 Jul 2013 09:44:38 UTC +00:00], ["summary", "Started by 3 students in 2000 as a protest against the Milosevic regime, fighting for political change and freedom, today Exit festival is still an NGO (Non Governmental Organization). One that promotes change and positive education, supporting many community and&#8230; <a href=\"http://www.localsuicide.com/festivals-final-acts-and-more-stages-revealed/\" class=\"read_more\"><b>READ MORE</b></a>"], ["title", "Festivals: Exit – Final Acts and More Stages Revealed"], ["updated_at", Wed, 10 Jul 2013 12:39:09 UTC +00:00], ["url", "http://www.localsuicide.com/festivals-final-acts-and-more-stages-revealed/"]]
+   (0.3ms)  COMMIT
+  Post Exists (0.3ms)  SELECT 1 AS one FROM "posts" WHERE "posts"."guid" = 'http://www.localsuicide.com/?p=23195' LIMIT 1
+   (0.2ms)  BEGIN
+  SQL (0.5ms)  INSERT INTO "posts" ("body", "created_at", "feed_id", "guid", "published_at", "summary", "title", "updated_at", "url") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING "id"  [["body", nil], ["created_at", Wed, 10 Jul 2013 12:39:09 UTC +00:00], ["feed_id", 2], ["guid", "http://www.localsuicide.com/?p=23195"], ["published_at", Fri, 05 Jul 2013 13:52:47 UTC +00:00], ["summary", "&#8216;She Wants&#8216; is the second single taken from techno legend Westbam&#8216;s recent album which he recorded over the last 8 years with big names like Kanye West, Lil Wayne, Iggy Pop, Brian Molko and Richard Butler. The track is definitely&#8230; <a href=\"http://www.localsuicide.com/new-video-westbam-she-wants-feat-bernhard-sumner/\" class=\"read_more\"><b>READ MORE</b></a>"], ["title", "New Video: Westbam – She Wants feat. Bernhard Sumner"], ["updated_at", Wed, 10 Jul 2013 12:39:09 UTC +00:00], ["url", "http://www.localsuicide.com/new-video-westbam-she-wants-feat-bernhard-sumner/"]]
+   (0.4ms)  COMMIT
+  Post Exists (0.3ms)  SELECT 1 AS one FROM "posts" WHERE "posts"."guid" = 'http://www.localsuicide.com/?p=23161' LIMIT 1
+   (0.1ms)  BEGIN
+  SQL (0.5ms)  INSERT INTO "posts" ("body", "created_at", "feed_id", "guid", "published_at", "summary", "title", "updated_at", "url") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING "id"  [["body", nil], ["created_at", Wed, 10 Jul 2013 12:39:09 UTC +00:00], ["feed_id", 2], ["guid", "http://www.localsuicide.com/?p=23161"], ["published_at", Thu, 04 Jul 2013 23:19:12 UTC +00:00], ["summary", "&#8220;What can we say about De la Romance? It is poetry, poetry offered to all. It is spoken with everyday words and expressions. Within it, we discover the dazzling of the ordinary, fragments of life, always mixed up. It is&#8230; <a href=\"http://www.localsuicide.com/new-video-de-la-romance-a-brighter-day/\" class=\"read_more\"><b>READ MORE</b></a>"], ["title", "New Video: De La Romance – A Brighter Day"], ["updated_at", Wed, 10 Jul 2013 12:39:09 UTC +00:00], ["url", "http://www.localsuicide.com/new-video-de-la-romance-a-brighter-day/"]]
+   (0.3ms)  COMMIT
+  Post Exists (0.3ms)  SELECT 1 AS one FROM "posts" WHERE "posts"."guid" = 'http://www.localsuicide.com/?p=23157' LIMIT 1
+   (0.1ms)  BEGIN
+  SQL (0.4ms)  INSERT INTO "posts" ("body", "created_at", "feed_id", "guid", "published_at", "summary", "title", "updated_at", "url") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING "id"  [["body", nil], ["created_at", Wed, 10 Jul 2013 12:39:09 UTC +00:00], ["feed_id", 2], ["guid", "http://www.localsuicide.com/?p=23157"], ["published_at", Thu, 04 Jul 2013 23:04:22 UTC +00:00], ["summary", "BeatauCue are back to make us dance all summer long with their new EP “Aeropolis” out July 15th on Kitsuné!\nFor their 6th release on Kitsuné, the two Frenchies unveil 2 powerful tracks.\nAnd because it’s BeatauCue we’re talking about,&#8230; <a href=\"http://www.localsuicide.com/stream-beataucue-aeropolis/\" class=\"read_more\"><b>READ MORE</b></a>"], ["title", "Stream: Beataucue – Aeropolis"], ["updated_at", Wed, 10 Jul 2013 12:39:09 UTC +00:00], ["url", "http://www.localsuicide.com/stream-beataucue-aeropolis/"]]
+   (0.4ms)  COMMIT
+  Post Exists (0.2ms)  SELECT 1 AS one FROM "posts" WHERE "posts"."guid" = 'http://www.localsuicide.com/?p=23169' LIMIT 1
+   (0.1ms)  BEGIN
+  SQL (0.3ms)  INSERT INTO "posts" ("body", "created_at", "feed_id", "guid", "published_at", "summary", "title", "updated_at", "url") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING "id"  [["body", nil], ["created_at", Wed, 10 Jul 2013 12:39:09 UTC +00:00], ["feed_id", 2], ["guid", "http://www.localsuicide.com/?p=23169"], ["published_at", Thu, 04 Jul 2013 09:37:38 UTC +00:00], ["summary", "&#8216;Holy Grail&#8216; with it&#8217;s Nirvana &#8216;feature&#8217; and cheesy Justin vox is maybe the worst Jay Z track I&#8217;ve heard so far&#8230; The new 16-track album &#8216;Magna Carta Holy Grail&#8216; featuring Beyonce, Frank Ocean, Rick Ross, Justin Timberlake, Pharrell, Swizz Beatz,&#8230; <a href=\"http://www.localsuicide.com/stream-jay-z-feat-justin-timberlake-holy-grail/\" class=\"read_more\"><b>READ MORE</b></a>"], ["title", "Stream: Jay Z feat. Justin Timberlake – Holy Grail"], ["updated_at", Wed, 10 Jul 2013 12:39:09 UTC +00:00], ["url", "http://www.localsuicide.com/stream-jay-z-feat-justin-timberlake-holy-grail/"]]
+   (0.4ms)  COMMIT
+  Post Exists (0.2ms)  SELECT 1 AS one FROM "posts" WHERE "posts"."guid" = 'http://www.localsuicide.com/?p=23092' LIMIT 1
+   (0.1ms)  BEGIN
+  SQL (0.4ms)  INSERT INTO "posts" ("body", "created_at", "feed_id", "guid", "published_at", "summary", "title", "updated_at", "url") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING "id"  [["body", nil], ["created_at", Wed, 10 Jul 2013 12:39:09 UTC +00:00], ["feed_id", 2], ["guid", "http://www.localsuicide.com/?p=23092"], ["published_at", Mon, 01 Jul 2013 14:44:06 UTC +00:00], ["summary", "Munich we are coming! Our friend Karl Komputer kindly invited us to deejay in Bavaria&#8217;s beautiful capital with him upcoming Saturday, July 6th, 2013!\nWe are so looking forward to be playing some disco, deep-house and other stuff at one&#8230; <a href=\"http://www.localsuicide.com/lsd-diskostoff-present-local-suicide-karl-komputer-pimpernel-munich/\" class=\"read_more\"><b>READ MORE</b></a>"], ["title", "LSD & Diskostoff present: Local Suicide & Karl Komputer @Pimpernel (Munich)"], ["updated_at", Wed, 10 Jul 2013 12:39:09 UTC +00:00], ["url", "http://www.localsuicide.com/lsd-diskostoff-present-local-suicide-karl-komputer-pimpernel-munich/"]]
+   (0.4ms)  COMMIT
+  Post Exists (0.2ms)  SELECT 1 AS one FROM "posts" WHERE "posts"."guid" = 'http://www.localsuicide.com/?p=23106' LIMIT 1
+   (0.1ms)  BEGIN
+  SQL (0.3ms)  INSERT INTO "posts" ("body", "created_at", "feed_id", "guid", "published_at", "summary", "title", "updated_at", "url") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING "id"  [["body", nil], ["created_at", Wed, 10 Jul 2013 12:39:09 UTC +00:00], ["feed_id", 2], ["guid", "http://www.localsuicide.com/?p=23106"], ["published_at", Mon, 01 Jul 2013 14:35:40 UTC +00:00], ["summary", "Canadian-born Rachel Zeffira sounds just heavenly. Her opera singing background is no wonder since this crystal clear voice of hers can give you spine-tingling goose bumps. She is capable not only of signing and composing, but also of playing the&#8230; <a href=\"http://www.localsuicide.com/rachel-zeffira-because/\" class=\"read_more\"><b>READ MORE</b></a>"], ["title", "New Video: Rachel Zeffira – Because"], ["updated_at", Wed, 10 Jul 2013 12:39:09 UTC +00:00], ["url", "http://www.localsuicide.com/rachel-zeffira-because/"]]
+   (0.3ms)  COMMIT
+  Post Exists (0.2ms)  SELECT 1 AS one FROM "posts" WHERE "posts"."guid" = 'http://www.localsuicide.com/?p=23123' LIMIT 1
+   (0.1ms)  BEGIN
+  SQL (0.3ms)  INSERT INTO "posts" ("body", "created_at", "feed_id", "guid", "published_at", "summary", "title", "updated_at", "url") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING "id"  [["body", nil], ["created_at", Wed, 10 Jul 2013 12:39:09 UTC +00:00], ["feed_id", 2], ["guid", "http://www.localsuicide.com/?p=23123"], ["published_at", Sun, 30 Jun 2013 16:57:00 UTC +00:00], ["summary", "Nine Inch Nails Came Back Haunted. The first single out of their upcoming album Hesitation Marks is out. The video for the track was directed David Lynch, with whom Trent Reznor collaborated for Lynch&#8217;s film &#8220;Lost Highway&#8220;. And there is&#8230; <a href=\"http://www.localsuicide.com/new-video-nine-inch-nails-came-back-haunted/\" class=\"read_more\"><b>READ MORE</b></a>"], ["title", "New Video: Nine Inch Nails – Came Back Haunted"], ["updated_at", Wed, 10 Jul 2013 12:39:09 UTC +00:00], ["url", "http://www.localsuicide.com/new-video-nine-inch-nails-came-back-haunted/"]]
+   (0.2ms)  COMMIT
+  Post Exists (0.2ms)  SELECT 1 AS one FROM "posts" WHERE "posts"."guid" = 'http://www.localsuicide.com/?p=22997' LIMIT 1
+   (0.1ms)  BEGIN
+  SQL (0.3ms)  INSERT INTO "posts" ("body", "created_at", "feed_id", "guid", "published_at", "summary", "title", "updated_at", "url") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING "id"  [["body", nil], ["created_at", Wed, 10 Jul 2013 12:39:09 UTC +00:00], ["feed_id", 2], ["guid", "http://www.localsuicide.com/?p=22997"], ["published_at", Fri, 28 Jun 2013 17:10:26 UTC +00:00], ["summary", "Every year, Fete de la Musique brings more open-air parties and musical events to Berlin than you could hope to see in 24 hours. From techno shows, to indie, to kinder music, the city is even more alive with sounds&#8230; <a href=\"http://www.localsuicide.com/concert-review-skream-gretchen-berlin/\" class=\"read_more\"><b>READ MORE</b></a>"], ["title", "Concert Review: Skream @Gretchen (Berlin)"], ["updated_at", Wed, 10 Jul 2013 12:39:09 UTC +00:00], ["url", "http://www.localsuicide.com/concert-review-skream-gretchen-berlin/"]]
+   (0.4ms)  COMMIT
+new feed entries is ([#<Post id: 1, title: "LSD presents: Cakes Da Killa @Festsaal Kreuzberg (B...", body: nil, created_at: "2013-07-10 12:39:08", updated_at: "2013-07-10 12:39:08", summary: "22-year-old rapper Cakes Da Killa from New York is ...", url: "http://www.localsuicide.com/lsd-presents-cakes-da-k...", published_at: "2013-07-09 10:31:26", guid: "http://www.localsuicide.com/?p=23103", feed_id: 2>, #<Post id: 2, title: "Festivals: Exit – Final Acts and More Stages Reveal...", body: nil, created_at: "2013-07-10 12:39:09", updated_at: "2013-07-10 12:39:09", summary: "Started by 3 students in 2000 as a protest against ...", url: "http://www.localsuicide.com/festivals-final-acts-an...", published_at: "2013-07-08 09:44:38", guid: "http://www.localsuicide.com/?p=23202", feed_id: 2>, #<Post id: 3, title: "New Video: Westbam – She Wants feat. Bernhard Sumne...", body: nil, created_at: "2013-07-10 12:39:09", updated_at: "2013-07-10 12:39:09", summary: "&#8216;She Wants&#8216; is the second single taken ...", url: "http://www.localsuicide.com/new-video-westbam-she-w...", published_at: "2013-07-05 13:52:47", guid: "http://www.localsuicide.com/?p=23195", feed_id: 2>, #<Post id: 4, title: "New Video: De La Romance – A Brighter Day", body: nil, created_at: "2013-07-10 12:39:09", updated_at: "2013-07-10 12:39:09", summary: "&#8220;What can we say about De la Romance? It is p...", url: "http://www.localsuicide.com/new-video-de-la-romance...", published_at: "2013-07-04 23:19:12", guid: "http://www.localsuicide.com/?p=23161", feed_id: 2>, #<Post id: 5, title: "Stream: Beataucue – Aeropolis", body: nil, created_at: "2013-07-10 12:39:09", updated_at: "2013-07-10 12:39:09", summary: "BeatauCue are back to make us dance all summer long...", url: "http://www.localsuicide.com/stream-beataucue-aeropo...", published_at: "2013-07-04 23:04:22", guid: "http://www.localsuicide.com/?p=23157", feed_id: 2>, #<Post id: 6, title: "Stream: Jay Z feat. Justin Timberlake – Holy Grail", body: nil, created_at: "2013-07-10 12:39:09", updated_at: "2013-07-10 12:39:09", summary: "&#8216;Holy Grail&#8216; with it&#8217;s Nirvana &#...", url: "http://www.localsuicide.com/stream-jay-z-feat-justi...", published_at: "2013-07-04 09:37:38", guid: "http://www.localsuicide.com/?p=23169", feed_id: 2>, #<Post id: 7, title: "LSD & Diskostoff present: Local Suicide & Karl Komp...", body: nil, created_at: "2013-07-10 12:39:09", updated_at: "2013-07-10 12:39:09", summary: "Munich we are coming! Our friend Karl Komputer kind...", url: "http://www.localsuicide.com/lsd-diskostoff-present-...", published_at: "2013-07-01 14:44:06", guid: "http://www.localsuicide.com/?p=23092", feed_id: 2>, #<Post id: 8, title: "New Video: Rachel Zeffira – Because", body: nil, created_at: "2013-07-10 12:39:09", updated_at: "2013-07-10 12:39:09", summary: "Canadian-born Rachel Zeffira sounds just heavenly. ...", url: "http://www.localsuicide.com/rachel-zeffira-because/...", published_at: "2013-07-01 14:35:40", guid: "http://www.localsuicide.com/?p=23106", feed_id: 2>, #<Post id: 9, title: "New Video: Nine Inch Nails – Came Back Haunted", body: nil, created_at: "2013-07-10 12:39:09", updated_at: "2013-07-10 12:39:09", summary: "Nine Inch Nails Came Back Haunted. The first single...", url: "http://www.localsuicide.com/new-video-nine-inch-nai...", published_at: "2013-06-30 16:57:00", guid: "http://www.localsuicide.com/?p=23123", feed_id: 2>, #<Post id: 10, title: "Concert Review: Skream @Gretchen (Berlin)", body: nil, created_at: "2013-07-10 12:39:09", updated_at: "2013-07-10 12:39:09", summary: "Every year, Fete de la Musique brings more open-air...", url: "http://www.localsuicide.com/concert-review-skream-g...", published_at: "2013-06-28 17:10:26", guid: "http://www.localsuicide.com/?p=22997", feed_id: 2>])
+  Feed Load (0.5ms)  SELECT "feeds".* FROM "feeds" WHERE "feeds"."id" = 2 LIMIT 1
+called post worker for post LSD presents: Cakes Da Killa @Festsaal Kreuzberg (Berlin) of feed LOCAL SUICIDE
+  Feed Load (0.5ms)  SELECT "feeds".* FROM "feeds" WHERE "feeds"."id" = 2 LIMIT 1
+called post worker for post Festivals: Exit – Final Acts and More Stages Revealed of feed LOCAL SUICIDE
+  Feed Load (0.3ms)  SELECT "feeds".* FROM "feeds" WHERE "feeds"."id" = 2 LIMIT 1
+called post worker for post New Video: Westbam – She Wants feat. Bernhard Sumner of feed LOCAL SUICIDE
+  Feed Load (0.6ms)  SELECT "feeds".* FROM "feeds" WHERE "feeds"."id" = 2 LIMIT 1
+called post worker for post New Video: De La Romance – A Brighter Day of feed LOCAL SUICIDE
+  Feed Load (1.7ms)  SELECT "feeds".* FROM "feeds" WHERE "feeds"."id" = 2 LIMIT 1
+  Post Load (2.5ms)  SELECT "posts".* FROM "posts" WHERE "posts"."id" = $1 LIMIT 1  [["id", 1]]
+  Post Load (2.3ms)  SELECT "posts".* FROM "posts" WHERE "posts"."id" = $1 LIMIT 1  [["id", 2]]
+called post worker for post Stream: Beataucue – Aeropolis of feed LOCAL SUICIDE
+  Post Load (7.0ms)  SELECT "posts".* FROM "posts" WHERE "posts"."id" = $1 LIMIT 1  [["id", 3]]
+  Post Load (2.0ms)  SELECT "posts".* FROM "posts" WHERE "posts"."id" = $1 LIMIT 1  [["id", 4]]
+  Feed Load (0.3ms)  SELECT "feeds".* FROM "feeds" WHERE "feeds"."id" = 2 LIMIT 1
+called post worker for post Stream: Jay Z feat. Justin Timberlake – Holy Grail of feed LOCAL SUICIDE
+  Feed Load (0.5ms)  SELECT "feeds".* FROM "feeds" WHERE "feeds"."id" = 2 LIMIT 1
+called post worker for post LSD & Diskostoff present: Local Suicide & Karl Komputer @Pimpernel (Munich) of feed LOCAL SUICIDE
+  Post Load (1.9ms)  SELECT "posts".* FROM "posts" WHERE "posts"."id" = $1 LIMIT 1  [["id", 5]]
+  Post Load (1.3ms)  SELECT "posts".* FROM "posts" WHERE "posts"."id" = $1 LIMIT 1  [["id", 6]]
+  Feed Load (0.4ms)  SELECT "feeds".* FROM "feeds" WHERE "feeds"."id" = 2 LIMIT 1
+called post worker for post New Video: Rachel Zeffira – Because of feed LOCAL SUICIDE
+  Feed Load (0.3ms)  SELECT "feeds".* FROM "feeds" WHERE "feeds"."id" = 2 LIMIT 1
+called post worker for post New Video: Nine Inch Nails – Came Back Haunted of feed LOCAL SUICIDE
+  Feed Load (0.6ms)  SELECT "feeds".* FROM "feeds" WHERE "feeds"."id" = 2 LIMIT 1
+called post worker for post Concert Review: Skream @Gretchen (Berlin) of feed LOCAL SUICIDE
+called parse on feed 2
+  Post Load (1.6ms)  SELECT "posts".* FROM "posts" WHERE "posts"."id" = $1 LIMIT 1  [["id", 8]]
+  Post Load (1.5ms)  SELECT "posts".* FROM "posts" WHERE "posts"."id" = $1 LIMIT 1  [["id", 7]]
+  Post Load (0.3ms)  SELECT "posts".* FROM "posts" WHERE "posts"."id" = $1 LIMIT 1  [["id", 9]]
+
+
+Started GET "/sidekiq/dashboard/stats" for 127.0.0.1 at 2013-07-10 14:39:10 +0200
+2013-07-10T12:39:11Z 19025 TID-ox32735gw FeedWorker JID-f797cb3ac6930c91a5df9c84 INFO: done: 2.818 sec
+2013-07-10T12:39:11Z 19025 TID-ox32735gw PostWorker JID-6d4ca65bf24d84d54a2d4f4a INFO: start
+2013-07-10T12:39:11Z 19025 TID-ox327b5a0 PostWorker JID-642499b75c33b00d3d128f42 INFO: done: 2.42 sec
+2013-07-10T12:39:11Z 19025 TID-ox327b5a0 PostWorker JID-918651cab98a5208f3a38ad8 INFO: start
+2013-07-10T12:39:12Z 19025 TID-ox32735gw PostWorker JID-6d4ca65bf24d84d54a2d4f4a INFO: done: 1.723 sec
+2013-07-10T12:39:12Z 19025 TID-ox32735gw PostWorker JID-681192f9f3da586c410b50fa INFO: start
+after fetch_and_parse, feedzirra_feed is #<Feedzirra::Parser::RSS:0x007fdfaba8d7d8>
+   (0.1ms)  BEGIN
+   (0.4ms)  UPDATE "feeds" SET "title" = 'De:Bug Podcast', "url" = 'http://de-bug.de/pod', "etag" = '"60086a4f2ebd4186943908f76037ed36"', "last_modified" = '2013-07-08 18:00:35.000000', "top_level_domain" = 'de-bug.de', "updated_at" = '2013-07-10 12:39:11.090041' WHERE "feeds"."id" = 1
+   (0.5ms)  COMMIT
+inside if update_from_feed(feedzirra_feed) - @feed is #<Feed:0x007fdfacee3b88>
+  Post Exists (0.6ms)  SELECT 1 AS one FROM "posts" WHERE "posts"."guid" = 'http://de-bug.de/pod/?p=7928' LIMIT 1
+   (0.2ms)  BEGIN
+  SQL (0.8ms)  INSERT INTO "posts" ("body", "created_at", "feed_id", "guid", "published_at", "summary", "title", "updated_at", "url") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING "id"  [["body", "<p><iframe style=\"border: 0; width: 500px; height: 711px;\" src=\"http://bandcamp.com/EmbeddedPlayer/album=214775494/size=large/bgcol=ffffff/linkcol=0687f5/package=3124525389/notracklist=true/transparent=true/\" seamless><a target=\"_blank\" href=\"http://noorden.bandcamp.com/album/neon-waves\">Neon Waves by Virtual Flannel</a></iframe></p>\n<p>A half year after the release of his <a target=\"_blank\" href=\"http://noorden.org/noolp3/\" title=\"[NooLP3] Virtual Flannel – „Virtual Flannel“\">selftitled LP</a>, <a target=\"_blank\" href=\"http://soundcloud.com/virtualflannel\">Virtual Flannel</a> is back with the tremendous 18-track-tape »Neon Waves« and we’re on cloud nine to hit you with the new original crackin VF-experience. As usual, VF is serving some dope’n’blunted vibes, a mix of expressive bitcrushed synth-(dis)-harmonies, pointed beats and flying percussions. These kind of appregiated VF-sounds, mingled with a bunch of space and funky noise is what makes »Neon Waves« a perfect summer-album for dreaming and chilling at the beach or surfing the sea on perfect (neon) waves&#8230;</p>\n<p><a target=\"_blank\" href=\"http://noorden.bandcamp.com/album/neon-waves\">DOWNLOAD/BUY AT BANDCAMP</a><br />\n<a target=\"_blank\" href=\"http://noorden.bandcamp.com/album/neon-waves\"><img src=\"http://i0.wp.com/de-bug.de/pod/files/2013/07/vf_02.jpg?w=500\" alt=\"vf_02\"  class=\"alignnone size-full wp-image-7929\" data-recalc-dims=\"1\" /></a><br />\nProduced by <a target=\"_blank\" href=\"http://soundcloud.com/virtualflannel\">Virtual Flannel</a><br />\nArtwork by <a target=\"_blank\" href=\"http://patrick-lemburg.de\">Patrick Lemburg</a><br />\nPublished by <a target=\"_blank\" href=\"http://noorden.org\">Noorden</a> </p>\n"], ["created_at", Wed, 10 Jul 2013 12:39:11 UTC +00:00], ["feed_id", 1], ["guid", "http://de-bug.de/pod/?p=7928"], ["published_at", Mon, 08 Jul 2013 11:46:58 UTC +00:00], ["summary", "Dope&#038;blunted vibes, a mix of expressive bitcrushed synth-(dis)-harmonies, pointed beats and flying percussions – all packed on limited neon-styled tape"], ["title", "[Noo_Ltd7] Virtual Flannel – Neon Waves"], ["updated_at", Wed, 10 Jul 2013 12:39:11 UTC +00:00], ["url", "http://de-bug.de/pod/archives/7928.html"]]
+   (0.3ms)  COMMIT
+  Post Exists (0.2ms)  SELECT 1 AS one FROM "posts" WHERE "posts"."guid" = 'http://de-bug.de/pod/?p=7925' LIMIT 1
+   (0.1ms)  BEGIN
+  SQL (0.7ms)  INSERT INTO "posts" ("body", "created_at", "feed_id", "guid", "published_at", "summary", "title", "updated_at", "url") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING "id"  [["body", "<div id=\"aircast12_hype_container\" style=\"position:relative;overflow:hidden;width:510px;height:510px;\">\n<script type=\"text/javascript\" charset=\"utf-8\" src=\"http://modularfield.net/assets/aircastani/aircast12/aircast12.hyperesources/aircast12_hype_generated_script.js?93468\"></script></div>\n<p>///////////////////////////////////////////////////////////////</p>\n<p style=\"text-align: justify;\">Modularfield AirCast #12 von <strong>TWOS</strong> aus Los Angeles. Mit 3.792.621 Einwohnern (2010) im Stadtgebiet nach New York die zweitgrößte Stadt der Vereinigten Staaten. Mit 11,8 Millionen Einwohnern in der Agglomeration, sowie über 12,8 Millionen Einwohnern in der Metropolregion (Metropolitan Statistical Area) und knapp 17,8 Millionen in der erweiterten Metropolregion steht die Greater Los Angeles Area unter den größten Metropolregionen der Welt an 17. Stelle. Die Einwohner von Los Angeles werden Angelenos genannt.</p>\n<p>///////////////////////////////////////////////////////////////</p>\n<p><iframe width=\"100%\" height=\"166\" scrolling=\"no\" frameborder=\"no\" src=\"https://w.soundcloud.com/player/?url=http%3A%2F%2Fapi.soundcloud.com%2Ftracks%2F100062080&amp;color=000000&amp;auto_play=false&amp;show_artwork=false\"></iframe></p>\n<p>///////////////////////////////////////////////////////////////</p>\n<p><a target=\"_blank\" href=\"itpc://modularfield.net/aircast/podcast.xml\">iTunes Podcast Feed</a></p>\n<p><a target=\"_blank\" href=\"http://modularfield.net/aircast/podcast.xml\">XML-Podcast Feed</a></p>\n<p>Mehr Informationen auf: <a title=\"Modularfield AirCast\" href=\"http://modularfield.net/mdf-aircast\">www.modularfield.net</a></p>\n<p>///////////////////////////////////////////////////////////////</p>\n<p>TWOS &#8211; <a target=\"_blank\" href=\"https://soundcloud.com/twosmusic\">Soundcloud</a> &#8211; Modularfield &#8211; <a target=\"_blank\" href=\"https://www.facebook.com/modularfield\">Facebook</a></p>\n<p>///////////////////////////////////////////////////////////////</p>\n<h5>*<a target=\"_blank\" href=\"http://de.wikipedia.org/wiki/Los_Angeles\">Quelle Wikipedia</a></h5>\n"], ["created_at", Wed, 10 Jul 2013 12:39:11 UTC +00:00], ["feed_id", 1], ["guid", "http://de-bug.de/pod/?p=7925"], ["published_at", Mon, 08 Jul 2013 09:23:31 UTC +00:00], ["summary", "Modularfield Podcast Series"], ["title", "AirCast #12 – TWOS"], ["updated_at", Wed, 10 Jul 2013 12:39:11 UTC +00:00], ["url", "http://de-bug.de/pod/archives/7925.html"]]
+   (0.4ms)  COMMIT
+  Post Exists (0.2ms)  SELECT 1 AS one FROM "posts" WHERE "posts"."guid" = 'http://de-bug.de/pod/?p=7920' LIMIT 1
+   (0.1ms)  BEGIN
+  SQL (0.8ms)  INSERT INTO "posts" ("body", "created_at", "feed_id", "guid", "published_at", "summary", "title", "updated_at", "url") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING "id"  [["body", "<p><a target=\"_blank\" href=\"http://www.dreiton.net/mp3_dn028.html\"></p>\n<td width=\"310\" colspan=\"2\" align=\"right\" valign=\"top\" bgcolor=\"#FFFFFF\">\n<p align=\"left\"><img src=\"http://i0.wp.com/www.dreiton.net/images/DN028.jpg?resize=302%2C302\" data-recalc-dims=\"1\" /></p>\n<p></a></p>\n<p><a target=\"_blank\" href=\"http://www.dreiton.net/mp3_dn028.html\">www.dreiton.net</a></p>\n<p align=\"justify\" class=\"style20\"><span class=\"style21\"><b>Tracklist:<br />\n</b>01 &#8211; Lars Leonhard &#8211; Mizaru &#8211; See No Evil | <a target=\"_blank\" href=\"http://www.dreiton.net/DOWNLOADS/DN028/01-Lars_Leonhard-Mizaru-See_No_Evil.mp3\"><b>MP3</b></a><br />\n02 &#8211; Lars Leonhard &#8211; Kikazaru &#8211; Hear No Evil | <a target=\"_blank\" href=\"http://www.dreiton.net/DOWNLOADS/DN028/02-Lars_Leonhard-Kikazaru-Hear_No_Evil.mp3\"><b>MP3</b></a><br />\n03 &#8211; Lars Leonhard &#8211; Iwazaru &#8211; Speak No Evil | <a target=\"_blank\" href=\"http://www.dreiton.net/DOWNLOADS/DN028/03-Lars_Leonhard-Iwazaru-Speak_No_Evil.mp3\"><b>MP3</b></a><br />\n</b></a></span></p>\n</p>\n<p align=\"justify\" class=\"style20\"><span class=\"style21\"><br /> Download <a target=\"_blank\" href=\"http://www.dreiton.net/DOWNLOADS/DN028/DN028.zip\"><b>Complete Release ZIP </b> </a> 47,9 MB</p>\n<p>Release: 01/07/2013<br />\nStyle: Dub Techno / Electronica<br /> </span><span class=\"style21\">MP3-Format: 320Kbit/s Stereo</span><span class=\"style21\"></span></p>\n<p align=\"left\" class=\"style11\"><b><span class=\"style17\">DN 028 &gt;&gt;&gt; </span></b><b><span class=\"style17\">Lars Leonhard – <br />\n„Three Monkeys“</span></b><b><span class=\"style17\"></span></b><b><span class=\"style17\"></span></b></p>\n<p>„Three Monkeys“ heißen die drei neuen Stücke von Lars Leonhard.</p>\n<p>Der erste Affe, sprich Song, bewegt sich in einer Welt voller geheimnisvoller Laute, meditativ und spannungsreich zugleich, am Ende schlägt der Puls des Tieres zunehmend schneller. Der zweite Affe nimmt die Botschaft auf, bewegt sich federleicht zu Takt und Beats, bis der dritte schließlich in den immer temporeicheren Rhythmen aufgeht.</p>\n<p>Weltall-Musiker Lars Leonhard verbindet in seinen Songs vermeintliche Gegensätze; das Mystische mit dem Leichtem, das Rätselhafte mit dem Lässigen, das Sphärische mit dem Lebendigen. Seine drei Affen könnten auch nur ein einziger sein, der zum Leben erwacht und sich die Welt tanzend zu eigen macht.</p>\n<p>\nVielleicht, wenn auch vom Komponisten unbeabsichtigt, liegt die Erklärung aber in der Philosophie. Im Westen stehen die drei Affen, die nichts hören, nichts sehen und nichts sagen wollen, für alles Schlechte, was wir nicht wahrhaben wollen, sind also negativ besetzt. Der chinesische Philosoph Konfuzius sagt dagegen über die drei Affen: „Was nicht dem Gesetz der Schönheit entspricht, darauf schaue ich nicht; was nicht dem Gesetz der Schönheit entspricht, darauf hören ich nicht; was nicht dem Gesetz der Schönheit entspricht, davon rede ich nicht – was also nicht dem Gesetz der Schönheit entspricht, das tue ich nicht.“ So ist es auch mit den drei Affen von Lars Leonhard: Sie ignorieren das Schlechte – und geben sich allein einer geheimnisvollen Schönheit dieser Musik hin.<br />\n<br/>\n</p>\n<p>Viel Spaß beim lauschen,</p>\n<p><a target=\"_blank\" href=\"http://www.dreiton.net\" title=\"Dreiton.net\">Dreiton.net</a></p>\n<p/>\n<p>\nWebsite:<br />\n<a target=\"_blank\" href=\"http://www.Lars-Leonhard.de/\">www.Lars-Leonhard.de</a><br />\n<br/></p>\n<p>\nSoundcloud:<br />\n<a target=\"_blank\" href=\"https://soundcloud.com/larsleonhard\">https://soundcloud.com/larsleonhard</a><br />\n<br/></p>\n<p>\nFacebook:<br />\n<a target=\"_blank\" href=\"https://www.facebook.com/lars.leonhard\">https://www.facebook.com/lars.leonhard</a><br />\n<br/></p>\n"], ["created_at", Wed, 10 Jul 2013 12:39:11 UTC +00:00], ["feed_id", 1], ["guid", "http://de-bug.de/pod/?p=7920"], ["published_at", Tue, 02 Jul 2013 08:16:42 UTC +00:00], ["summary", "www.dreiton.net Tracklist: 01 &#8211; Lars Leonhard &#8211; Mizaru &#8211; See No Evil &#124; MP3 02 &#8211; Lars Leonhard &#8211; Kikazaru &#8211; Hear No Evil &#124; MP3 03 &#8211; Lars Leonhard &#8211; Iwazaru &#8211; Speak No Evil &#124; MP3 Download Complete Release ZIP 47,9 MB Release: 01/07/2013 Style: Dub Techno / Electronica MP3-Format: 320Kbit/s Stereo DN [...]"], ["title", "DN 028 >>> Lars Leonhard – Three Monkeys"], ["updated_at", Wed, 10 Jul 2013 12:39:11 UTC +00:00], ["url", "http://de-bug.de/pod/archives/7920.html"]]
+   (0.3ms)  COMMIT
+  Post Exists (0.3ms)  SELECT 1 AS one FROM "posts" WHERE "posts"."guid" = 'http://de-bug.de/pod/?p=7917' LIMIT 1
+   (0.1ms)  BEGIN
+  SQL (0.4ms)  INSERT INTO "posts" ("body", "created_at", "feed_id", "guid", "published_at", "summary", "title", "updated_at", "url") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING "id"  [["body", "<p><a href=\"http://i1.wp.com/de-bug.de/pod/files/2013/06/Cloned_Red_Rome_1400.jpg\"><img src=\"http://i1.wp.com/de-bug.de/pod/files/2013/06/Cloned_Red_Rome_1400.jpg?resize=300%2C300\" alt=\"Cloned_Red_Rome_1400\" class=\"aligncenter size-medium wp-image-7918\" data-recalc-dims=\"1\" /></a><br />\n<iframe style=\"border: 0; width: 450px; height: 120px;\" src=\"http://bandcamp.com/EmbeddedPlayer/album=2819344450/size=medium/bgcol=ffffff/linkcol=7137dc/transparent=true/\" seamless><a target=\"_blank\" href=\"http://deepindub.bandcamp.com/album/cloned-red-rome\">Cloned &#8211; Red Rome by Cloned</a></iframe></p>\n<p><a target=\"_blank\" href=\"http://www.deepindub.org\" title=\"deepindub netlabel dubtechno &#038; deep house music\">deepindub</a> strikes again with red rome by Cloned dubtechno music at its best !</p>\n<p>how awesome is this <strong><a target=\"_blank\" href=\"http://www.deepindub.org/cloned/\" title=\"Cloned\">Cloned</a></strong> ?? a lot&#8230; he make original dubtechno moods, landscapes, that transmit positive dub energies to your soul, mind &#038; body !!!</p>\n<p>Grab it from <a target=\"_blank\" href=\"http://deepindub.bandcamp.com/album/cloned-red-rome\" title=\"Cloned - Red Rome, a dubtechno mini album very suggestive, danceable dubtechno &#038; deep tech house tracks !!!\">bandcamp</a>, <a target=\"_blank\" href=\"http://www.junodownload.com/products/cloned-red-rome/2221695-02/\" title=\"Cloned - Red Rome, a dubtechno mini album very suggestive, danceable dubtechno &#038; deep tech house tracks !!!\">junodownload</a> or read more info from the web site <strong><a target=\"_blank\" href=\"http://www.deepindub.org/cloned-red-rome/\" title=\"Cloned - Red Rome, a dubtechno mini album very suggestive, danceable dubtechno &#038; deep tech house tracks !!!\">release page</a></strong>&#8230; </p>\n<p>surely a masterpiece that cant be missed in your <strong>dubtechno</strong> music collection ! </p>\n<p>A must !</p>\n<p><iframe width=\"100%\" height=\"166\" scrolling=\"no\" frameborder=\"no\" src=\"https://w.soundcloud.com/player/?url=http%3A%2F%2Fapi.soundcloud.com%2Ftracks%2F95090151&amp;color=ff6600&amp;auto_play=true&amp;show_artwork=true\"></iframe></p>\n"], ["created_at", Wed, 10 Jul 2013 12:39:11 UTC +00:00], ["feed_id", 1], ["guid", "http://de-bug.de/pod/?p=7917"], ["published_at", Wed, 26 Jun 2013 19:05:15 UTC +00:00], ["summary", "Cloned &#8211; Red Rome by Cloned deepindub strikes again with red rome by Cloned dubtechno music at its best ! how awesome is this Cloned ?? a lot&#8230; he make original dubtechno moods, landscapes, that transmit positive dub energies to your soul, mind &#038; body !!! Grab it from bandcamp, junodownload or read more info [...]"], ["title", "[DID-013] – Cloned – Red Rome"], ["updated_at", Wed, 10 Jul 2013 12:39:11 UTC +00:00], ["url", "http://de-bug.de/pod/archives/7917.html"]]
+   (0.5ms)  COMMIT
+  Post Exists (0.2ms)  SELECT 1 AS one FROM "posts" WHERE "posts"."guid" = 'http://de-bug.de/pod/?p=7914' LIMIT 1
+   (0.1ms)  BEGIN
+  SQL (0.4ms)  INSERT INTO "posts" ("body", "created_at", "feed_id", "guid", "published_at", "summary", "title", "updated_at", "url") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING "id"  [["body", "<p><a href=\"http://i0.wp.com/de-bug.de/pod/files/2013/06/7561698.jpg\"><img src=\"http://i0.wp.com/de-bug.de/pod/files/2013/06/7561698.jpg?resize=300%2C300\" alt=\"7561698\" class=\"alignnone size-medium wp-image-7915\" data-recalc-dims=\"1\" /></a></p>\n<p>Artist: Fabian Schinzel<br />\nTitle: Reality<br />\nLabel: Stahlplatten<br />\nRemixes by: Evolent, Audiorhythm<br />\nFull Length: 25.39<br />\nGenre: Dubtechno, Deephouse, Minimal<br />\nFoto: Alexander Senge Photography</p>\n<p><iframe width=\"500\" height=\"166\" scrolling=\"no\" frameborder=\"no\" src=\"https://w.soundcloud.com/player/?url=http%3A%2F%2Fapi.soundcloud.com%2Ftracks%2F97857934&#038;show_artwork=true&#038;maxwidth=500&#038;maxheight=750\"></iframe></p>\n<p><a target=\"_blank\" href=\"http://www.discogs.com/Fabian-Schinzel-Reality/release/4676021\">www.discogs.com/Fabian-Schinzel-Reality/release/4676021</a></p>\n<p>Purchase: <a target=\"_blank\" href=\"http://www.beatport.com/release/reality/1104990\">www.beatport.com/release/reality/1104990</a></p>\n<p>About Fabian Schinzel:<br />\n<a target=\"_blank\" href=\"http://www.djxeed.ch\">www.djxeed.ch</a><br />\n<a target=\"_blank\" href=\"http://www.facebook.com/xeedmusic\">www.facebook.com/xeedmusic</a><br />\n<a target=\"_blank\" href=\"http://www.soundcloud.com/xeed\">www.soundcloud.com/xeed</a></p>\n<p>About Evolent:<br />\n<a target=\"_blank\" href=\"http://www.evolent.ch\">www.evolent.ch</a></p>\n<p>About Audiorhythm:<br />\n<a target=\"_blank\" href=\"http://www.facebook.com/audiorhythm\">www.facebook.com/audiorhythm</a></p>\n"], ["created_at", Wed, 10 Jul 2013 12:39:11 UTC +00:00], ["feed_id", 1], ["guid", "http://de-bug.de/pod/?p=7914"], ["published_at", Mon, 24 Jun 2013 17:52:25 UTC +00:00], ["summary", "Deep stuff + 2 remixes"], ["title", "[SP41] Fabian Schinzel – Reality"], ["updated_at", Wed, 10 Jul 2013 12:39:11 UTC +00:00], ["url", "http://de-bug.de/pod/archives/7914.html"]]
+   (0.3ms)  COMMIT
+  Post Exists (0.3ms)  SELECT 1 AS one FROM "posts" WHERE "posts"."guid" = 'http://de-bug.de/pod/?p=7910' LIMIT 1
+   (0.1ms)  BEGIN
+  SQL (0.4ms)  INSERT INTO "posts" ("body", "created_at", "feed_id", "guid", "published_at", "summary", "title", "updated_at", "url") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING "id"  [["body", "<p><a target=\"_blank\" href=\"http://modularfield.net/mdf-aircast?\"><img class=\"alignnone size-full wp-image-7880\" alt=\"Modularfield AirCast #11 - Redcompass\" src=\"http://i0.wp.com/de-bug.de/pod/files/2013/06/AirCast11-Redcompass-3.jpg?resize=510%2C510\" data-recalc-dims=\"1\" /></a></p>\n<p>///////////////////////////////////////////////////////////////</p>\n<p style=\"text-align: justify;\">Modularfield AirCast #11 von <strong>Redcompass</strong> aus Yokohama. Die 18 Stadtbezirke sind zugleich die Wahlkreise für den Rat der Stadt Yokohama (Yokohama-shikai), dessen 92 Mitglieder durch einfache nicht-übertragbare Stimme auf vier Jahre gewählt werden – wie in allen japanischen Gemeinden. Yokohama ist eine Großstadt und Verwaltungssitz der japanischen Präfektur Kanagawa sowie eine bedeutende Industrie- und Handelsstadt. Yokohama ist Teil des Ballungsgebiets von Tokio. Sie ist – nach Tokio – die zweitgrößte Stadt Japans und somit die größte Gemeinde des Landes.*</p>\n<p>///////////////////////////////////////////////////////////////</p>\n<p><iframe width=\"100%\" height=\"166\" scrolling=\"no\" frameborder=\"no\" src=\"https://w.soundcloud.com/player/?url=http%3A%2F%2Fapi.soundcloud.com%2Ftracks%2F97949002&amp;color=000000&amp;auto_play=false&amp;show_artwork=false\"></iframe></p>\n<p>///////////////////////////////////////////////////////////////</p>\n<p><a target=\"_blank\" href=\"itpc://modularfield.net/aircast/podcast.xml\">iTunes Podcast Feed</a></p>\n<p><a target=\"_blank\" href=\"http://modularfield.net/aircast/podcast.xml\">XML-Podcast Feed</a></p>\n<p>Mehr Informationen auf: <a title=\"Modularfield AirCast\" href=\"http://modularfield.net/mdf-aircast\">www.modularfield.net</a></p>\n<p>///////////////////////////////////////////////////////////////</p>\n<p>Redcompass &#8211; <a target=\"_blank\" href=\"https://soundcloud.com/chimerairborne\">Soundcloud</a> &#8211; Modularfield &#8211; <a target=\"_blank\" href=\"https://www.facebook.com/modularfield\">Facebook</a></p>\n<p>///////////////////////////////////////////////////////////////</p>\n<h5>*<a target=\"_blank\" href=\"http://de.wikipedia.org/wiki/Yokohama\">Quelle Wikipedia</a></h5>\n"], ["created_at", Wed, 10 Jul 2013 12:39:11 UTC +00:00], ["feed_id", 1], ["guid", "http://de-bug.de/pod/?p=7910"], ["published_at", Sat, 22 Jun 2013 08:48:00 UTC +00:00], ["summary", "Modularfield Podcast Series"], ["title", "AirCast #11 – Redcompass"], ["updated_at", Wed, 10 Jul 2013 12:39:11 UTC +00:00], ["url", "http://de-bug.de/pod/archives/7910.html"]]
+   (0.4ms)  COMMIT
+  Post Exists (0.2ms)  SELECT 1 AS one FROM "posts" WHERE "posts"."guid" = 'http://de-bug.de/pod/?p=7908' LIMIT 1
+   (0.0ms)  BEGIN
+  SQL (0.4ms)  INSERT INTO "posts" ("body", "created_at", "feed_id", "guid", "published_at", "summary", "title", "updated_at", "url") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING "id"  [["body", "<p>Marv Lawaai hat einen bunten Strauß zeitloser Netlabel-Perlen ausgesucht und sie zu einem richtig gechillten Set gemixt. Lass die Sonne einfach scheinen und lächle!</p>\n<p><a target=\"_blank\" href=\"http://www.mixotic.net\">DJ Set Download:</a></p>\n<a target=\"_blank\" href=\"http://www.mixotic.net\"><img src=\"http://i0.wp.com/www.mixotic.net/mixes/261_-_Marv_Lawaai_-_Le_Soir_Commence/cover_press.jpg?resize=350%2C350\" border=\"0\" alt=\"dj sets\" data-recalc-dims=\"1\"></a>\n<p>Playlist:</p>\n<p>01 &#8211; Alta Infidelidad &#8211; Oeste<br />\nThinner 083 (http://www.scene.org/dir.php?dir=%2Fmusic%2Fgroups%2Fthinner%2F)<br />\n02 &#8211; H.Hammer.Hansen &#8211; What&#8217;s Dub<br />\nThinner 003 (http://www.scene.org/dir.php?dir=%2Fmusic%2Fgroups%2Fthinner%2F)<br />\n03 &#8211; Rktic &#8211; Riding The Pipeline<br />\nThinner 005 (http://www.scene.org/dir.php?dir=%2Fmusic%2Fgroups%2Fthinner%2F)<br />\n04 &#8211; Sensual Physics &#8211; Sensual Movement<br />\nThinner 050 (http://www.scene.org/dir.php?dir=%2Fmusic%2Fgroups%2Fthinner%2F)<br />\n05 &#8211; Zzzzra &#8211; Sumo<br />\nDeep In Dub 072 (http://www.deepindub.org)<br />\n06 &#8211; Nulleins &#8211; Anotherday<br />\nThinner 084 (http://www.scene.org/dir.php?dir=%2Fmusic%2Fgroups%2Fthinner%2F)<br />\n07 &#8211; Sensual Physics &#8211; Out Of Sense<br />\nThinner 093 (http://www.scene.org/dir.php?dir=%2Fmusic%2Fgroups%2Fthinner%2F)<br />\n08 &#8211; Eloi Brunelle &#8211; Deepmush<br />\nThinner 100 (http://www.scene.org/dir.php?dir=%2Fmusic%2Fgroups%2Fthinner%2F)<br />\n09 &#8211; Sensual Physics &#8211; Arcs And Master<br />\nThinner 100 (http://www.scene.org/dir.php?dir=%2Fmusic%2Fgroups%2Fthinner%2F)<br />\n10 &#8211; Serendipity &#8211; Winter<br />\nMixomat 013 (http://www.mixomat.org)<br />\n11 &#8211; Neurotron &#8211; Black Skyline<br />\nNo Response 004 (http://www.no-response.org)<br />\n12 &#8211; Yatsuo Motoki &#8211; Just Funny Ehh<br />\nNo Response 003 (http://www.no-response.org)<br />\n13 &#8211; Zoltan Solomon &#8211; Nibiru<br />\nZeECc 015 (http://www.zeecc.com)<br />\n14 &#8211; Deluge &#8211; The Crush<br />\nThinner 100 (http://www.scene.org/dir.php?dir=%2Fmusic%2Fgroups%2Fthinner%2F)</p>\n"], ["created_at", Wed, 10 Jul 2013 12:39:11 UTC +00:00], ["feed_id", 1], ["guid", "http://de-bug.de/pod/?p=7908"], ["published_at", Fri, 21 Jun 2013 08:29:57 UTC +00:00], ["summary", "Dub-House, Deep House"], ["title", "Marv Lawaai – Le Soir Commence (Mixotic 261)"], ["updated_at", Wed, 10 Jul 2013 12:39:11 UTC +00:00], ["url", "http://de-bug.de/pod/archives/7908.html"]]
+   (0.3ms)  COMMIT
+  Post Exists (0.2ms)  SELECT 1 AS one FROM "posts" WHERE "posts"."guid" = 'http://de-bug.de/pod/?p=7903' LIMIT 1
+   (0.1ms)  BEGIN
+  SQL (0.4ms)  INSERT INTO "posts" ("body", "created_at", "feed_id", "guid", "published_at", "summary", "title", "updated_at", "url") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING "id"  [["body", "<p><a target=\"_blank\" href=\"http://www.studior.tv/shows/unoiki-with-andres-marcos/\"><img src=\"http://i1.wp.com/de-bug.de/pod/files/2013/06/andres-marcos-studio-r.jpg?resize=460%2C247\" alt=\"Andres Marcos Revellado live PA @ Studio r Berlin\" class=\"alignnone size-full wp-image-7904\" data-recalc-dims=\"1\" /></a></p>\n<p>This is the recording of the <a target=\"_blank\" href=\"http://www.studior.tv/shows/unoiki-with-andres-marcos/\" title=\"Andres Marcos live PA @ Studio r Berlin\">Studio r° show</a> played on the 20th of May 2013 in Berlin.</p>\n<p>It features a live PA by Andres Marcos Revellado, jazz coloured and based on improvisation, for the <a href\"http://www.unoiki.net\">Unoiki Collective</a>.</p>\n<p>Artist: <a href\"http://www.andresmarcos.com\">Andrés Marcos Revellado</a><br />\nFormat: Video streaming<br />\nDuration: 74 min<br />\nLocation: <a target=\"_blank\" href=\"http://studior.tv\">Studio r° Berlin</a><br />\nDate: 20th of May 2013</p>\n"], ["created_at", Wed, 10 Jul 2013 12:39:11 UTC +00:00], ["feed_id", 1], ["guid", "http://de-bug.de/pod/?p=7903"], ["published_at", Tue, 18 Jun 2013 12:38:55 UTC +00:00], ["summary", "This is the recording of the Studio r° show played on the 20th of May 2013 in Berlin. It features a live PA by Andres Marcos Revellado, jazz coloured and based on improvisation, for the Unoiki Collective. Artist: Andrés Marcos Revellado Format: Video streaming Duration: 74 min Location: Studio r° Berlin Date: 20th of May [...]"], ["title", "[video streaming] Andrés Marcos Live Pa @ Studio r°"], ["updated_at", Wed, 10 Jul 2013 12:39:11 UTC +00:00], ["url", "http://de-bug.de/pod/archives/7903.html"]]
+   (0.3ms)  COMMIT
+  Post Exists (0.3ms)  SELECT 1 AS one FROM "posts" WHERE "posts"."guid" = 'http://de-bug.de/pod/?p=7900' LIMIT 1
+   (0.1ms)  BEGIN
+  SQL (0.4ms)  INSERT INTO "posts" ("body", "created_at", "feed_id", "guid", "published_at", "summary", "title", "updated_at", "url") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING "id"  [["body", "<p><a href=\"http://i0.wp.com/de-bug.de/pod/files/2013/06/500px_SMV025.jpg\"><img class=\"aligncenter size-full wp-image-7901\" alt=\"500px_SMV025\" src=\"http://i0.wp.com/de-bug.de/pod/files/2013/06/500px_SMV025.jpg?resize=500%2C500\" data-recalc-dims=\"1\" /></a></p>\n<p>After a long time meandering in the deep seas of broken beats, glitches, halftime breaks and dub, faceless Supralist comes out of the woods of submerging rhythms to release this full long player. A solid library of forward-moving beats coloured with deep basses and haunting melodies. Crispy percussion-bubbles and vocoded voices are following the line to a moving knight with the sword of lazor. Bass!</p>\n<ol>\n<li><a target=\"_blank\" href=\"https://archive.org/download/SMV025-Supralist-lazortooth/SMV025--01--Supralist--Anticipation----.mp3\">Supralist &#8211; Anticipation</a></li>\n<li><a target=\"_blank\" href=\"https://archive.org/download/SMV025-Supralist-lazortooth/SMV025--02--Supralist--For_Those_Who_Fuck----.mp3\">Supralist &#8211; For Those Who Fuck</a></li>\n<li><a target=\"_blank\" href=\"https://archive.org/download/SMV025-Supralist-lazortooth/SMV025--03--Supralist--Bis_An%2527s_Ende_Dieser_Welt----.mp3\">Supralist &#8211; Bis An&#8217;s Ende Dieser Welt</a></li>\n<li><a target=\"_blank\" href=\"https://archive.org/download/SMV025-Supralist-lazortooth/SMV025--04--Supralist--Dolemite----.mp3\">Supralist &#8211; Dolemite</a></li>\n<li><a target=\"_blank\" href=\"https://archive.org/download/SMV025-Supralist-lazortooth/SMV025--05--Supralist--First_Flush----.mp3\">Supralist &#8211; First Flush</a></li>\n<li><a target=\"_blank\" href=\"https://archive.org/download/SMV025-Supralist-lazortooth/SMV025--06--Supralist--Galaxy----.mp3\">Supralist &#8211; Galaxy</a></li>\n<li><a target=\"_blank\" href=\"https://archive.org/download/SMV025-Supralist-lazortooth/SMV025--07--Supralist--Lazortooth----.mp3\">Supralist &#8211; Lazortooth</a></li>\n<li><a target=\"_blank\" href=\"https://archive.org/download/SMV025-Supralist-lazortooth/SMV025--08--Supralist--Nice_To_See_You_There----.mp3\">Supralist &#8211; Nice To See You There</a></li>\n<li><a target=\"_blank\" href=\"https://archive.org/download/SMV025-Supralist-lazortooth/SMV025--09--Supralist--Snowtrail----.mp3\">Supralist &#8211; Snowtrail</a></li>\n<li><a target=\"_blank\" href=\"https://archive.org/download/SMV025-Supralist-lazortooth/SMV025--10--Supralist--Stonefish----.mp3\">Supralist &#8211; Stonefish</a></li>\n<li><a target=\"_blank\" href=\"https://archive.org/download/SMV025-Supralist-lazortooth/SMV025--11--Supralist--Dizco_Discurze----.mp3\">Supralist &#8211; Dizco Discurze</a></li>\n<li><a target=\"_blank\" href=\"https://archive.org/download/SMV025-Supralist-lazortooth/SMV025--12--Supralist--Ballad----.mp3\">Supralist &#8211; Ballad</a></li>\n</ol>\n<p><a target=\"_blank\" href=\"http://spontan-musik.de/main/release/index/release/SMV025\">Free download here</a></p>\n<p><iframe width=\"500\" height=\"300\" src=\"http://www.youtube.com/embed/GaC7iDszlz0\" frameborder=\"0\" allowfullscreen></iframe></p>\n"], ["created_at", Wed, 10 Jul 2013 12:39:11 UTC +00:00], ["feed_id", 1], ["guid", "http://de-bug.de/pod/?p=7900"], ["published_at", Tue, 18 Jun 2013 09:40:23 UTC +00:00], ["summary", "After a long time meandering in the deep seas of broken beats, glitches, halftime breaks and dub, faceless Supralist comes out of the woods of submerging rhythms to release this full long player. A solid library of forward-moving beats coloured with deep basses and haunting melodies. Crispy percussion-bubbles and vocoded voices are following the line [...]"], ["title", "Supralist – Lazortooth"], ["updated_at", Wed, 10 Jul 2013 12:39:11 UTC +00:00], ["url", "http://de-bug.de/pod/archives/7900.html"]]
+   (0.3ms)  COMMIT
+  Post Exists (0.2ms)  SELECT 1 AS one FROM "posts" WHERE "posts"."guid" = 'http://de-bug.de/pod/?p=7898' LIMIT 1
+   (0.1ms)  BEGIN
+  SQL (0.3ms)  INSERT INTO "posts" ("body", "created_at", "feed_id", "guid", "published_at", "summary", "title", "updated_at", "url") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING "id"  [["body", "<p><a href=\"http://i1.wp.com/de-bug.de/pod/files/2013/06/gtakt036_cover.jpg\"><img src=\"http://i1.wp.com/de-bug.de/pod/files/2013/06/gtakt036_cover.jpg?resize=300%2C300\" alt=\"gtakt036_cover\" class=\"alignnone size-medium wp-image-7897\" data-recalc-dims=\"1\" /></a></p>\n<p>Artist: Alexander Dahlmann<br />\nTitle: Moonwise EP<br />\nRelease-Date: 17.06.2013<br />\nLength: 14:56<br />\nGenre: Dub Techno<br />\nQuality: 320kb/s mp3<br />\nArtwork: Alexander Dahlmann / Edit by: Gleichtakt Records<br />\nLicense: by-nc-nd</p>\n<p>Download as Rar: <a target=\"_blank\" href=\"http://www.gleichtakt.net/downloadgtakt036.rar\">[GTakt036] Alexander Dahlmann &#8211; Moonwise EP</a></p>\n<p><a target=\"_blank\" href=\"http://www.gleichtakt.net/downloadGTakt036_01_Alexander_Dahlmann_-_Rearrangedfragments__Moonwise_EP.mp3\">[GTakt036] Alexander Dahlmann &#8211; Rearranged Fragments</a><br />\n<a target=\"_blank\" href=\"http://www.gleichtakt.net/downloadGTakt036_02_Alexander_Dahlmann_-_The_Essence__Moonwise_EP.mp3\">[GTakt036] Alexander Dahlmann &#8211; The Essence</a></p>\n<p>Release page: <a target=\"_blank\" href=\"http://www.gleichtakt.net/gtakt036\">gleichtakt.net/gtakt036</a></p>\n"], ["created_at", Wed, 10 Jul 2013 12:39:11 UTC +00:00], ["feed_id", 1], ["guid", "http://de-bug.de/pod/?p=7898"], ["published_at", Tue, 18 Jun 2013 07:54:40 UTC +00:00], ["summary", "fresh dubtechno from berlin"], ["title", "[GTakt036] Alexander Dahlmann – Moonwise EP"], ["updated_at", Wed, 10 Jul 2013 12:39:11 UTC +00:00], ["url", "http://de-bug.de/pod/archives/7898.html"]]
+   (0.4ms)  COMMIT
+new feed entries is ([#<Post id: 11, title: "[Noo_Ltd7] Virtual Flannel – Neon Waves", body: "<p><iframe style=\"border: 0; width: 500px; height: ...", created_at: "2013-07-10 12:39:11", updated_at: "2013-07-10 12:39:11", summary: "Dope&#038;blunted vibes, a mix of expressive bitcru...", url: "http://de-bug.de/pod/archives/7928.html", published_at: "2013-07-08 11:46:58", guid: "http://de-bug.de/pod/?p=7928", feed_id: 1>, #<Post id: 12, title: "AirCast #12 – TWOS", body: "<div id=\"aircast12_hype_container\" style=\"position:...", created_at: "2013-07-10 12:39:11", updated_at: "2013-07-10 12:39:11", summary: "Modularfield Podcast Series", url: "http://de-bug.de/pod/archives/7925.html", published_at: "2013-07-08 09:23:31", guid: "http://de-bug.de/pod/?p=7925", feed_id: 1>, #<Post id: 13, title: "DN 028 >>> Lars Leonhard – Three Monkeys", body: "<p><a target=\"_blank\" href=\"http://www.dreiton.net/...", created_at: "2013-07-10 12:39:11", updated_at: "2013-07-10 12:39:11", summary: "www.dreiton.net Tracklist: 01 &#8211; Lars Leonhard...", url: "http://de-bug.de/pod/archives/7920.html", published_at: "2013-07-02 08:16:42", guid: "http://de-bug.de/pod/?p=7920", feed_id: 1>, #<Post id: 14, title: "[DID-013] – Cloned – Red Rome", body: "<p><a href=\"http://i1.wp.com/de-bug.de/pod/files/20...", created_at: "2013-07-10 12:39:11", updated_at: "2013-07-10 12:39:11", summary: "Cloned &#8211; Red Rome by Cloned deepindub strikes...", url: "http://de-bug.de/pod/archives/7917.html", published_at: "2013-06-26 19:05:15", guid: "http://de-bug.de/pod/?p=7917", feed_id: 1>, #<Post id: 15, title: "[SP41] Fabian Schinzel – Reality", body: "<p><a href=\"http://i0.wp.com/de-bug.de/pod/files/20...", created_at: "2013-07-10 12:39:11", updated_at: "2013-07-10 12:39:11", summary: "Deep stuff + 2 remixes", url: "http://de-bug.de/pod/archives/7914.html", published_at: "2013-06-24 17:52:25", guid: "http://de-bug.de/pod/?p=7914", feed_id: 1>, #<Post id: 16, title: "AirCast #11 – Redcompass", body: "<p><a target=\"_blank\" href=\"http://modularfield.net...", created_at: "2013-07-10 12:39:11", updated_at: "2013-07-10 12:39:11", summary: "Modularfield Podcast Series", url: "http://de-bug.de/pod/archives/7910.html", published_at: "2013-06-22 08:48:00", guid: "http://de-bug.de/pod/?p=7910", feed_id: 1>, #<Post id: 17, title: "Marv Lawaai – Le Soir Commence (Mixotic 261)", body: "<p>Marv Lawaai hat einen bunten Strauß zeitloser Ne...", created_at: "2013-07-10 12:39:11", updated_at: "2013-07-10 12:39:11", summary: "Dub-House, Deep House", url: "http://de-bug.de/pod/archives/7908.html", published_at: "2013-06-21 08:29:57", guid: "http://de-bug.de/pod/?p=7908", feed_id: 1>, #<Post id: 18, title: "[video streaming] Andrés Marcos Live Pa @ Studio r°...", body: "<p><a target=\"_blank\" href=\"http://www.studior.tv/s...", created_at: "2013-07-10 12:39:11", updated_at: "2013-07-10 12:39:11", summary: "This is the recording of the Studio r° show played ...", url: "http://de-bug.de/pod/archives/7903.html", published_at: "2013-06-18 12:38:55", guid: "http://de-bug.de/pod/?p=7903", feed_id: 1>, #<Post id: 19, title: "Supralist – Lazortooth", body: "<p><a href=\"http://i0.wp.com/de-bug.de/pod/files/20...", created_at: "2013-07-10 12:39:11", updated_at: "2013-07-10 12:39:11", summary: "After a long time meandering in the deep seas of br...", url: "http://de-bug.de/pod/archives/7900.html", published_at: "2013-06-18 09:40:23", guid: "http://de-bug.de/pod/?p=7900", feed_id: 1>, #<Post id: 20, title: "[GTakt036] Alexander Dahlmann – Moonwise EP", body: "<p><a href=\"http://i1.wp.com/de-bug.de/pod/files/20...", created_at: "2013-07-10 12:39:11", updated_at: "2013-07-10 12:39:11", summary: "fresh dubtechno from berlin", url: "http://de-bug.de/pod/archives/7898.html", published_at: "2013-06-18 07:54:40", guid: "http://de-bug.de/pod/?p=7898", feed_id: 1>])
+  Feed Load (0.3ms)  SELECT "feeds".* FROM "feeds" WHERE "feeds"."id" = 1 LIMIT 1
+called post worker for post [Noo_Ltd7] Virtual Flannel – Neon Waves of feed De:Bug Podcast
+  Feed Load (0.3ms)  SELECT "feeds".* FROM "feeds" WHERE "feeds"."id" = 1 LIMIT 1
+called post worker for post AirCast #12 – TWOS of feed De:Bug Podcast
+  Feed Load (0.3ms)  SELECT "feeds".* FROM "feeds" WHERE "feeds"."id" = 1 LIMIT 1
+called post worker for post DN 028 >>> Lars Leonhard – Three Monkeys of feed De:Bug Podcast
+  Feed Load (0.3ms)  SELECT "feeds".* FROM "feeds" WHERE "feeds"."id" = 1 LIMIT 1
+called post worker for post [DID-013] – Cloned – Red Rome of feed De:Bug Podcast
+  Feed Load (0.3ms)  SELECT "feeds".* FROM "feeds" WHERE "feeds"."id" = 1 LIMIT 1
+called post worker for post [SP41] Fabian Schinzel – Reality of feed De:Bug Podcast
+  Feed Load (0.2ms)  SELECT "feeds".* FROM "feeds" WHERE "feeds"."id" = 1 LIMIT 1
+called post worker for post AirCast #11 – Redcompass of feed De:Bug Podcast
+  Feed Load (0.3ms)  SELECT "feeds".* FROM "feeds" WHERE "feeds"."id" = 1 LIMIT 1
+called post worker for post Marv Lawaai – Le Soir Commence (Mixotic 261) of feed De:Bug Podcast
+  Feed Load (0.3ms)  SELECT "feeds".* FROM "feeds" WHERE "feeds"."id" = 1 LIMIT 1
+called post worker for post [video streaming] Andrés Marcos Live Pa @ Studio r° of feed De:Bug Podcast
+  Feed Load (0.3ms)  SELECT "feeds".* FROM "feeds" WHERE "feeds"."id" = 1 LIMIT 1
+called post worker for post Supralist – Lazortooth of feed De:Bug Podcast
+  Feed Load (0.3ms)  SELECT "feeds".* FROM "feeds" WHERE "feeds"."id" = 1 LIMIT 1
+called post worker for post [GTakt036] Alexander Dahlmann – Moonwise EP of feed De:Bug Podcast
+called parse on feed 1
+  Post Load (0.3ms)  SELECT "posts".* FROM "posts" WHERE "posts"."id" = $1 LIMIT 1  [["id", 10]]
+query string from google is (beataucue live) for post Stream: Beataucue – Aeropolis
+query string from google is (false) for post New Video: De La Romance – A Brighter Day
+  Post Load (0.3ms)  SELECT "posts".* FROM "posts" WHERE "posts"."id" = $1 LIMIT 1  [["id", 11]]
+query string from google is (false) for post Concert Review: Skream @Gretchen (Berlin)
+  Post Load (0.3ms)  SELECT "posts".* FROM "posts" WHERE "posts"."id" = $1 LIMIT 1  [["id", 12]]
+
+
+Started GET "/sidekiq/dashboard/stats" for 127.0.0.1 at 2013-07-10 14:39:12 +0200
+
+
+Started GET "/sidekiq" for 127.0.0.1 at 2013-07-10 14:39:12 +0200
+
+
+Started GET "/sidekiq/javascripts/dashboard.js" for 127.0.0.1 at 2013-07-10 14:39:13 +0200
+[2013-07-10 14:39:13] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+
+
+Started GET "/sidekiq/stylesheets/bootstrap.css" for 127.0.0.1 at 2013-07-10 14:39:13 +0200
+[2013-07-10 14:39:13] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+
+
+Started GET "/sidekiq/javascripts/application.js" for 127.0.0.1 at 2013-07-10 14:39:13 +0200
+[2013-07-10 14:39:13] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+
+
+Started GET "/sidekiq/stylesheets/application.css" for 127.0.0.1 at 2013-07-10 14:39:13 +0200
+[2013-07-10 14:39:13] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+
+
+Started GET "/sidekiq/images/status-sd8051fd480.png" for 127.0.0.1 at 2013-07-10 14:39:13 +0200
+[2013-07-10 14:39:13] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+2013-07-10T12:39:13Z 19025 TID-ox326yqx4 PostWorker JID-92f590883c750b36d0fe6055 INFO: done: 4.08 sec
+2013-07-10T12:39:13Z 19025 TID-ox326yqx4 PostWorker JID-abf581236b68ba6021c9bca2 INFO: start
+query string from google is (false) for post New Video: Nine Inch Nails – Came Back Haunted
+  Post Load (0.4ms)  SELECT "posts".* FROM "posts" WHERE "posts"."id" = $1 LIMIT 1  [["id", 13]]
+query string from google is (exit festival) for post Festivals: Exit – Final Acts and More Stages Revealed
+
+
+Started GET "/playlist/1/tracks" for 127.0.0.1 at 2013-07-10 14:39:13 +0200
+Processing by TracksController#index as */*
+  Parameters: {"playlist_id"=>"1"}
+  Playlist Load (0.4ms)  SELECT "playlists".* FROM "playlists" WHERE "playlists"."id" = $1 LIMIT 1  [["id", "1"]]
+TracksController index called
+  Track Load (0.5ms)  SELECT "tracks".* FROM "tracks" INNER JOIN "playlist_tracks" ON "tracks"."id" = "playlist_tracks"."track_id" WHERE "playlist_tracks"."playlist_id" = 1 AND (track_id > 0)
+  Rendered collection (0.0ms)
+  Rendered tracks/index.js.erb (2.2ms)
+Completed 200 OK in 6ms (Views: 3.5ms | ActiveRecord: 0.9ms)
+2013-07-10T12:39:14Z 19025 TID-ox32cgxhk PostWorker JID-b73810054d185b072de033bf INFO: done: 5.311 sec
+2013-07-10T12:39:14Z 19025 TID-ox32cgxhk PostWorker JID-e8bb3d7511b50276c05eb092 INFO: start
+query string from google is (false) for post New Video: Westbam – She Wants feat. Bernhard Sumner
+  Post Load (0.3ms)  SELECT "posts".* FROM "posts" WHERE "posts"."id" = $1 LIMIT 1  [["id", 14]]
+
+
+Started GET "/sidekiq/dashboard/stats" for 127.0.0.1 at 2013-07-10 14:39:15 +0200
+2013-07-10T12:39:15Z 19025 TID-ox32735gw PostWorker JID-681192f9f3da586c410b50fa INFO: done: 2.966 sec
+2013-07-10T12:39:15Z 19025 TID-ox32735gw PostWorker JID-7a267c7f64eb7fb5bedbf30c INFO: start
+2013-07-10T12:39:15Z 19025 TID-ox327b5a0 PostWorker JID-918651cab98a5208f3a38ad8 INFO: done: 4.368 sec
+2013-07-10T12:39:15Z 19025 TID-ox327b5a0 PostWorker JID-dc12f34c24c246ac59b0822e INFO: start
+2013-07-10T12:39:16Z 19025 TID-ox325xgmc PostWorker JID-21a350d4a0d27d5e4d063ac3 INFO: done: 7.33 sec
+2013-07-10T12:39:16Z 19025 TID-ox325xgmc PostWorker JID-73d230e5dce9cb9760819a06 INFO: start
+
+          <<< 
+
+          in create_tracks_for_coverart success 
+          @post.title is Stream: Beataucue – Aeropolis
+          query_string is beataucue live
+          is_artist_name is false 
+          is_artist_release is true
+          echonest_artist_object['name'] is Live
+
+          >>>>
+          
+   (0.2ms)  BEGIN
+  SQL (1.8ms)  INSERT INTO "keywords" ("created_at", "updated_at", "value") VALUES ($1, $2, $3) RETURNING "id"  [["created_at", Wed, 10 Jul 2013 12:39:15 UTC +00:00], ["updated_at", Wed, 10 Jul 2013 12:39:15 UTC +00:00], ["value", "Live"]]
+   (0.9ms)  COMMIT
+   (1.7ms)  BEGIN
+  SQL (1.1ms)  INSERT INTO "keyword_posts" ("body_occurrence", "created_at", "keyword_id", "post_id", "title_occurrence", "updated_at") VALUES ($1, $2, $3, $4, $5, $6) RETURNING "id"  [["body_occurrence", nil], ["created_at", Wed, 10 Jul 2013 12:39:15 UTC +00:00], ["keyword_id", 1], ["post_id", 5], ["title_occurrence", nil], ["updated_at", Wed, 10 Jul 2013 12:39:15 UTC +00:00]]
+   (0.3ms)  COMMIT
+in query soundcloud begin block
+query string from google is (false) for post AirCast #12 – TWOS
+  Post Load (0.3ms)  SELECT "posts".* FROM "posts" WHERE "posts"."id" = $1 LIMIT 1  [["id", 15]]
+query string from google is (false) for post [Noo_Ltd7] Virtual Flannel – Neon Waves
+  Post Load (0.4ms)  SELECT "posts".* FROM "posts" WHERE "posts"."id" = $1 LIMIT 1  [["id", 16]]
+query string from google is (rachel zeffira) for post New Video: Rachel Zeffira – Because
+  Track Exists (0.9ms)  SELECT 1 AS one FROM "tracks" WHERE "tracks"."soundcloud_uri" = 'http://api.soundcloud.com/tracks/9005092' LIMIT 1
+   (0.2ms)  BEGIN
+  SQL (1.5ms)  INSERT INTO "tracks" ("created_at", "name", "soundcloud_embed", "soundcloud_uri", "soundcloud_url", "spotify_uri", "title", "updated_at", "youtube_embed", "youtube_id") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING "id"  [["created_at", Wed, 10 Jul 2013 12:39:16 UTC +00:00], ["name", nil], ["soundcloud_embed", "<iframe width=\"100%\" height=\"166\" scrolling=\"no\" frameborder=\"no\" src=\"http://w.soundcloud.com/player/?url=http://api.soundcloud.com/tracks/9005092&show_artwork=true&client_id=902d3c2d6d4c5c5f1dc5bee41cb01e2b\"></iframe>"], ["soundcloud_uri", "http://api.soundcloud.com/tracks/9005092"], ["soundcloud_url", "http://soundcloud.com/lauraleishmanproject/beataucue-live-dj-set-laura-leishman-project-sur-le-mouv"], ["spotify_uri", nil], ["title", "BEATAUCUE - Live DJ Set @ Laura Leishman Project sur Le Mouv'"], ["updated_at", Wed, 10 Jul 2013 12:39:16 UTC +00:00], ["youtube_embed", nil], ["youtube_id", nil]]
+   (0.2ms)  INSERT INTO "posts_tracks" ("post_id", "track_id") VALUES (5, 1)
+it works!
+  Feed Load (0.3ms)  SELECT "feeds".* FROM "feeds" WHERE "feeds"."id" = 2 LIMIT 1
+  Playlist Load (0.4ms)  SELECT "playlists".* FROM "playlists" INNER JOIN "feeds_playlists" ON "playlists"."id" = "feeds_playlists"."playlist_id" WHERE "feeds_playlists"."feed_id" = 2
+  Track Exists (0.5ms)  SELECT 1 AS one FROM "tracks" INNER JOIN "playlist_tracks" ON "tracks"."id" = "playlist_tracks"."track_id" WHERE "playlist_tracks"."playlist_id" = 1 AND "tracks"."id" = 1 LIMIT 1
+  SQL (0.8ms)  INSERT INTO "playlist_tracks" ("created_at", "playlist_id", "position", "track_id", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"  [["created_at", Wed, 10 Jul 2013 12:39:16 UTC +00:00], ["playlist_id", 1], ["position", nil], ["track_id", 1], ["updated_at", Wed, 10 Jul 2013 12:39:16 UTC +00:00]]
+   (0.4ms)  COMMIT
+  Post Load (0.3ms)  SELECT "posts".* FROM "posts" WHERE "posts"."id" = $1 LIMIT 1  [["id", 17]]
+
+
+Started GET "/sidekiq/dashboard/stats" for 127.0.0.1 at 2013-07-10 14:39:17 +0200
+2013-07-10T12:39:17Z 19025 TID-ox32cehlo PostWorker JID-18812430c31ec8bc3a04a42d INFO: done: 8.597 sec
+2013-07-10T12:39:17Z 19025 TID-ox32cehlo PostWorker JID-70e2502a7c7da5b8a5c0bc9f INFO: start
+2013-07-10T12:39:18Z 19025 TID-ox32cjl2o PostWorker JID-33506761c61aabf8263f83ea INFO: done: 9.192 sec
+2013-07-10T12:39:18Z 19025 TID-ox32cjl2o PostWorker JID-1e78a3047ac299596867a5bf INFO: start
+  Post Load (0.3ms)  SELECT "posts".* FROM "posts" WHERE "posts"."id" = $1 LIMIT 1  [["id", 18]]
+query string from google is (false) for post LSD presents: Cakes Da Killa @Festsaal Kreuzberg (Berlin)
+  Post Load (0.3ms)  SELECT "posts".* FROM "posts" WHERE "posts"."id" = $1 LIMIT 1  [["id", 19]]
+
+
+Started GET "/playlist/1/tracks" for 127.0.0.1 at 2013-07-10 14:39:18 +0200
+Processing by TracksController#index as */*
+  Parameters: {"playlist_id"=>"1"}
+  Playlist Load (0.3ms)  SELECT "playlists".* FROM "playlists" WHERE "playlists"."id" = $1 LIMIT 1  [["id", "1"]]
+TracksController index called
+  Track Load (0.7ms)  SELECT "tracks".* FROM "tracks" INNER JOIN "playlist_tracks" ON "tracks"."id" = "playlist_tracks"."track_id" WHERE "playlist_tracks"."playlist_id" = 1 AND (track_id > 0)
+  Rendered tracks/_track.html.erb (1.2ms)
+  Rendered tracks/index.js.erb (12.0ms)
+Completed 200 OK in 16ms (Views: 12.9ms | ActiveRecord: 1.0ms)
+2013-07-10T12:39:18Z 19025 TID-ox326h62c PostWorker JID-3f2776d3a7479927beec882a INFO: done: 9.721 sec
+2013-07-10T12:39:18Z 19025 TID-ox326h62c PostWorker JID-0212b11f8f511b5b195489a9 INFO: start
+2013-07-10T12:39:19Z 19025 TID-ox32ce72s PostWorker JID-8fc63d1127d4760c1aa117a7 INFO: done: 10.089 sec
+2013-07-10T12:39:19Z 19025 TID-ox326yqx4 PostWorker JID-abf581236b68ba6021c9bca2 INFO: done: 5.999 sec
+query string from google is (false) for post Stream: Jay Z feat. Justin Timberlake – Holy Grail
+  Post Load (0.3ms)  SELECT "posts".* FROM "posts" WHERE "posts"."id" = $1 LIMIT 1  [["id", 20]]
+
+          <<< 
+
+          in create_tracks_for_coverart success 
+          @post.title is New Video: Rachel Zeffira – Because
+          query_string is rachel zeffira
+          is_artist_name is true 
+          is_artist_release is false
+          echonest_artist_object['name'] is Rachel Zeffira
+
+          >>>>
+          
+   (0.2ms)  BEGIN
+  SQL (0.8ms)  INSERT INTO "keywords" ("created_at", "updated_at", "value") VALUES ($1, $2, $3) RETURNING "id"  [["created_at", Wed, 10 Jul 2013 12:39:19 UTC +00:00], ["updated_at", Wed, 10 Jul 2013 12:39:19 UTC +00:00], ["value", "Rachel Zeffira"]]
+   (0.5ms)  COMMIT
+   (0.1ms)  BEGIN
+  SQL (0.6ms)  INSERT INTO "keyword_posts" ("body_occurrence", "created_at", "keyword_id", "post_id", "title_occurrence", "updated_at") VALUES ($1, $2, $3, $4, $5, $6) RETURNING "id"  [["body_occurrence", nil], ["created_at", Wed, 10 Jul 2013 12:39:19 UTC +00:00], ["keyword_id", 2], ["post_id", 8], ["title_occurrence", nil], ["updated_at", Wed, 10 Jul 2013 12:39:19 UTC +00:00]]
+   (0.2ms)  COMMIT
+in query soundcloud begin block
+query string from google is (false) for post LSD & Diskostoff present: Local Suicide & Karl Komputer @Pimpernel (Munich)
+query string from google is (false) for post DN 028 >>> Lars Leonhard – Three Monkeys
+
+
+Started GET "/sidekiq/dashboard/stats" for 127.0.0.1 at 2013-07-10 14:39:19 +0200
+query string from google is (red rome) for post [DID-013] – Cloned – Red Rome
+
+
+Started GET "/sidekiq/dashboard/stats" for 127.0.0.1 at 2013-07-10 14:39:21 +0200
+[2013-07-10 14:39:21] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+2013-07-10T12:39:22Z 19025 TID-ox325xgmc PostWorker JID-73d230e5dce9cb9760819a06 INFO: done: 5.609 sec
+2013-07-10T12:39:22Z 19025 TID-ox327b5a0 PostWorker JID-dc12f34c24c246ac59b0822e INFO: done: 6.531 sec
+query string from google is (false) for post Marv Lawaai – Le Soir Commence (Mixotic 261)
+query string from google is (reality) for post [SP41] Fabian Schinzel – Reality
+query string from google is (false) for post AirCast #11 – Redcompass
+
+
+Started GET "/sidekiq/dashboard/stats" for 127.0.0.1 at 2013-07-10 14:39:23 +0200
+
+
+Started GET "/playlist/1/tracks?after=1" for 127.0.0.1 at 2013-07-10 14:39:23 +0200
+Processing by TracksController#index as */*
+  Parameters: {"after"=>"1", "playlist_id"=>"1"}
+  Playlist Load (0.4ms)  SELECT "playlists".* FROM "playlists" WHERE "playlists"."id" = $1 LIMIT 1  [["id", "1"]]
+TracksController index called
+  Track Load (0.4ms)  SELECT "tracks".* FROM "tracks" INNER JOIN "playlist_tracks" ON "tracks"."id" = "playlist_tracks"."track_id" WHERE "playlist_tracks"."playlist_id" = 1 AND (track_id > 1)
+  Rendered collection (0.0ms)
+  Rendered tracks/index.js.erb (1.2ms)
+Completed 200 OK in 5ms (Views: 2.6ms | ActiveRecord: 0.7ms)
+2013-07-10T12:39:24Z 19025 TID-ox32cehlo PostWorker JID-70e2502a7c7da5b8a5c0bc9f INFO: done: 6.509 sec
+2013-07-10T12:39:24Z 19025 TID-ox32cgxhk PostWorker JID-e8bb3d7511b50276c05eb092 INFO: done: 10.427 sec
+2013-07-10T12:39:24Z 19025 TID-ox326h62c PostWorker JID-0212b11f8f511b5b195489a9 INFO: done: 6.119 sec
+query string from google is (false) for post [video streaming] Andrés Marcos Live Pa @ Studio r°
+query string from google is (false) for post [GTakt036] Alexander Dahlmann – Moonwise EP
+
+          <<< 
+
+          in create_tracks_for_coverart success 
+          @post.title is [SP41] Fabian Schinzel – Reality
+          query_string is reality
+          is_artist_name is true 
+          is_artist_release is false
+          echonest_artist_object['name'] is Reality
+
+          >>>>
+          
+   (0.5ms)  BEGIN
+  SQL (0.7ms)  INSERT INTO "keywords" ("created_at", "updated_at", "value") VALUES ($1, $2, $3) RETURNING "id"  [["created_at", Wed, 10 Jul 2013 12:39:25 UTC +00:00], ["updated_at", Wed, 10 Jul 2013 12:39:25 UTC +00:00], ["value", "Reality"]]
+   (0.3ms)  COMMIT
+   (0.1ms)  BEGIN
+  SQL (0.6ms)  INSERT INTO "keyword_posts" ("body_occurrence", "created_at", "keyword_id", "post_id", "title_occurrence", "updated_at") VALUES ($1, $2, $3, $4, $5, $6) RETURNING "id"  [["body_occurrence", nil], ["created_at", Wed, 10 Jul 2013 12:39:25 UTC +00:00], ["keyword_id", 3], ["post_id", 15], ["title_occurrence", nil], ["updated_at", Wed, 10 Jul 2013 12:39:25 UTC +00:00]]
+   (0.2ms)  COMMIT
+in query soundcloud begin block
+
+
+Started GET "/sidekiq/dashboard/stats" for 127.0.0.1 at 2013-07-10 14:39:25 +0200
+2013-07-10T12:39:25Z 19025 TID-ox32cjl2o PostWorker JID-1e78a3047ac299596867a5bf INFO: done: 7.147 sec
+query string from google is (false) for post Supralist – Lazortooth
+
+
+Started GET "/sidekiq/dashboard/stats" for 127.0.0.1 at 2013-07-10 14:39:27 +0200
+
+
+Started GET "/playlist/1/tracks?after=1" for 127.0.0.1 at 2013-07-10 14:39:28 +0200
+Processing by TracksController#index as */*
+  Parameters: {"after"=>"1", "playlist_id"=>"1"}
+  Playlist Load (0.3ms)  SELECT "playlists".* FROM "playlists" WHERE "playlists"."id" = $1 LIMIT 1  [["id", "1"]]
+TracksController index called
+  Track Load (0.4ms)  SELECT "tracks".* FROM "tracks" INNER JOIN "playlist_tracks" ON "tracks"."id" = "playlist_tracks"."track_id" WHERE "playlist_tracks"."playlist_id" = 1 AND (track_id > 1)
+  Rendered collection (0.0ms)
+  Rendered tracks/index.js.erb (1.1ms)
+Completed 200 OK in 4ms (Views: 2.2ms | ActiveRecord: 0.7ms)
+[2013-07-10 14:39:28] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+
+
+Started GET "/sidekiq/dashboard/stats" for 127.0.0.1 at 2013-07-10 14:39:29 +0200
+[2013-07-10 14:39:29] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+2013-07-10T12:39:30Z 19025 TID-ox32735gw PostWorker JID-7a267c7f64eb7fb5bedbf30c INFO: done: 14.722 sec
+  Track Exists (0.5ms)  SELECT 1 AS one FROM "tracks" WHERE "tracks"."soundcloud_uri" = 'http://api.soundcloud.com/playlists/2964395' LIMIT 1
+   (0.1ms)  BEGIN
+  SQL (0.7ms)  INSERT INTO "tracks" ("created_at", "name", "soundcloud_embed", "soundcloud_uri", "soundcloud_url", "spotify_uri", "title", "updated_at", "youtube_embed", "youtube_id") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING "id"  [["created_at", Wed, 10 Jul 2013 12:39:30 UTC +00:00], ["name", nil], ["soundcloud_embed", "<iframe width=\"100%\" height=\"166\" scrolling=\"no\" frameborder=\"no\" src=\"http://w.soundcloud.com/player/?url=http://api.soundcloud.com/playlists/2964395&show_artwork=true&client_id=902d3c2d6d4c5c5f1dc5bee41cb01e2b\"></iframe>"], ["soundcloud_uri", "http://api.soundcloud.com/playlists/2964395"], ["soundcloud_url", "http://soundcloud.com/weeding-dub/weeding-dub-sound-of-reality"], ["spotify_uri", nil], ["title", "Weeding Dub \"Sound of Reality\" ALBUM"], ["updated_at", Wed, 10 Jul 2013 12:39:30 UTC +00:00], ["youtube_embed", nil], ["youtube_id", nil]]
+   (0.1ms)  INSERT INTO "posts_tracks" ("post_id", "track_id") VALUES (15, 2)
+it works!
+  Feed Load (0.2ms)  SELECT "feeds".* FROM "feeds" WHERE "feeds"."id" = 1 LIMIT 1
+  Playlist Load (0.4ms)  SELECT "playlists".* FROM "playlists" INNER JOIN "feeds_playlists" ON "playlists"."id" = "feeds_playlists"."playlist_id" WHERE "feeds_playlists"."feed_id" = 1
+  Track Exists (0.4ms)  SELECT 1 AS one FROM "tracks" INNER JOIN "playlist_tracks" ON "tracks"."id" = "playlist_tracks"."track_id" WHERE "playlist_tracks"."playlist_id" = 1 AND "tracks"."id" = 2 LIMIT 1
+  SQL (0.6ms)  INSERT INTO "playlist_tracks" ("created_at", "playlist_id", "position", "track_id", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"  [["created_at", Wed, 10 Jul 2013 12:39:30 UTC +00:00], ["playlist_id", 1], ["position", nil], ["track_id", 2], ["updated_at", Wed, 10 Jul 2013 12:39:30 UTC +00:00]]
+   (0.3ms)  COMMIT
+
+
+Started GET "/sidekiq/dashboard/stats" for 127.0.0.1 at 2013-07-10 14:39:31 +0200
+
+
+Started GET "/sidekiq/dashboard/stats" for 127.0.0.1 at 2013-07-10 14:39:33 +0200
+[2013-07-10 14:39:33] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+
+
+Started GET "/playlist/1/tracks?after=1" for 127.0.0.1 at 2013-07-10 14:39:33 +0200
+Processing by TracksController#index as */*
+  Parameters: {"after"=>"1", "playlist_id"=>"1"}
+  Playlist Load (0.4ms)  SELECT "playlists".* FROM "playlists" WHERE "playlists"."id" = $1 LIMIT 1  [["id", "1"]]
+TracksController index called
+  Track Load (0.5ms)  SELECT "tracks".* FROM "tracks" INNER JOIN "playlist_tracks" ON "tracks"."id" = "playlist_tracks"."track_id" WHERE "playlist_tracks"."playlist_id" = 1 AND (track_id > 1)
+  Rendered tracks/_track.html.erb (0.3ms)
+  Rendered tracks/index.js.erb (2.3ms)
+Completed 200 OK in 7ms (Views: 3.6ms | ActiveRecord: 0.9ms)
+
+
+Started GET "/sidekiq" for 127.0.0.1 at 2013-07-10 14:39:34 +0200
+
+
+Started GET "/sidekiq/stylesheets/application.css" for 127.0.0.1 at 2013-07-10 14:39:34 +0200
+[2013-07-10 14:39:34] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+
+
+Started GET "/sidekiq/stylesheets/bootstrap.css" for 127.0.0.1 at 2013-07-10 14:39:34 +0200
+[2013-07-10 14:39:34] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+
+
+Started GET "/sidekiq/javascripts/dashboard.js" for 127.0.0.1 at 2013-07-10 14:39:34 +0200
+[2013-07-10 14:39:34] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+
+
+Started GET "/sidekiq/javascripts/application.js" for 127.0.0.1 at 2013-07-10 14:39:34 +0200
+[2013-07-10 14:39:34] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+
+
+Started GET "/sidekiq/images/status-sd8051fd480.png" for 127.0.0.1 at 2013-07-10 14:39:34 +0200
+[2013-07-10 14:39:34] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+
+
+Started GET "/sidekiq/dashboard/stats" for 127.0.0.1 at 2013-07-10 14:39:37 +0200
+[2013-07-10 14:39:37] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+
+
+Started GET "/playlist/1/tracks?after=2" for 127.0.0.1 at 2013-07-10 14:39:38 +0200
+Processing by TracksController#index as */*
+  Parameters: {"after"=>"2", "playlist_id"=>"1"}
+  Playlist Load (0.3ms)  SELECT "playlists".* FROM "playlists" WHERE "playlists"."id" = $1 LIMIT 1  [["id", "1"]]
+TracksController index called
+  Track Load (0.5ms)  SELECT "tracks".* FROM "tracks" INNER JOIN "playlist_tracks" ON "tracks"."id" = "playlist_tracks"."track_id" WHERE "playlist_tracks"."playlist_id" = 1 AND (track_id > 2)
+  Rendered collection (0.0ms)
+  Rendered tracks/index.js.erb (1.2ms)
+Completed 200 OK in 5ms (Views: 2.4ms | ActiveRecord: 0.8ms)
+
+
+Started GET "/sidekiq/dashboard/stats" for 127.0.0.1 at 2013-07-10 14:39:39 +0200
+[2013-07-10 14:39:39] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+
+
+Started GET "/sidekiq/dashboard/stats" for 127.0.0.1 at 2013-07-10 14:39:41 +0200
+[2013-07-10 14:39:41] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+
+
+Started GET "/sidekiq" for 127.0.0.1 at 2013-07-10 14:39:41 +0200
+
+
+Started GET "/sidekiq/stylesheets/bootstrap.css" for 127.0.0.1 at 2013-07-10 14:39:41 +0200
+[2013-07-10 14:39:41] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+
+
+Started GET "/sidekiq/javascripts/dashboard.js" for 127.0.0.1 at 2013-07-10 14:39:41 +0200
+[2013-07-10 14:39:41] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+
+
+Started GET "/sidekiq/javascripts/application.js" for 127.0.0.1 at 2013-07-10 14:39:41 +0200
+[2013-07-10 14:39:41] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+
+
+Started GET "/sidekiq/stylesheets/application.css" for 127.0.0.1 at 2013-07-10 14:39:41 +0200
+[2013-07-10 14:39:41] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+
+
+Started GET "/sidekiq/images/status-sd8051fd480.png" for 127.0.0.1 at 2013-07-10 14:39:41 +0200
+[2013-07-10 14:39:41] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+
+
+Started GET "/sidekiq" for 127.0.0.1 at 2013-07-10 14:39:42 +0200
+
+
+Started GET "/sidekiq/javascripts/application.js" for 127.0.0.1 at 2013-07-10 14:39:42 +0200
+[2013-07-10 14:39:42] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+
+
+Started GET "/sidekiq/javascripts/dashboard.js" for 127.0.0.1 at 2013-07-10 14:39:42 +0200
+[2013-07-10 14:39:42] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+
+
+Started GET "/sidekiq/stylesheets/bootstrap.css" for 127.0.0.1 at 2013-07-10 14:39:42 +0200
+[2013-07-10 14:39:42] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+
+
+Started GET "/sidekiq/stylesheets/application.css" for 127.0.0.1 at 2013-07-10 14:39:42 +0200
+[2013-07-10 14:39:42] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+
+
+Started GET "/sidekiq/images/status-sd8051fd480.png" for 127.0.0.1 at 2013-07-10 14:39:42 +0200
+[2013-07-10 14:39:42] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+
+
+Started GET "/playlist/1/tracks?after=2" for 127.0.0.1 at 2013-07-10 14:39:43 +0200
+Processing by TracksController#index as */*
+  Parameters: {"after"=>"2", "playlist_id"=>"1"}
+  Playlist Load (0.3ms)  SELECT "playlists".* FROM "playlists" WHERE "playlists"."id" = $1 LIMIT 1  [["id", "1"]]
+TracksController index called
+  Track Load (0.5ms)  SELECT "tracks".* FROM "tracks" INNER JOIN "playlist_tracks" ON "tracks"."id" = "playlist_tracks"."track_id" WHERE "playlist_tracks"."playlist_id" = 1 AND (track_id > 2)
+  Rendered collection (0.0ms)
+  Rendered tracks/index.js.erb (1.6ms)
+Completed 200 OK in 6ms (Views: 3.2ms | ActiveRecord: 0.8ms)
+[2013-07-10 14:39:43] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+
+
+Started GET "/sidekiq/dashboard/stats" for 127.0.0.1 at 2013-07-10 14:39:44 +0200
+[2013-07-10 14:39:44] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+
+
+Started GET "/sidekiq/dashboard/stats" for 127.0.0.1 at 2013-07-10 14:39:46 +0200
+[2013-07-10 14:39:46] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+
+
+Started GET "/playlist/1/tracks?after=2" for 127.0.0.1 at 2013-07-10 14:39:48 +0200
+Processing by TracksController#index as */*
+  Parameters: {"after"=>"2", "playlist_id"=>"1"}
+  Playlist Load (0.3ms)  SELECT "playlists".* FROM "playlists" WHERE "playlists"."id" = $1 LIMIT 1  [["id", "1"]]
+TracksController index called
+  Track Load (0.4ms)  SELECT "tracks".* FROM "tracks" INNER JOIN "playlist_tracks" ON "tracks"."id" = "playlist_tracks"."track_id" WHERE "playlist_tracks"."playlist_id" = 1 AND (track_id > 2)
+  Rendered collection (0.0ms)
+  Rendered tracks/index.js.erb (1.2ms)
+Completed 200 OK in 5ms (Views: 2.6ms | ActiveRecord: 0.7ms)
+[2013-07-10 14:39:48] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+
+
+Started GET "/sidekiq/dashboard/stats" for 127.0.0.1 at 2013-07-10 14:39:48 +0200
+[2013-07-10 14:39:48] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+in query soundcloud begin block
+
+
+Started GET "/sidekiq/dashboard/stats" for 127.0.0.1 at 2013-07-10 14:39:50 +0200
+[2013-07-10 14:39:50] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+
+
+Started GET "/sidekiq/dashboard/stats" for 127.0.0.1 at 2013-07-10 14:39:52 +0200
+[2013-07-10 14:39:52] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+
+
+Started GET "/playlist/1/tracks?after=2" for 127.0.0.1 at 2013-07-10 14:39:53 +0200
+Processing by TracksController#index as */*
+  Parameters: {"after"=>"2", "playlist_id"=>"1"}
+  Playlist Load (0.3ms)  SELECT "playlists".* FROM "playlists" WHERE "playlists"."id" = $1 LIMIT 1  [["id", "1"]]
+TracksController index called
+  Track Load (0.4ms)  SELECT "tracks".* FROM "tracks" INNER JOIN "playlist_tracks" ON "tracks"."id" = "playlist_tracks"."track_id" WHERE "playlist_tracks"."playlist_id" = 1 AND (track_id > 2)
+  Rendered collection (0.0ms)
+  Rendered tracks/index.js.erb (1.3ms)
+Completed 200 OK in 6ms (Views: 2.7ms | ActiveRecord: 0.7ms)
+[2013-07-10 14:39:53] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+
+
+Started GET "/sidekiq/dashboard/stats" for 127.0.0.1 at 2013-07-10 14:39:54 +0200
+[2013-07-10 14:39:54] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+
+
+Started GET "/sidekiq/dashboard/stats" for 127.0.0.1 at 2013-07-10 14:39:56 +0200
+[2013-07-10 14:39:56] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+
+
+Started GET "/playlist/1/tracks?after=2" for 127.0.0.1 at 2013-07-10 14:39:58 +0200
+Processing by TracksController#index as */*
+  Parameters: {"after"=>"2", "playlist_id"=>"1"}
+  Playlist Load (0.3ms)  SELECT "playlists".* FROM "playlists" WHERE "playlists"."id" = $1 LIMIT 1  [["id", "1"]]
+TracksController index called
+  Track Load (0.4ms)  SELECT "tracks".* FROM "tracks" INNER JOIN "playlist_tracks" ON "tracks"."id" = "playlist_tracks"."track_id" WHERE "playlist_tracks"."playlist_id" = 1 AND (track_id > 2)
+  Rendered collection (0.0ms)
+  Rendered tracks/index.js.erb (1.2ms)
+Completed 200 OK in 5ms (Views: 2.6ms | ActiveRecord: 0.7ms)
+[2013-07-10 14:39:58] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+
+
+Started GET "/sidekiq/dashboard/stats" for 127.0.0.1 at 2013-07-10 14:39:58 +0200
+[2013-07-10 14:39:58] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+
+
+Started GET "/sidekiq" for 127.0.0.1 at 2013-07-10 14:39:59 +0200
+
+
+Started GET "/sidekiq/stylesheets/bootstrap.css" for 127.0.0.1 at 2013-07-10 14:39:59 +0200
+[2013-07-10 14:39:59] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+
+
+Started GET "/sidekiq/stylesheets/application.css" for 127.0.0.1 at 2013-07-10 14:39:59 +0200
+[2013-07-10 14:39:59] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+
+
+Started GET "/sidekiq/javascripts/dashboard.js" for 127.0.0.1 at 2013-07-10 14:39:59 +0200
+[2013-07-10 14:39:59] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+
+
+Started GET "/sidekiq/javascripts/application.js" for 127.0.0.1 at 2013-07-10 14:39:59 +0200
+[2013-07-10 14:39:59] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+
+
+Started GET "/sidekiq/images/status-sd8051fd480.png" for 127.0.0.1 at 2013-07-10 14:39:59 +0200
+[2013-07-10 14:39:59] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+
+
+Started GET "/sidekiq/queues" for 127.0.0.1 at 2013-07-10 14:40:01 +0200
+
+
+Started GET "/sidekiq/stylesheets/bootstrap.css" for 127.0.0.1 at 2013-07-10 14:40:01 +0200
+[2013-07-10 14:40:01] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+
+
+Started GET "/sidekiq/stylesheets/application.css" for 127.0.0.1 at 2013-07-10 14:40:01 +0200
+[2013-07-10 14:40:01] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+
+
+Started GET "/sidekiq/javascripts/application.js" for 127.0.0.1 at 2013-07-10 14:40:01 +0200
+[2013-07-10 14:40:01] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+
+
+Started GET "/sidekiq/images/status-sd8051fd480.png" for 127.0.0.1 at 2013-07-10 14:40:01 +0200
+[2013-07-10 14:40:01] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+
+
+Started GET "/sidekiq/retries" for 127.0.0.1 at 2013-07-10 14:40:02 +0200
+
+
+Started GET "/sidekiq/stylesheets/bootstrap.css" for 127.0.0.1 at 2013-07-10 14:40:02 +0200
+[2013-07-10 14:40:02] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+
+
+Started GET "/sidekiq/javascripts/application.js" for 127.0.0.1 at 2013-07-10 14:40:02 +0200
+[2013-07-10 14:40:02] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+
+
+Started GET "/sidekiq/stylesheets/application.css" for 127.0.0.1 at 2013-07-10 14:40:02 +0200
+[2013-07-10 14:40:02] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+
+
+Started GET "/sidekiq/images/status-sd8051fd480.png" for 127.0.0.1 at 2013-07-10 14:40:02 +0200
+[2013-07-10 14:40:02] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+
+
+Started GET "/playlist/1/tracks?after=2" for 127.0.0.1 at 2013-07-10 14:40:03 +0200
+Processing by TracksController#index as */*
+  Parameters: {"after"=>"2", "playlist_id"=>"1"}
+  Playlist Load (0.3ms)  SELECT "playlists".* FROM "playlists" WHERE "playlists"."id" = $1 LIMIT 1  [["id", "1"]]
+TracksController index called
+  Track Load (0.4ms)  SELECT "tracks".* FROM "tracks" INNER JOIN "playlist_tracks" ON "tracks"."id" = "playlist_tracks"."track_id" WHERE "playlist_tracks"."playlist_id" = 1 AND (track_id > 2)
+  Rendered collection (0.0ms)
+  Rendered tracks/index.js.erb (1.2ms)
+Completed 200 OK in 5ms (Views: 2.6ms | ActiveRecord: 0.8ms)
+[2013-07-10 14:40:03] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+
+
+Started GET "/sidekiq/workers" for 127.0.0.1 at 2013-07-10 14:40:03 +0200
+
+
+Started GET "/sidekiq/stylesheets/bootstrap.css" for 127.0.0.1 at 2013-07-10 14:40:04 +0200
+[2013-07-10 14:40:04] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+
+
+Started GET "/sidekiq/stylesheets/application.css" for 127.0.0.1 at 2013-07-10 14:40:04 +0200
+[2013-07-10 14:40:04] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+
+
+Started GET "/sidekiq/javascripts/application.js" for 127.0.0.1 at 2013-07-10 14:40:04 +0200
+[2013-07-10 14:40:04] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+
+
+Started GET "/sidekiq/images/status-sd8051fd480.png" for 127.0.0.1 at 2013-07-10 14:40:04 +0200
+[2013-07-10 14:40:04] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+
+
+Started GET "/playlist/1/tracks?after=2" for 127.0.0.1 at 2013-07-10 14:40:08 +0200
+Processing by TracksController#index as */*
+  Parameters: {"after"=>"2", "playlist_id"=>"1"}
+  Playlist Load (0.3ms)  SELECT "playlists".* FROM "playlists" WHERE "playlists"."id" = $1 LIMIT 1  [["id", "1"]]
+TracksController index called
+  Track Load (0.4ms)  SELECT "tracks".* FROM "tracks" INNER JOIN "playlist_tracks" ON "tracks"."id" = "playlist_tracks"."track_id" WHERE "playlist_tracks"."playlist_id" = 1 AND (track_id > 2)
+  Rendered collection (0.0ms)
+  Rendered tracks/index.js.erb (1.2ms)
+Completed 200 OK in 5ms (Views: 2.6ms | ActiveRecord: 0.7ms)
+[2013-07-10 14:40:08] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+
+
+Started GET "/playlist/1/tracks?after=2" for 127.0.0.1 at 2013-07-10 14:40:13 +0200
+Processing by TracksController#index as */*
+  Parameters: {"after"=>"2", "playlist_id"=>"1"}
+  Playlist Load (0.3ms)  SELECT "playlists".* FROM "playlists" WHERE "playlists"."id" = $1 LIMIT 1  [["id", "1"]]
+TracksController index called
+  Track Load (0.4ms)  SELECT "tracks".* FROM "tracks" INNER JOIN "playlist_tracks" ON "tracks"."id" = "playlist_tracks"."track_id" WHERE "playlist_tracks"."playlist_id" = 1 AND (track_id > 2)
+  Rendered collection (0.0ms)
+  Rendered tracks/index.js.erb (1.2ms)
+Completed 200 OK in 5ms (Views: 2.6ms | ActiveRecord: 0.7ms)
+[2013-07-10 14:40:13] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+
+
+Started GET "/playlist/1/tracks?after=2" for 127.0.0.1 at 2013-07-10 14:40:18 +0200
+Processing by TracksController#index as */*
+  Parameters: {"after"=>"2", "playlist_id"=>"1"}
+  Playlist Load (0.3ms)  SELECT "playlists".* FROM "playlists" WHERE "playlists"."id" = $1 LIMIT 1  [["id", "1"]]
+TracksController index called
+  Track Load (0.4ms)  SELECT "tracks".* FROM "tracks" INNER JOIN "playlist_tracks" ON "tracks"."id" = "playlist_tracks"."track_id" WHERE "playlist_tracks"."playlist_id" = 1 AND (track_id > 2)
+  Rendered collection (0.0ms)
+  Rendered tracks/index.js.erb (1.2ms)
+Completed 200 OK in 5ms (Views: 2.6ms | ActiveRecord: 0.7ms)
+[2013-07-10 14:40:18] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+
+
+Started GET "/sidekiq/workers" for 127.0.0.1 at 2013-07-10 14:40:19 +0200
+
+
+Started GET "/sidekiq/javascripts/application.js" for 127.0.0.1 at 2013-07-10 14:40:19 +0200
+[2013-07-10 14:40:19] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+
+
+Started GET "/sidekiq/stylesheets/application.css" for 127.0.0.1 at 2013-07-10 14:40:19 +0200
+[2013-07-10 14:40:19] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+
+
+Started GET "/sidekiq/stylesheets/bootstrap.css" for 127.0.0.1 at 2013-07-10 14:40:19 +0200
+[2013-07-10 14:40:19] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+
+
+Started GET "/sidekiq/images/status-sd8051fd480.png" for 127.0.0.1 at 2013-07-10 14:40:19 +0200
+[2013-07-10 14:40:19] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+2013-07-10T12:40:21Z 19025 TID-ox327dws8 PostWorker JID-6a66b1d23198c1f373f60e7a INFO: done: 72.607 sec
+  Track Exists (0.8ms)  SELECT 1 AS one FROM "tracks" WHERE "tracks"."soundcloud_uri" = 'http://api.soundcloud.com/playlists/7491082' LIMIT 1
+   (0.1ms)  BEGIN
+  SQL (0.9ms)  INSERT INTO "tracks" ("created_at", "name", "soundcloud_embed", "soundcloud_uri", "soundcloud_url", "spotify_uri", "title", "updated_at", "youtube_embed", "youtube_id") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING "id"  [["created_at", Wed, 10 Jul 2013 12:40:21 UTC +00:00], ["name", nil], ["soundcloud_embed", "<iframe width=\"100%\" height=\"166\" scrolling=\"no\" frameborder=\"no\" src=\"http://w.soundcloud.com/player/?url=http://api.soundcloud.com/playlists/7491082&show_artwork=true&client_id=902d3c2d6d4c5c5f1dc5bee41cb01e2b\"></iframe>"], ["soundcloud_uri", "http://api.soundcloud.com/playlists/7491082"], ["soundcloud_url", "http://soundcloud.com/chloe-perron/rachel-zeffira"], ["spotify_uri", nil], ["title", "Rachel Zeffira"], ["updated_at", Wed, 10 Jul 2013 12:40:21 UTC +00:00], ["youtube_embed", nil], ["youtube_id", nil]]
+   (0.2ms)  INSERT INTO "posts_tracks" ("post_id", "track_id") VALUES (8, 3)
+it works!
+  Feed Load (0.4ms)  SELECT "feeds".* FROM "feeds" WHERE "feeds"."id" = 2 LIMIT 1
+  Playlist Load (0.4ms)  SELECT "playlists".* FROM "playlists" INNER JOIN "feeds_playlists" ON "playlists"."id" = "feeds_playlists"."playlist_id" WHERE "feeds_playlists"."feed_id" = 2
+  Track Exists (0.4ms)  SELECT 1 AS one FROM "tracks" INNER JOIN "playlist_tracks" ON "tracks"."id" = "playlist_tracks"."track_id" WHERE "playlist_tracks"."playlist_id" = 1 AND "tracks"."id" = 3 LIMIT 1
+  SQL (0.6ms)  INSERT INTO "playlist_tracks" ("created_at", "playlist_id", "position", "track_id", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"  [["created_at", Wed, 10 Jul 2013 12:40:21 UTC +00:00], ["playlist_id", 1], ["position", nil], ["track_id", 3], ["updated_at", Wed, 10 Jul 2013 12:40:21 UTC +00:00]]
+   (0.4ms)  COMMIT
+
+
+Started GET "/playlist/1/tracks?after=2" for 127.0.0.1 at 2013-07-10 14:40:23 +0200
+Processing by TracksController#index as */*
+  Parameters: {"after"=>"2", "playlist_id"=>"1"}
+  Playlist Load (0.3ms)  SELECT "playlists".* FROM "playlists" WHERE "playlists"."id" = $1 LIMIT 1  [["id", "1"]]
+TracksController index called
+  Track Load (0.4ms)  SELECT "tracks".* FROM "tracks" INNER JOIN "playlist_tracks" ON "tracks"."id" = "playlist_tracks"."track_id" WHERE "playlist_tracks"."playlist_id" = 1 AND (track_id > 2)
+  Rendered tracks/_track.html.erb (0.3ms)
+  Rendered tracks/index.js.erb (2.2ms)
+Completed 200 OK in 6ms (Views: 3.5ms | ActiveRecord: 0.7ms)
+
+
+Started GET "/playlist/1/tracks?after=3" for 127.0.0.1 at 2013-07-10 14:40:28 +0200
+Processing by TracksController#index as */*
+  Parameters: {"after"=>"3", "playlist_id"=>"1"}
+  Playlist Load (0.3ms)  SELECT "playlists".* FROM "playlists" WHERE "playlists"."id" = $1 LIMIT 1  [["id", "1"]]
+TracksController index called
+  Track Load (0.4ms)  SELECT "tracks".* FROM "tracks" INNER JOIN "playlist_tracks" ON "tracks"."id" = "playlist_tracks"."track_id" WHERE "playlist_tracks"."playlist_id" = 1 AND (track_id > 3)
+  Rendered collection (0.0ms)
+  Rendered tracks/index.js.erb (1.2ms)
+Completed 200 OK in 5ms (Views: 2.6ms | ActiveRecord: 0.6ms)
+
+
+Started GET "/playlist/1/tracks?after=3" for 127.0.0.1 at 2013-07-10 14:40:33 +0200
+Processing by TracksController#index as */*
+  Parameters: {"after"=>"3", "playlist_id"=>"1"}
+  Playlist Load (0.2ms)  SELECT "playlists".* FROM "playlists" WHERE "playlists"."id" = $1 LIMIT 1  [["id", "1"]]
+TracksController index called
+  Track Load (0.4ms)  SELECT "tracks".* FROM "tracks" INNER JOIN "playlist_tracks" ON "tracks"."id" = "playlist_tracks"."track_id" WHERE "playlist_tracks"."playlist_id" = 1 AND (track_id > 3)
+  Rendered collection (0.0ms)
+  Rendered tracks/index.js.erb (1.1ms)
+Completed 200 OK in 4ms (Views: 2.3ms | ActiveRecord: 0.7ms)
+[2013-07-10 14:40:33] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+
+
+Started GET "/sidekiq/workers" for 127.0.0.1 at 2013-07-10 14:40:35 +0200
+
+
+Started GET "/sidekiq/stylesheets/bootstrap.css" for 127.0.0.1 at 2013-07-10 14:40:35 +0200
+[2013-07-10 14:40:35] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+
+
+Started GET "/sidekiq/stylesheets/application.css" for 127.0.0.1 at 2013-07-10 14:40:35 +0200
+[2013-07-10 14:40:35] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+
+
+Started GET "/sidekiq/javascripts/application.js" for 127.0.0.1 at 2013-07-10 14:40:35 +0200
+[2013-07-10 14:40:35] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+
+
+Started GET "/sidekiq/images/status-sd8051fd480.png" for 127.0.0.1 at 2013-07-10 14:40:35 +0200
+[2013-07-10 14:40:35] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+
+
+Started GET "/playlist/1/tracks?after=3" for 127.0.0.1 at 2013-07-10 14:40:38 +0200
+Processing by TracksController#index as */*
+  Parameters: {"after"=>"3", "playlist_id"=>"1"}
+  Playlist Load (0.3ms)  SELECT "playlists".* FROM "playlists" WHERE "playlists"."id" = $1 LIMIT 1  [["id", "1"]]
+TracksController index called
+  Track Load (0.4ms)  SELECT "tracks".* FROM "tracks" INNER JOIN "playlist_tracks" ON "tracks"."id" = "playlist_tracks"."track_id" WHERE "playlist_tracks"."playlist_id" = 1 AND (track_id > 3)
+  Rendered collection (0.0ms)
+  Rendered tracks/index.js.erb (1.2ms)
+Completed 200 OK in 5ms (Views: 2.6ms | ActiveRecord: 0.7ms)
+[2013-07-10 14:40:38] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+
+
+Started GET "/playlist/1/tracks?after=3" for 127.0.0.1 at 2013-07-10 14:40:44 +0200
+Processing by TracksController#index as */*
+  Parameters: {"after"=>"3", "playlist_id"=>"1"}
+  Playlist Load (0.3ms)  SELECT "playlists".* FROM "playlists" WHERE "playlists"."id" = $1 LIMIT 1  [["id", "1"]]
+TracksController index called
+  Track Load (0.5ms)  SELECT "tracks".* FROM "tracks" INNER JOIN "playlist_tracks" ON "tracks"."id" = "playlist_tracks"."track_id" WHERE "playlist_tracks"."playlist_id" = 1 AND (track_id > 3)
+  Rendered collection (0.0ms)
+  Rendered tracks/index.js.erb (1.3ms)
+Completed 200 OK in 5ms (Views: 2.6ms | ActiveRecord: 0.7ms)
+[2013-07-10 14:40:44] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+
+
+Started GET "/playlist/1/tracks?after=3" for 127.0.0.1 at 2013-07-10 14:40:49 +0200
+Processing by TracksController#index as */*
+  Parameters: {"after"=>"3", "playlist_id"=>"1"}
+  Playlist Load (0.2ms)  SELECT "playlists".* FROM "playlists" WHERE "playlists"."id" = $1 LIMIT 1  [["id", "1"]]
+TracksController index called
+  Track Load (0.4ms)  SELECT "tracks".* FROM "tracks" INNER JOIN "playlist_tracks" ON "tracks"."id" = "playlist_tracks"."track_id" WHERE "playlist_tracks"."playlist_id" = 1 AND (track_id > 3)
+  Rendered collection (0.0ms)
+  Rendered tracks/index.js.erb (1.2ms)
+Completed 200 OK in 5ms (Views: 2.6ms | ActiveRecord: 0.7ms)
+[2013-07-10 14:40:49] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+
+
+Started GET "/playlist/1/tracks?after=3" for 127.0.0.1 at 2013-07-10 14:40:54 +0200
+Processing by TracksController#index as */*
+  Parameters: {"after"=>"3", "playlist_id"=>"1"}
+  Playlist Load (0.3ms)  SELECT "playlists".* FROM "playlists" WHERE "playlists"."id" = $1 LIMIT 1  [["id", "1"]]
+TracksController index called
+  Track Load (0.4ms)  SELECT "tracks".* FROM "tracks" INNER JOIN "playlist_tracks" ON "tracks"."id" = "playlist_tracks"."track_id" WHERE "playlist_tracks"."playlist_id" = 1 AND (track_id > 3)
+  Rendered collection (0.0ms)
+  Rendered tracks/index.js.erb (1.2ms)
+Completed 200 OK in 5ms (Views: 2.6ms | ActiveRecord: 0.7ms)
+[2013-07-10 14:40:54] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+
+
+Started GET "/playlist/1/tracks?after=3" for 127.0.0.1 at 2013-07-10 14:40:59 +0200
+Processing by TracksController#index as */*
+  Parameters: {"after"=>"3", "playlist_id"=>"1"}
+  Playlist Load (0.3ms)  SELECT "playlists".* FROM "playlists" WHERE "playlists"."id" = $1 LIMIT 1  [["id", "1"]]
+TracksController index called
+  Track Load (0.4ms)  SELECT "tracks".* FROM "tracks" INNER JOIN "playlist_tracks" ON "tracks"."id" = "playlist_tracks"."track_id" WHERE "playlist_tracks"."playlist_id" = 1 AND (track_id > 3)
+  Rendered collection (0.0ms)
+  Rendered tracks/index.js.erb (1.2ms)
+Completed 200 OK in 5ms (Views: 2.4ms | ActiveRecord: 0.7ms)
+[2013-07-10 14:40:59] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+
+
+Started GET "/playlist/1/tracks?after=3" for 127.0.0.1 at 2013-07-10 14:41:04 +0200
+Processing by TracksController#index as */*
+  Parameters: {"after"=>"3", "playlist_id"=>"1"}
+  Playlist Load (0.3ms)  SELECT "playlists".* FROM "playlists" WHERE "playlists"."id" = $1 LIMIT 1  [["id", "1"]]
+TracksController index called
+  Track Load (0.4ms)  SELECT "tracks".* FROM "tracks" INNER JOIN "playlist_tracks" ON "tracks"."id" = "playlist_tracks"."track_id" WHERE "playlist_tracks"."playlist_id" = 1 AND (track_id > 3)
+  Rendered collection (0.0ms)
+  Rendered tracks/index.js.erb (1.2ms)
+Completed 200 OK in 5ms (Views: 2.4ms | ActiveRecord: 0.7ms)
+[2013-07-10 14:41:04] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+
