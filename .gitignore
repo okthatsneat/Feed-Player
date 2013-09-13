@@ -31,3 +31,6 @@ doc/
 #Ignore Diagrams until bachelor thesis can be public
 #./Diagrams
 
+# ignore development environment variables for production
+# ex: https://devcenter.heroku.com/articles/getting-started-with-rails3#webserver
+.env

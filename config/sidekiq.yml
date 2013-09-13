@@ -8,3 +8,8 @@
 :queues:
   - [feeds_queue, 7]
   - [posts_queue, 5]
+
+production:
+  :queues:
+  - [feeds_queue, 7]
+  - [posts_queue, 5]
