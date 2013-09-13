@@ -1,5 +1,5 @@
 source 'https://rubygems.org'
-ruby '1.9.3'
+ruby '2.0.0'
 
 gem 'rails', '3.2.13'
 gem 'unicorn'
@@ -42,4 +42,5 @@ end
 group :production do
   gem 'pg'
   gem 'newrelic_rpm'
+  gem 'rails_12factor'
 end
