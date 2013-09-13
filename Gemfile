@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 ruby '1.9.3'
 gem 'rails', '3.2.13'
-gem 'feedzirra'
+gem 'feedzirra', '0.2.0.rc2'
 gem 'echonest-ruby-api'
 gem 'httparty'
 gem 'soundcloud'
