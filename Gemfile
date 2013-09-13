@@ -15,6 +15,8 @@ gem 'googleajax'
 gem 'sidekiq'
 gem 'sinatra', require: false
 gem 'slim'
+gem 'autoscaler'
+
 
 group :development, :test do
   gem 'pg'
