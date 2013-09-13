@@ -26,11 +26,5 @@ after_fork do |server, worker|
   if defined?(ActiveRecord::Base)
     ActiveRecord::Base.establish_connection
     Rails.logger.info('Connected to ActiveRecord')
-  end
-
-  if defined?(Sidekiq)
-    Sidekiq.configure_client do |config|
-      config.redis = { :size => 1 }
-    end
-  end
+  end  
 end

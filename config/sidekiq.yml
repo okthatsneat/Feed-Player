@@ -12,7 +12,7 @@
 production:
   :verbose: false
   :pidfile: ./tmp/pids/sidekiq.pid
-  :concurrency:  10
+  :concurrency:  6
   :queues:
   - [feeds_queue, 7]
   - [posts_queue, 5]
