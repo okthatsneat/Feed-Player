@@ -3,7 +3,7 @@
 pg_ctl -D /usr/local/var/postgres -l /usr/local/var/postgres/server.log start &
 echo 'postgres started'
 #rails server
-rails s &
+rake s &
 echo 'rails started'
 #redis-start=
 redis-server ~/.rvm/etc/redis.conf &

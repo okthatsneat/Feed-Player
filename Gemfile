@@ -1,6 +1,8 @@
 source 'https://rubygems.org'
 ruby '1.9.3'
+
 gem 'rails', '3.2.13'
+gem 'unicorn'
 gem 'feedzirra', '0.2.0.rc2'
 gem 'echonest-ruby-api'
 gem 'httparty'
@@ -37,4 +39,5 @@ end
 
 group :production do
   gem 'pg'
+  gem 'newrelic_rpm'
 end

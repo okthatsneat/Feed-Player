@@ -69,5 +69,10 @@ module FeedPlayer
     # https://devcenter.heroku.com/articles/rails-asset-pipeline#troubleshooting
     config.assets.initialize_on_precompile = false
 
+    # enable logging to stdout 
+    # ex http://jing.io/t/used-unicorn-as-Rails-3-development-server.html
+    # and http://blog.codeship.io/2012/05/06/unicorn-on-heroku.html
+    config.logger = Logger.new(STDOUT)
+    config.logger.level = Logger.const_get('DEBUG')
   end
 end
